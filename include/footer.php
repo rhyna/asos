@@ -1,5 +1,58 @@
 <footer>
-
+    <div class="icons-bar">
+        <ul class="socials">
+            <li class="socials-item">
+                <a href="">
+                    <img src="/upload/icons/socials/facebook.svg" alt="">
+                </a>
+            </li>
+            <li class="socials-item">
+                <a href="">
+                    <img src="/upload/icons/socials/instagram.svg" alt="">
+                </a>
+            </li>
+            <li class="socials-item">
+                <a href="">
+                    <img src="/upload/icons/socials/snapchat.svg" alt="">
+                </a>
+            </li>
+        </ul>
+        <ul class="payments">
+            <li class="payments-item">
+                <img src="/upload/icons/payment-options/visa.jpg" alt="">
+            </li>
+            <li class="payments-item">
+                <img src="/upload/icons/payment-options/mastercard.jpg" alt="">
+            </li>
+            <li class="payments-item">
+                <img src="/upload/icons/payment-options/pay-pal.jpg" alt="">
+            </li>
+            <li class="payments-item">
+                <img src="/upload/icons/payment-options/american-express.jpg" alt="">
+            </li>
+            <li class="payments-item">
+                <img src="/upload/icons/payment-options/visa-electron.jpg" alt="">
+            </li>
+        </ul>
+    </div>
+    <div class="footer-bar">
+        <div class="footer-bar__content">
+            <div class="copyright">
+                © 2020 ASOS
+            </div>
+            <ul class="footer-nav">
+                <li class="footer-nav-item">
+                    <a href="">Privacy & Cookies</a>
+                </li>
+                <li class="footer-nav-item">
+                    <a href="">Ts&Cs</a>
+                </li>
+                <li class="footer-nav-item">
+                    <a href="">Accessibility</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </footer>
 <script
         src="https://code.jquery.com/jquery-3.5.0.min.js"

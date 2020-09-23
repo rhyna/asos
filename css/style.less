@@ -24,6 +24,7 @@ a {
 
 ul {
   list-style: none;
+  margin-bottom: 0;
 }
 
 .topbar {
@@ -325,3 +326,132 @@ ul {
     }
   }
 }
+
+footer {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+
+  .icons-bar {
+    margin: 0 auto 50px auto;
+    max-width: 1200px;
+    padding: 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 630px) {
+      flex-direction: column;
+    }
+
+    .socials {
+      padding-right: 35px;
+
+      @media (max-width: 630px) {
+        margin-bottom: 20px;
+        padding-right: 0;
+      }
+
+      a {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        border: 1px solid transparent;
+        border-radius: 100%;
+      }
+
+      &-item {
+        display: inline-block;
+        margin-right: 35px;
+        border: 1px solid transparent;
+        border-radius: 100%;
+        bottom: -1px;
+        right: -1px;
+
+        &:hover {
+          border: 1px solid #0770cf;
+          border-radius: 100%;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .payments {
+      padding-left: 35px;
+      height: 20px;
+      border-left: 1px solid #999;
+      display: flex;
+      align-items: center;
+
+      @media (max-width: 630px) {
+        border-left: 0;
+        padding-left: 0;
+      }
+
+      &-item {
+        display: inline-block;
+        margin-right: 35px;
+        line-height: 0;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      img {
+        width: 32px;
+        height: 20px;
+      }
+    }
+  }
+
+  .footer-bar {
+    background-color: #ddd;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #2d2d2d;
+    font-weight: 200;
+    font-size: 13px;
+
+    &__content {
+      display: flex;
+      margin: 0 auto;
+      max-width: 1200px;
+      padding: 0 15px;
+    }
+  }
+
+  .copyright {
+    flex-grow: 1;
+  }
+
+  .footer-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-item {
+      padding-right: 10px;
+      padding-left: 10px;
+      border-right: 1px solid #2d2d2d;
+      line-height: 13px;
+      letter-spacing: 0.2px;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+        border-right: 0;
+      }
+
+      a:hover {
+        color: #0770cf;
+      }
+    }
+  }
+}
+

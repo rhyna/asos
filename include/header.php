@@ -1,4 +1,13 @@
 <?php
+
+$subbarItems = [
+    'Clothing',
+    'Shoes',
+    'Activewear',
+    'Face and Body',
+    'Brands'
+];
+
 ?>
 
 <!doctype html>
@@ -30,11 +39,11 @@
             </div>
             <ul class="topbar-nav">
                 <li class="topbar-nav-item
-                <?= ($currentURL = $_SERVER['REQUEST_URI'] == '/women.php') ? ' topbar-nav-item--active': ''?>">
+                <?= ($currentURL = $_SERVER['REQUEST_URI'] == '/women.php') ? ' topbar-nav-item--active' : '' ?>">
                     <a href="/women.php">women</a>
                 </li>
                 <li class="topbar-nav-item
-                <?= ($currentURL = $_SERVER['REQUEST_URI'] == '/men.php') ? ' topbar-nav-item--active': ''?>">
+                <?= ($currentURL = $_SERVER['REQUEST_URI'] == '/men.php') ? ' topbar-nav-item--active' : '' ?>">
                     <a href="/men.php">men</a>
                 </li>
             </ul>
@@ -45,22 +54,80 @@
         </div>
     </nav>
     <div class="subbar__wrapper">
-        <ul class="subbar">
-            <li class="subbar-item">
-                <a href="/">Clothing</a>
-            </li>
-            <li class="subbar-item">
-                <a href="/">Shoes</a>
-            </li>
-            <li class="subbar-item">
-                <a href="/">Activewear</a>
-            </li>
-            <li class="subbar-item">
-                <a href="/">Face and Body</a>
-            </li>
-            <li class="subbar-item">
-                <a href="/">Brands</a>
-            </li>
-        </ul>
+        <!--        <ul class="subbar">-->
+        <!--            <li class="subbar-item">-->
+        <!--                <a href="/">Clothing</a>-->
+        <!--            </li>-->
+        <!--            <li class="subbar-item">-->
+        <!--                <a href="/">Shoes</a>-->
+        <!--            </li>-->
+        <!--            <li class="subbar-item">-->
+        <!--                <a href="/">Activewear</a>-->
+        <!--            </li>-->
+        <!--            <li class="subbar-item">-->
+        <!--                <a href="/">Face and Body</a>-->
+        <!--            </li>-->
+        <!--            <li class="subbar-item">-->
+        <!--                <a href="/">Brands</a>-->
+        <!--            </li>-->
+        <!--        </ul>-->
+
+        <div class="dropdowns-wrapper">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Clothing
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Shoes
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Activewear
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Face and Body
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Brands
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
