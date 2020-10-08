@@ -1,11 +1,26 @@
 <?php
 
-$subbarItems = [
-    'Clothing',
-    'Shoes',
-    'Activewear',
-    'Face and Body',
-    'Brands'
+require_once 'include/init.php';
+
+$conn = require_once 'include/db.php';
+
+$womenRootCategoryId = Menu::getRootWomenCategoryId($conn);
+
+$menRootCategoryId = Menu::getRootMenCategoryId($conn);
+
+$womenCategories = Menu::getCategories($conn, $womenRootCategoryId);
+
+$menCategories = Menu::getCategories($conn, $menRootCategoryId);
+
+$womenSubCategories = Menu::getSubCategories($conn, $womenCategories);
+
+$menSubCategories = Menu::getSubCategories($conn, $menCategories);
+
+$config = [
+    ['uri' => '/women',
+    'categories' => $womenSubCategories],
+    ['uri' => '/men',
+    'categories' => $menSubCategories]
 ];
 
 ?>
@@ -39,11 +54,11 @@ $subbarItems = [
             </div>
             <ul class="topbar-nav">
                 <li class="topbar-nav-item
-                <?= ($currentURL = $_SERVER['REQUEST_URI'] == '/women.php') ? ' topbar-nav-item--active' : '' ?>">
+                <?= (strpos($_SERVER['REQUEST_URI'], '/women')) !== false ? ' topbar-nav-item--active' : '' ?>">
                     <a href="/women.php">women</a>
                 </li>
                 <li class="topbar-nav-item
-                <?= ($currentURL = $_SERVER['REQUEST_URI'] == '/men.php') ? ' topbar-nav-item--active' : '' ?>">
+                <?= (strpos($_SERVER['REQUEST_URI'], '/men')) !== false ? ' topbar-nav-item--active' : '' ?>">
                     <a href="/men.php">men</a>
                 </li>
             </ul>
@@ -54,80 +69,162 @@ $subbarItems = [
         </div>
     </nav>
     <div class="subbar__wrapper">
-        <!--        <ul class="subbar">-->
-        <!--            <li class="subbar-item">-->
-        <!--                <a href="/">Clothing</a>-->
-        <!--            </li>-->
-        <!--            <li class="subbar-item">-->
-        <!--                <a href="/">Shoes</a>-->
-        <!--            </li>-->
-        <!--            <li class="subbar-item">-->
-        <!--                <a href="/">Activewear</a>-->
-        <!--            </li>-->
-        <!--            <li class="subbar-item">-->
-        <!--                <a href="/">Face and Body</a>-->
-        <!--            </li>-->
-        <!--            <li class="subbar-item">-->
-        <!--                <a href="/">Brands</a>-->
-        <!--            </li>-->
-        <!--        </ul>-->
+        <ul class="subbar">
+            <?php foreach($config as $item): ?>
+                <?php if (strpos($_SERVER['REQUEST_URI'], $item['uri']) !== false): ?>
+                <?php foreach ($item['categories'] as $name => $category): ?>
+                    <li class="subbar-item">
+                        <button type="button" class="subbar-button"><?= $name ?></button>
+                        <div class="subbar-dropdown-menu__wrapper">
+                            <div class="subbar-dropdown-menu__inner">
+                                <div class="subbar-dropdown-menu subbar-dropdown-menu--product">
+                                    <div class="subbar-dropdown-title">
+                                        <span>Shop by product</span>
+                                    </div>
+                                    <div class="subbar-dropdown-menu__content">
+                                        <?php foreach ($category as $item): ?>
+                                            <a class="subbar-dropdown-item"
+                                               href="/men.php?category=<?= $item['id'] ?>">
+                                                <?= $item['title'] ?>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                                <div class="subbar-dropdown-menu subbar-dropdown-menu--brand">
+                                    <div class="subbar-dropdown-title">
+                                        <span>Shop by brand</span>
+                                    </div>
+                                    <div class="subbar-dropdown-menu__content">
+                                        <ul>
+                                            <li>Brand name</li>
+                                            <li>Brand name</li>
+                                            <li>Brand name</li>
+                                            <li>Brand name</li>
+                                            <li>Brand name</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="subbar-dropdown-menu subbar-dropdown-menu--preview">
+                                    <div class="subbar-dropdown-menu-preview__inner"><?php $previewSubCategories = Menu::getPreviewSubCategories($category) ?>
+                                        <?php foreach ($previewSubCategories as $subCategory): ?>
+                                            <div class="subbar-dropdown-menu-preview-image__wrapper">
+                                                <div class="subbar-dropdown-menu-preview-image"
+                                                     style='background-image: url("<?= $subCategory['image'] ?>")'>
+                                                    <span><?= $subCategory['title'] ?></span>
+                                                </div>
+                                            </div>
+                                        <?php endforeach ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <?php endforeach; ?>
 
-        <div class="dropdowns-wrapper">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Clothing
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Shoes
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Activewear
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Face and Body
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Brands
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </div>
-        </div>
+
+<!--            --><?php //if (strpos($_SERVER['REQUEST_URI'], '/women') !== false): ?>
+<!--                --><?php //foreach ($womenSubCategories as $name => $category): ?>
+<!--                    <li class="subbar-item">-->
+<!--                        <button type="button" class="subbar-button">--><?//= $name ?><!--</button>-->
+<!--                        <div class="subbar-dropdown-menu__wrapper">-->
+<!--                            <div class="subbar-dropdown-menu__inner">-->
+<!--                                <div class="subbar-dropdown-menu subbar-dropdown-menu--product">-->
+<!--                                    <div class="subbar-dropdown-title">-->
+<!--                                        <span>Shop by product</span>-->
+<!--                                    </div>-->
+<!--                                    <div class="subbar-dropdown-menu__content">-->
+<!--                                        --><?php //foreach ($category as $item): ?>
+<!--                                            <a class="subbar-dropdown-item"-->
+<!--                                               href="/men.php?category=--><?//= $item['id'] ?><!--">-->
+<!--                                                --><?//= $item['title'] ?>
+<!--                                            </a>-->
+<!--                                        --><?php //endforeach; ?>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="subbar-dropdown-menu subbar-dropdown-menu--brand">-->
+<!--                                    <div class="subbar-dropdown-title">-->
+<!--                                        <span>Shop by brand</span>-->
+<!--                                    </div>-->
+<!--                                    <div class="subbar-dropdown-menu__content">-->
+<!--                                        <ul>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="subbar-dropdown-menu subbar-dropdown-menu--preview">-->
+<!--                                    <div class="subbar-dropdown-menu-preview__inner">--><?php //$previewSubCategories = Menu::getPreviewSubCategories($category) ?>
+<!--                                        --><?php //foreach ($previewSubCategories as $subCategory): ?>
+<!--                                            <div class="subbar-dropdown-menu-preview-image__wrapper">-->
+<!--                                                <div class="subbar-dropdown-menu-preview-image"-->
+<!--                                                     style='background-image: url("--><?//= $subCategory['image'] ?>/*")'>*/
+/*                                                    <span>*/<?//= $subCategory['title'] ?><!--</span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        --><?php //endforeach ?>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                --><?php //endforeach; ?>
+<!--            --><?php //endif; ?>
+<!---->
+<!--            --><?php //if (strpos($_SERVER['REQUEST_URI'], '/men') !== false): ?>
+<!--                --><?php //foreach ($menSubCategories as $name => $category): ?>
+<!--                    <li class="subbar-item">-->
+<!--                        <button type="button" class="subbar-button">--><?//= $name ?><!--</button>-->
+<!--                        <div class="subbar-dropdown-menu__wrapper">-->
+<!--                            <div class="subbar-dropdown-menu__inner">-->
+<!--                                <div class="subbar-dropdown-menu subbar-dropdown-menu--product">-->
+<!--                                    <div class="subbar-dropdown-title">-->
+<!--                                        <span>Shop by product</span>-->
+<!--                                    </div>-->
+<!--                                    <div class="subbar-dropdown-menu__content">-->
+<!--                                        --><?php //foreach ($category as $item): ?>
+<!--                                            <a class="subbar-dropdown-item"-->
+<!--                                               href="/men.php?category=--><?//= $item['id'] ?><!--">-->
+<!--                                                --><?//= $item['title'] ?>
+<!--                                            </a>-->
+<!--                                        --><?php //endforeach; ?>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="subbar-dropdown-menu subbar-dropdown-menu--brand">-->
+<!--                                    <div class="subbar-dropdown-title">-->
+<!--                                        <span>Shop by brand</span>-->
+<!--                                    </div>-->
+<!--                                    <div class="subbar-dropdown-menu__content">-->
+<!--                                        <ul>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                            <li>Brand name</li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="subbar-dropdown-menu subbar-dropdown-menu--preview">-->
+<!--                                    <div class="subbar-dropdown-menu-preview__inner">--><?php //$previewSubCategories = Menu::getPreviewSubCategories($category) ?>
+<!--                                        --><?php //foreach ($previewSubCategories as $subCategory): ?>
+<!--                                            <div class="subbar-dropdown-menu-preview-image__wrapper">-->
+<!--                                                <div class="subbar-dropdown-menu-preview-image"-->
+<!--                                                     style='background-image: url("--><?//= $subCategory['image'] ?>/*")'>*/
+/*                                                    <span>*/<?//= $subCategory['title'] ?><!--</span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        --><?php //endforeach ?>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                --><?php //endforeach; ?>
+<!--            --><?php //endif; ?>
+        </ul>
     </div>
 </header>
