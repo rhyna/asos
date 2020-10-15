@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+  border-collapse: collapse;
+}
+body {
+  font-family: "Futura PT", sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+a {
+  color: #000;
+}
+a:hover {
+  text-decoration: none;
+  color: #000;
+}
+h1 {
+  font-size: 22px;
+}
+ul {
+  list-style: none;
+  margin-bottom: 0;
+}
+.admin-header {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+.admin-header-nav-item {
+  padding-right: 20px;
+}
+.admin-header-nav-item:last-child {
+  padding-right: 0;
+}
+.allproducts-list {
+  font-weight: lighter;
+}
+.allproducts-list-item {
+  margin-bottom: 15px;
+}
+.allproducts-list-item a {
+  display: block;
+}
+.allproducts-list-item a:hover {
+  color: #0770cf;
+}
+.allproducts-list-item--image {
+  height: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.allproducts-list-header {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: normal;
+}
+.allproducts-list-title {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 25px;
+  text-align: center;
+}
+/*# sourceMappingURL=style.css.map */

@@ -4,7 +4,7 @@
 //
 //$conn = require_once 'include/db.php';
 
-require_once 'include/header.php';
+require_once __DIR__ . '/include/header.php';
 
 $banners = Banner::getFormattedBanners($conn);
 
@@ -104,4 +104,4 @@ $trendingBrands = Banner::getTrendingBrands($conn);
     <?php endif; ?>
 </main>
 
-<?php require_once 'include/footer.php'; ?>
+<?php require_once __DIR__ . '/include/footer.php'; ?>
