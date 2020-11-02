@@ -52,8 +52,10 @@ class Product
             $this->productErrors[] = 'Select a category';
         }
 
-        if ($this->checkProductCodeDupes($conn)) {
-            $this->productErrors[] = 'An item with the entered product code already exists';
+        if ($this->product_code && !$this->id) {
+            if ($this->checkProductCodeDupes($conn)) {
+                $this->productErrors[] = 'An item with the entered product code already exists';
+            }
         }
 
         return $this->productErrors ? false : true;
@@ -166,12 +168,15 @@ class Product
         $this->title = $data['title'];
 
         $this->product_details = $data['productDetails'];
+
+        $this->look_after_me = $data['lookAfterMe'];
+
+        $this->about_me = $data['aboutMe'];
     }
 
     public function validateProductImage($image)
     {
         $extensions = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
-//        $imageErrors = [];
 
         try {
             $errorMessages = [];
@@ -284,6 +289,82 @@ class Product
 
         $result = $conn->query($sql);
 
-        return (bool) $result->fetch();
+        return (bool)$result->fetch();
+    }
+
+    static public function getProduct(PDO $conn, $id): ?Product
+    {
+        $sql = "select p.id, 
+                p.title,
+                p.product_code,
+                p.product_details,
+                p.price,
+                p.category_id,
+                p.brand_id,
+                p.look_after_me,
+                p.about_me,
+                p.image,
+                p.image_1,
+                p.image_2,
+                p.image_3,
+                b.title as brand_title,
+                c.title as category_title
+        from product p
+        left join brand b on b.id = p.brand_id
+        left join category c on c.id = p.category_id
+        where p.id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $statement->execute();
+
+        return $statement->fetchObject('Product') ?: null;
+    }
+
+    public function updateProduct($conn, $data): bool
+    {
+        $imagesArray = [
+            'image' => $data['image'],
+            'image_1' => $data['image1'],
+            'image_2' => $data['image2'],
+            'image_3' => $data['image3'],
+        ];
+
+        $isImageValidated = true;
+
+        foreach ($imagesArray as $imageKey => $image) {
+            if ($image['name'] == '') {
+                continue;
+            }
+
+            if (!$this->validateProductImage($image)) {
+                $isImageValidated = false;
+            }
+        }
+
+        if ($this->validateProduct($conn) && $isImageValidated) {
+            $sql = "update  product 
+            set     category_id = :categoryId,
+                    brand_id = :brandId,
+                    product_code = :productCode,
+                    price = :price,
+                    title = :title,
+                    product_details = :productDetails,
+                    look_after_me = :lookAfterMe,
+                    about_me = :aboutMe
+            where id = :id";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            $this->fillProductStatement($statement);
+
+            return $statement->execute();
+        } else {
+            return false;
+        }
     }
 }

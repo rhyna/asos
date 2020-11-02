@@ -42,7 +42,7 @@ if ($mode === 'add-product') {
     <div class="form-group">
         <label for="productCode">Product Code</label>
         <input class="form-control" type="text" name="productCode" id="productCode"
-               value="<?= htmlspecialchars($product->product_code) ?>">
+               value="<?= htmlspecialchars($product->product_code) ?>" <?= $mode === 'edit-product' ? 'readonly' : '' ?>>
     </div>
     <div class="form-group">
         <label for="price">Price, €</label>

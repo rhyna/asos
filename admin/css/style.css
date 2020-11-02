@@ -110,6 +110,7 @@ ul {
 .edit-product-submit,
 .add-product-submit {
   margin-top: 10px;
+  margin-bottom: 30px;
   font-size: 16px;
   padding: 5px 20px;
   border: 1px solid #ccc;
