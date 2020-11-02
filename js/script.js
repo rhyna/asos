@@ -6,3 +6,4 @@ $('.subbar-item').hover(function () {
     $(this).removeClass('subbar-item--active');
 })
 
+$('.product-form-option--disabled').prop('disabled', true);

@@ -15,7 +15,7 @@ class Database
         $this->db_pass = $pass;
     }
 
-    public function getConn()
+    public function getConn(): PDO
     {
         $dsn = 'mysql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';charset=utf8';
 

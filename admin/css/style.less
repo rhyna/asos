@@ -11,6 +11,7 @@ body {
   font-family: "Futura PT", sans-serif;
   font-size: 14px;
   letter-spacing: 0.5px;
+  color: #2d2d2d;
 }
 
 a {
@@ -79,4 +80,107 @@ ul {
   border-bottom: 1px solid #ccc;
   margin-bottom: 25px;
   text-align: center;
+}
+
+.admin-button {
+  font-size: 16px;
+  padding: 5px 20px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  transition: background-color 0.1s linear;
+  background-color: #fff;
+  color: #2d2d2d;
+  font-family: "Futura PT", sans-serif;
+  letter-spacing: 0.5px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    background-color: #eeeeee;
+
+  }
+}
+
+.admin-title {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.add-product {
+  margin-bottom: 20px;
+  margin-top: 20px;
+  display: inline-block;
+  .admin-button();
+}
+
+.edit-product-submit,
+.add-product-submit {
+  margin-top: 10px;
+  .admin-button();
+}
+
+.add-product-title, .edit-product-title {
+  .admin-title();
+}
+
+.edit-product-form-image,
+.add-product-form-image {
+  height: 300px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 10px 0 15px 0;
+}
+
+.edit-product-delete-image,
+.add-product-delete-image {
+  margin-top: 10px;
+}
+
+.edit-product-form-image--deleted,
+.add-product-form-image--deleted,
+.products-item__img--deleted,
+.product-img--deleted {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  border: 1px solid #ccc;
+}
+
+.edit-product-delete-image-button--deleted,
+.add-product-delete-image-button--deleted {
+  display: none;
+}
+
+.product-form-option--disabled {
+  opacity: 0.5;
+}
+
+.edit-product-errors,
+.add-product-errors {
+  margin-left: 20px;
+  color: #ff253a;
+  margin-bottom: 20px;
+
+  &--image-group {
+    margin-bottom: 20px;
+
+    ul {
+      list-style: circle;
+
+      li {
+        margin-left: 30px;
+      }
+    }
+  }
+}
+
+.edit-product-errors:last-of-type,
+.add-product-errors:last-of-type {
+  margin-bottom: 20px;
 }

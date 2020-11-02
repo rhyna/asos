@@ -1,6 +1,6 @@
 <?php
 
-$ROOT = __DIR__ . '/../';
+$ROOT = __DIR__ . '/..';
 
 require_once "$ROOT/config.php";
 
@@ -19,7 +19,7 @@ function exceptionHandler($exception)
 {
     http_response_code(500);
 
-    echo '<h1>En error occurred:</h1>';
+    echo '<h1>An error occurred:</h1>';
     echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
     echo '<p>' . $exception->getMessage() . '</p>';
     echo '<p>Stack trace: <pre>' . $exception->getTraceAsString() . '</pre></p>';
