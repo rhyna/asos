@@ -187,4 +187,17 @@ ul {
 .add-product-errors:last-of-type {
   margin-bottom: 20px;
 }
+.edit-product-form-image--deleted,
+.add-product-form-image--deleted {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  border: 1px solid #ccc;
+}
+.edit-product-delete-image-button--deleted,
+.add-product-delete-image-button--deleted {
+  display: none;
+}
 /*# sourceMappingURL=style.css.map */

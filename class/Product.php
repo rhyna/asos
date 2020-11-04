@@ -61,7 +61,7 @@ class Product
         return $this->productErrors ? false : true;
     }
 
-    public function createProduct($conn, $data): bool
+    public function checkImageValidation($data)
     {
         $imagesArray = [
             'image' => $data['image'],
@@ -81,6 +81,13 @@ class Product
                 $isImageValidated = false;
             }
         }
+
+        return $isImageValidated;
+    }
+
+    public function createProduct($conn, $data): bool
+    {
+        $isImageValidated = $this->checkImageValidation($data);
 
         if ($this->validateProduct($conn) && $isImageValidated) {
             $sql = "insert into product 
@@ -267,7 +274,7 @@ class Product
                 return false;
             }
 
-            $previousImage = $this->$imageKey;
+            $previousImage = $this->$imageKey; // $imageKey - variable variable
 
             $this->$imageKey = $imageUploadDestination;
 
@@ -325,24 +332,7 @@ class Product
 
     public function updateProduct($conn, $data): bool
     {
-        $imagesArray = [
-            'image' => $data['image'],
-            'image_1' => $data['image1'],
-            'image_2' => $data['image2'],
-            'image_3' => $data['image3'],
-        ];
-
-        $isImageValidated = true;
-
-        foreach ($imagesArray as $imageKey => $image) {
-            if ($image['name'] == '') {
-                continue;
-            }
-
-            if (!$this->validateProductImage($image)) {
-                $isImageValidated = false;
-            }
-        }
+        $isImageValidated = $this->checkImageValidation($data);
 
         if ($this->validateProduct($conn) && $isImageValidated) {
             $sql = "update  product 
@@ -366,5 +356,46 @@ class Product
         } else {
             return false;
         }
+    }
+
+    public function getImagesArray()
+    {
+        return [
+            'image' => [
+                'image' => $this->image,
+            ],
+            'image1' => [
+                'image_1' => $this->image_1,
+            ],
+            'image2' => [
+                'image_2' => $this->image_2,
+            ],
+            'image3' => [
+                'image_3' => $this->image_3,
+            ],
+        ];
+    }
+
+    public function deleteProductImage(PDO $conn, $image)
+    {
+        global $ROOT;
+
+        $sql = "update product set $image = null where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+
+        $imagePath = $this->$image; // $image - variable variable
+
+        if ($statement->execute()) {
+            unlink($ROOT . $imagePath);
+
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
