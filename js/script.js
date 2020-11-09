@@ -34,6 +34,6 @@ $('.edit-product-delete-image-button').on('click', function () {
             $(button).addClass('edit-product-delete-image-button--deleted');
         })
         .fail(function (response) { // when the server code is other than 200
-            alert('An error occurred');
+            alert(response.responseText);
         })
 })
