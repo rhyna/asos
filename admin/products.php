@@ -43,6 +43,9 @@ $allProducts = Product::getAllProducts($conn);
                                 <a href="/admin/edit-product.php?id=<?= $product->id ?>">
                                     <i class="far fa-edit"></i>
                                 </a>
+                                <a href="/admin/delete-product.php?id=<?= $product->id ?>">
+                                    <i class="far fa-remove"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
