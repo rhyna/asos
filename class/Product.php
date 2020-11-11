@@ -398,4 +398,15 @@ class Product
         }
 
     }
+
+    public function deleteProduct($conn): bool
+    {
+        $sql = "delete from product where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $statement->execute();
+    }
 }

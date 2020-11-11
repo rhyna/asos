@@ -4,13 +4,7 @@ require_once __DIR__ . '/include/header.php';
 
 $mode = 'add-product';
 
-$rootCategories = Category::getRootCategories($conn);
-
-$firstLevelCategories = Category::getFirstLevelCategories($conn);
-
-$secondLevelCategories = Category::getSecondLevelCategories($conn);
-
-$categoryLevels = Category::$categoryLevels;
+$categoryLevels = Category::getCategoryLevels($conn);
 
 $allBrands = Brand::getAllBrands($conn);
 

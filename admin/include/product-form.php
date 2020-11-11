@@ -114,14 +114,17 @@ $images = $product->getImagesArray();
                                 <?= ($imageUrl ? 'style="background-image: url(' . $imageUrl . ')"' : null) ?>>
                                 <?= !$imageUrl ? 'No image' : null ?>
                             </div>
-                            <input class="form-control-file" name="<?= $imageAlias ?>" id="<?= $imageAlias ?>" type="file">
+                            <input class="form-control-file" name="<?= $imageAlias ?>" id="<?= $imageAlias ?>"
+                                   type="file">
                         </div>
                         <div class="form-group <?= $classMode ?>-product-delete-image">
                             <?php if ($imageUrl): ?>
-                                <button type="button" class="btn btn-danger <?= $classMode ?>-product-delete-image-button"
+                                <button type="button"
+                                        class="btn btn-danger <?= $classMode ?>-product-delete-image-button"
                                         name="delete-image"
                                         data-id="<?= $product->id ?>"
-                                        data-image="<?= $imageName ?>">
+                                        data-image="<?= $imageName ?>"
+                                        onclick="deleteProductImage(this)">
                                     Delete image
                                 </button>
                             <?php endif; ?>

@@ -10,13 +10,7 @@ if (isset($_GET['id'])) {
     $product = null;
 }
 
-$rootCategories = Category::getRootCategories($conn);
-
-$firstLevelCategories = Category::getFirstLevelCategories($conn);
-
-$secondLevelCategories = Category::getSecondLevelCategories($conn);
-
-$categoryLevels = Category::$categoryLevels;
+$categoryLevels = Category::getCategoryLevels($conn);
 
 $allBrands = Brand::getAllBrands($conn);
 

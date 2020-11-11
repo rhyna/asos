@@ -83,4 +83,15 @@ class Category
             }
         }
     }
+
+    static public function getCategoryLevels($conn)
+    {
+        Category::getRootCategories($conn);
+
+        Category::getFirstLevelCategories($conn);
+
+        Category::getSecondLevelCategories($conn);
+
+        return self::$categoryLevels;
+    }
 }

@@ -27,7 +27,7 @@ $allProducts = Product::getAllProducts($conn);
                     <div class="allproducts-list-item">
                         <div class="row">
                             <div class="col">
-                                <div class="allproducts-list-item--image"
+                                <div class="allproducts-list-item-image"
                                      style="background-image: url('<?= $product->image ?>')"></div>
                             </div>
                             <div class="col-3">
@@ -39,13 +39,16 @@ $allProducts = Product::getAllProducts($conn);
                             <div class="col"><?= $product->price ?></div>
                             <div class="col"><?= $product->brand_title ?></div>
                             <div class="col"><?= $product->category_title ?></div>
-                            <div class="col-1">
+                            <div class="col-1 allproducts-list-item-icons">
                                 <a href="/admin/edit-product.php?id=<?= $product->id ?>">
                                     <i class="far fa-edit"></i>
                                 </a>
-                                <a href="/admin/delete-product.php?id=<?= $product->id ?>">
-                                    <i class="far fa-remove"></i>
-                                </a>
+                                <button type="button" data-toggle="modal"
+                                        data-target="#deleteProduct"
+                                        onclick="passProductId(<?= $product->id ?>)">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+
                             </div>
                         </div>
                     </div>
@@ -54,5 +57,28 @@ $allProducts = Product::getAllProducts($conn);
         </div>
     </div>
 </main>
+
+<div class="modal fade delete-product-modal" id="deleteProduct" tabindex="-1" role="dialog"
+     aria-labelledby="deleteProductLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the product?
+            </div>
+            <form action="/admin/delete-product.php" method="post">
+                <input type="hidden" class="delete-product-modal-product-id" value="" name="id">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No, close</button>
+                    <button type="submit" class="btn btn-primary">Yes, delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <?php require_once __DIR__ . '/include/footer.php'; ?>
