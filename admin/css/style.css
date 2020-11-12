@@ -80,16 +80,17 @@ button:focus {
 .admin-button {
   font-size: 16px;
   padding: 5px 20px;
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
   border-radius: 3px;
   transition: background-color 0.1s linear;
-  background-color: #fff;
-  color: #2d2d2d;
+  background-color: #17a2b8;
+  color: #fff;
   font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
 .admin-button:hover {
-  background-color: #eeeeee;
+  background-color: #17a2b896;
+  color: #fff;
 }
 .admin-title {
   margin-bottom: 20px;
@@ -102,16 +103,17 @@ button:focus {
   display: inline-block;
   font-size: 16px;
   padding: 5px 20px;
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
   border-radius: 3px;
   transition: background-color 0.1s linear;
-  background-color: #fff;
-  color: #2d2d2d;
+  background-color: #17a2b8;
+  color: #fff;
   font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
 .add-product:hover {
-  background-color: #eeeeee;
+  background-color: #17a2b896;
+  color: #fff;
 }
 .edit-product-submit,
 .add-product-submit {
@@ -119,17 +121,18 @@ button:focus {
   margin-bottom: 30px;
   font-size: 16px;
   padding: 5px 20px;
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
   border-radius: 3px;
   transition: background-color 0.1s linear;
-  background-color: #fff;
-  color: #2d2d2d;
+  background-color: #17a2b8;
+  color: #fff;
   font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
 .edit-product-submit:hover,
 .add-product-submit:hover {
-  background-color: #eeeeee;
+  background-color: #17a2b896;
+  color: #fff;
 }
 .add-product-title,
 .edit-product-title {
@@ -216,7 +219,15 @@ button:focus {
   border-top: none;
   padding-bottom: 35px;
 }
-.delete-product-modal .modal-footer .btn-primary {
-  background-color: #17a2b8;
+.login-form {
+  width: 500px;
+}
+.login-form__wrapper {
+  display: flex;
+  justify-content: center;
+}
+.login-form h1 {
+  margin-bottom: 20px;
+  text-align: center;
 }
 /*# sourceMappingURL=style.css.map */

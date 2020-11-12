@@ -104,16 +104,17 @@ button {
 .admin-button {
   font-size: 16px;
   padding: 5px 20px;
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
   border-radius: 3px;
   transition: background-color 0.1s linear;
-  background-color: #fff;
-  color: #2d2d2d;
+  background-color: #17a2b8;
+  color: #fff;
   font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 
   &:hover {
-    background-color: #eeeeee;
+    background-color: #17a2b896;
+    color: #fff;
   }
 }
 
@@ -220,20 +221,30 @@ button {
     border-bottom: none;
   }
 
- .modal-body {
-   text-align: center;
-   font-size: 14px;
-   padding-top: 10px;
- }
+  .modal-body {
+    text-align: center;
+    font-size: 14px;
+    padding-top: 10px;
+  }
 
   .modal-footer {
     justify-content: center;
     font-size: 14px;
     border-top: none;
     padding-bottom: 35px;
+  }
+}
 
-    .btn-primary {
-      background-color: #17a2b8;
-    }
+.login-form {
+  width: 500px;
+
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
   }
 }

@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/include/header.php';
 
+Auth::ifNotLoggedIn();
+
 $mode = 'edit-product';
 
 if (isset($_GET['id'])) {
@@ -20,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($product->updateProduct($conn, $_FILES)) {
         if ($product->updateProductImage($conn, $_FILES)) {
-            Url::redirect("/admin");
+            Url::redirect("/admin/products.php");
         }
     }
 }

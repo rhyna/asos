@@ -2,6 +2,8 @@
 
 require_once __DIR__ . "/../include/init.php";
 
+Auth::ifNotLoggedIn();
+
 $conn = require_once __DIR__ . "/../include/db.php";
 
 if (!isset($_POST['id'])) {

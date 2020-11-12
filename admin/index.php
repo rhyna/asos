@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/include/header.php';
 
+Auth::ifNotLoggedIn();
+
 ?>
 
 <main>

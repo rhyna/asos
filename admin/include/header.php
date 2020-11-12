@@ -45,6 +45,15 @@ $conn = require_once __DIR__ . "/../../include/db.php";
                 <li class="nav-item admin-header-nav-item">
                     <a class="nav-link" href="/admin/products.php">Products</a>
                 </li>
+                <?php if (Auth::isLoggedIn()): ?>
+                    <li class="nav-item admin-header-nav-item">
+                        <a class="nav-link" href="/admin/logout.php">Log out</a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item admin-header-nav-item">
+                        <a class="nav-link" href="/admin/login.php">Log in</a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
