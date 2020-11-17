@@ -3,6 +3,7 @@
 
 class Auth
 {
+
     static public function login(): void
     {
         session_regenerate_id();
@@ -25,6 +26,9 @@ class Auth
         session_destroy();
     }
 
+    /**
+     * @return bool
+     */
     static public function isLoggedIn(): bool
     {
         if (isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in']) {

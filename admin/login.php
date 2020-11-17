@@ -13,8 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-?>
+if (Auth::isLoggedIn()) {
+    echo 'You are already logged in, log out to switch to another user account';
+    exit;
+}
 
+?>
 <div class="container">
     <div class="login-form__wrapper">
         <form action="" method="post" class="login-form">

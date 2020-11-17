@@ -7,7 +7,7 @@ class Database
     protected $db_user;
     protected $db_pass;
 
-    public function __construct($host, $name, $user, $pass)
+    public function __construct(string $host, string $name, string $user, string $pass)
     {
         $this->db_host = $host;
         $this->db_name = $name;
@@ -15,16 +15,23 @@ class Database
         $this->db_pass = $pass;
     }
 
+    /**
+     * @return PDO
+     */
     public function getConn(): PDO
     {
         $dsn = 'mysql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';charset=utf8';
 
         try {
             $db = new PDO($dsn, $this->db_user, $this->db_pass);
+
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
             return $db;
+
         } catch (PDOException $e) {
             echo $e->getMessage();
+
             exit;
         }
     }

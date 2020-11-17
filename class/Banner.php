@@ -11,7 +11,12 @@ class Banner
     public $buttonLabel;
     public $alias;
 
-    public static function getAllBanners($conn)
+    /**
+     * @param PDO $conn
+     * @return array
+     * @throws Exception
+     */
+    public static function getAllBanners(PDO $conn): array
     {
         $sql = 'select 
                     banner.id, 
@@ -28,11 +33,22 @@ class Banner
 
         $result = $conn->query($sql);
 
-        return $result->fetchAll(PDO::FETCH_CLASS, 'Banner');
+        $fetchedResult = $result->fetchAll(PDO::FETCH_CLASS, Banner::class);
+
+        if (is_array($fetchedResult) && $fetchedResult) {
+            return $fetchedResult;
+        } else {
+            throw new Exception('The banner list is empty or a fetch error occurred');
+        }
 
     }
 
-    public static function getFormattedBanners($conn)
+    /**
+     * @param PDO $conn
+     * @return array
+     * @throws Exception
+     */
+    public static function getFormattedBanners(PDO $conn): array
     {
         $banners = self::getAllBanners($conn);
 
@@ -45,7 +61,12 @@ class Banner
 
     }
 
-    public static function getHotCategorySmallBanners($conn)
+    /**
+     * @param PDO $conn
+     * @return array
+     * @throws Exception
+     */
+    public static function getHotCategorySmallBanners(PDO $conn): array
     {
         $banners = self::getFormattedBanners($conn);
 
@@ -62,7 +83,12 @@ class Banner
         return $hotCategorySmallBanners;
     }
 
-    public static function getHotCategoryBigBanners($conn)
+    /**
+     * @param PDO $conn
+     * @return array
+     * @throws Exception
+     */
+    public static function getHotCategoryBigBanners(PDO $conn): array
     {
         $banners = self::getFormattedBanners($conn);
 
@@ -79,7 +105,13 @@ class Banner
         return $hotCategoryBigBanners;
     }
 
-    public static function getTrendingBrands($conn) {
+    /**
+     * @param PDO $conn
+     * @return array
+     * @throws Exception
+     */
+    public static function getTrendingBrands(PDO $conn): array
+    {
         $banners = self::getFormattedBanners($conn);
 
         $trendingBrands = [];

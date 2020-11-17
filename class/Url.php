@@ -2,7 +2,10 @@
 
 class Url
 {
-    static function redirect($path)
+    /**
+     * @param string $path
+     */
+    static function redirect(string $path): void
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
             $protocol = 'https';

@@ -30,7 +30,7 @@ class Product
 
         $result = $conn->query($sql);
 
-        return $result->fetchAll(PDO::FETCH_CLASS, 'Product');
+        return $result->fetchAll(PDO::FETCH_CLASS, Product::class);
     }
 
     public function validateProduct($conn)
@@ -327,7 +327,7 @@ class Product
 
         $statement->execute();
 
-        return $statement->fetchObject('Product') ?: null;
+        return $statement->fetchObject(Product::class) ?: null;
     }
 
     public function updateProduct($conn, $data): bool

@@ -5,29 +5,55 @@ class Category
 {
     public static $categoryLevels = [];
 
-    static public function getRootWomenCategoryId($conn)
+    /**
+     * @param PDO $conn
+     * @return int
+     */
+    static public function getRootWomenCategoryId(PDO $conn): int
     {
         $sql = 'select id from category where root_women_category = 1';
         $result = $conn->query($sql);
-        return $result->fetchColumn();
+        return (int)$result->fetchColumn();
     }
 
-    static public function getRootMenCategoryId($conn)
+    /**
+     * @param PDO $conn
+     * @return int
+     */
+    static public function getRootMenCategoryId(PDO $conn): int
     {
         $sql = 'select id from category where root_men_category = 1';
         $result = $conn->query($sql);
-        return $result->fetchColumn();
+        return (int)$result->fetchColumn();
     }
 
-    static public function getCategories($conn, $parentId)
+    /**
+     * @param PDO $conn
+     * @param int $parentId
+     * @return array
+     * @throws Exception
+     */
+    static public function getCategories(PDO $conn, int $parentId): array
     {
         $sql = "select title, id from category where parent_id = $parentId";
+
         $result = $conn->query($sql);
-        return $result->fetchAll(PDO::FETCH_ASSOC);
+
+        $fetchedResult = $result->fetchAll(PDO::FETCH_ASSOC);
+
+        if (is_array($fetchedResult) && $fetchedResult) {
+            return $fetchedResult;
+        } else {
+            throw new Exception('The category list is empty or a fetch error occurred');
+        }
     }
 
-
-    static public function getSubCategories($conn, $categories)
+    /**
+     * @param PDO $conn
+     * @param array $categories
+     * @return array
+     */
+    static public function getSubCategories(PDO $conn, array $categories): array
     {
         $subCategories = [];
 
@@ -42,12 +68,19 @@ class Category
         return $subCategories;
     }
 
-    static public function getPreviewSubCategories($subCategories)
+    /**
+     * @param array $subCategories
+     * @return array
+     */
+    static public function getPreviewSubCategories(array $subCategories): array
     {
         return $previewSubCategories = array_slice($subCategories, 0, 2);
     }
 
-    static public function getRootCategories($conn)
+    /**
+     * @param PDO $conn
+     */
+    static public function getRootCategories(PDO $conn): void
     {
         $rootCategoriesSQL = 'select title, id from category where parent_id IS NULL';
 
@@ -56,7 +89,10 @@ class Category
         self::$categoryLevels = $rootCategories->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    static public function getFirstLevelCategories($conn)
+    /**
+     * @param PDO $conn
+     */
+    static public function getFirstLevelCategories(PDO $conn): void
     {
         foreach (self::$categoryLevels as &$categoryLevel) {
             $firstLevelCategoriesSQL =
@@ -68,7 +104,10 @@ class Category
         }
     }
 
-    static public function getSecondLevelCategories($conn)
+    /**
+     * @param PDO $conn
+     */
+    static public function getSecondLevelCategories(PDO $conn): void
     {
         foreach (self::$categoryLevels as &$categoryLevel) {
 
@@ -84,7 +123,11 @@ class Category
         }
     }
 
-    static public function getCategoryLevels($conn)
+    /**
+     * @param PDO $conn
+     * @return array
+     */
+    static public function getCategoryLevels(PDO $conn): array
     {
         Category::getRootCategories($conn);
 
