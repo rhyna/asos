@@ -6,6 +6,8 @@ Auth::ifNotLoggedIn();
 
 $allProducts = Product::getAllProducts($conn);
 
+$entityType = 'product';
+
 ?>
 
 <main>
@@ -46,8 +48,8 @@ $allProducts = Product::getAllProducts($conn);
                                     <i class="far fa-edit"></i>
                                 </a>
                                 <button type="button" data-toggle="modal"
-                                        data-target="#deleteProduct"
-                                        onclick="passProductId(<?= $product->id ?>)">
+                                        data-target="#deleteEntity"
+                                        onclick="passEntityId(<?= $product->id ?>)">
                                     <i class="far fa-trash-alt"></i>
                                 </button>
 
@@ -60,6 +62,8 @@ $allProducts = Product::getAllProducts($conn);
     </div>
 </main>
 
-<?php require_once __DIR__ . '/include/delete-product-confirmation.php'; ?>
+<?php require_once __DIR__ . '/include/delete-entity-confirmation.php'; ?>
+
+<?php require_once __DIR__ . '/include/on-entity-deletion-modal.php'; ?>
 
 <?php require_once __DIR__ . '/include/footer.php'; ?>

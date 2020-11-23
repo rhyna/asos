@@ -9,13 +9,15 @@ $conn = require_once __DIR__ . "/../include/db.php";
 $id = $_POST['id'] ?? null;
 
 if (!$id) {
-    echo 'The product id is not provided';
-    exit;
+    header('HTTP/1.1 500 Internal Server Error');
+
+    die('The product id is not provided');
 }
 
 if ($id !== (string)((int)$id)) {
-    echo 'The product id is not a valid number';
-    exit;
+    header('HTTP/1.1 500 Internal Server Error');
+
+    die('The product id is not a valid number');
 }
 
 $id = (int)$id;
@@ -23,13 +25,16 @@ $id = (int)$id;
 $product = Product::getProduct($conn, $id);
 
 if (!$product) {
-    echo 'The product to delete is not found';
-    exit;
+    header('HTTP/1.1 500 Internal Server Error');
+
+    die('The product to delete is not found');
 }
 
 global $ROOT;
 
 if ($product->deleteProduct($conn)) {
+    header("HTTP/1.1 200 OK");
+
     $images = $product->getImagesArray();
 
     foreach ($images as $imageArray) {
@@ -44,10 +49,15 @@ if ($product->deleteProduct($conn)) {
         }
     }
 
-    Url::redirect("/admin/products.php");
+//    Url::redirect("/admin/products.php");
+
+    echo 'Successfully deleted';
+
+
 } else {
-    echo 'A problem occurred, the product has not been deleted';
-    exit;
+    header('HTTP/1.1 500 Internal Server Error');
+
+    die('A problem occurred, the product has not been deleted');
 }
 
 

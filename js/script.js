@@ -40,8 +40,56 @@ function deleteProductImage(button) {
         })
 }
 
-function passProductId(productId) {
-    let modalHiddenInput = $('#deleteProduct').find('.delete-product-modal-product-id');
+function passEntityId(entityId) {
+    let modalHiddenInput = $('#deleteEntity').find('.delete-entity-modal-entity-id');
 
-    modalHiddenInput.val(productId);
+    modalHiddenInput.val(entityId);
+}
+
+function deleteEntity(form) {
+    let url = form.action;
+
+    let id = $('#deleteEntity').find('.delete-entity-modal-entity-id')[0].defaultValue;
+
+    let onDeletionModal = $('#onDeletionResponse');
+
+    let entityType = '';
+
+    if (url.includes('product')) {
+        entityType = 'products';
+    } else if (url.includes('category')) {
+        entityType = 'categories';
+    }
+
+    let a = $('.all' + entityType + '-list-item').find("a[href*='id=" + id + "']");
+
+    let listItem = a.closest('.all' + entityType + '-list-item');
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            id: id,
+        },
+    })
+        .done(function (response) {
+            $('#deleteEntity').modal('hide');
+
+            onDeletionModal.find('.modal-title').html('');
+
+            onDeletionModal.find('.modal-body').html(response);
+
+            onDeletionModal.modal('show');
+
+            listItem.remove();
+        })
+        .fail(function (response) {
+            $('#deleteEntity').modal('hide');
+
+            onDeletionModal.find('.modal-title').html('An error occurred');
+
+            onDeletionModal.find('.modal-body').html(response.responseText);
+
+            onDeletionModal.modal('show');
+        })
 }

@@ -1,5 +1,5 @@
-<div class="modal fade delete-product-modal" id="deleteProduct" tabindex="-1" role="dialog"
-     aria-labelledby="deleteProductLabel" aria-hidden="true">
+<div class="modal fade delete-entity-modal" id="deleteEntity" tabindex="-1" role="dialog"
+     aria-labelledby="deleteEntityLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,10 +8,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete the product?
+                Are you sure you want to delete the <?= $entityType ?>?
             </div>
-            <form action="/admin/delete-product.php" method="post">
-                <input type="hidden" class="delete-product-modal-product-id" value="" name="id">
+            <form action="/admin/delete-<?= $entityType ?>.php" method="post" onsubmit="event.preventDefault(); deleteEntity(this)">
+                <input type="hidden" class="delete-entity-modal-entity-id" value="" name="id">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No, close</button>
                     <button type="submit" class="btn btn-primary">Yes, delete</button>

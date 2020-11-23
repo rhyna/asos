@@ -51,7 +51,7 @@ button {
   }
 }
 
-.allproducts-list {
+.allproducts-list, .allcategories-list {
   font-weight: lighter;
 
   &-item {
@@ -94,11 +94,8 @@ button {
   }
 }
 
-.allproducts-list-title {
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 25px;
-  text-align: center;
+.allproducts-list-title, .allcategories-list-title {
+  .admin-lists-title();
 }
 
 .admin-button {
@@ -124,7 +121,14 @@ button {
   text-align: center;
 }
 
-.add-product {
+.admin-lists-title {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.add-product, .add-category {
   margin-bottom: 20px;
   margin-top: 20px;
   display: inline-block;
@@ -216,7 +220,8 @@ button {
   display: none;
 }
 
-.delete-product-modal {
+.delete-entity-modal,
+.entity-modal-ondeletion {
   .modal-header {
     border-bottom: none;
   }

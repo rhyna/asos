@@ -39,39 +39,49 @@ button:focus {
 .admin-header-nav-item:last-child {
   padding-right: 0;
 }
-.allproducts-list {
+.allproducts-list,
+.allcategories-list {
   font-weight: lighter;
 }
-.allproducts-list-item {
+.allproducts-list-item,
+.allcategories-list-item {
   margin-bottom: 15px;
 }
-.allproducts-list-item a:hover {
+.allproducts-list-item a:hover,
+.allcategories-list-item a:hover {
   color: #0770cf;
 }
-.allproducts-list-item-image {
+.allproducts-list-item-image,
+.allcategories-list-item-image {
   height: 100px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
 }
-.allproducts-list-item-icons a {
+.allproducts-list-item-icons a,
+.allcategories-list-item-icons a {
   margin-right: 15px;
 }
-.allproducts-list-item-icons a:last-child {
+.allproducts-list-item-icons a:last-child,
+.allcategories-list-item-icons a:last-child {
   margin-right: 0;
 }
-.allproducts-list-item-icons button {
+.allproducts-list-item-icons button,
+.allcategories-list-item-icons button {
   background: transparent;
 }
-.allproducts-list-item-icons button:hover {
+.allproducts-list-item-icons button:hover,
+.allcategories-list-item-icons button:hover {
   color: #0770cf;
 }
-.allproducts-list-header {
+.allproducts-list-header,
+.allcategories-list-header {
   margin-bottom: 10px;
   font-size: 16px;
   font-weight: normal;
 }
-.allproducts-list-title {
+.allproducts-list-title,
+.allcategories-list-title {
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
   margin-bottom: 25px;
@@ -97,7 +107,14 @@ button:focus {
   font-size: 20px;
   text-align: center;
 }
-.add-product {
+.admin-lists-title {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 25px;
+  text-align: center;
+}
+.add-product,
+.add-category {
   margin-bottom: 20px;
   margin-top: 20px;
   display: inline-block;
@@ -111,7 +128,8 @@ button:focus {
   font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
-.add-product:hover {
+.add-product:hover,
+.add-category:hover {
   background-color: #17a2b896;
   color: #fff;
 }
@@ -205,15 +223,18 @@ button:focus {
 .add-product-delete-image-button--deleted {
   display: none;
 }
-.delete-product-modal .modal-header {
+.delete-entity-modal .modal-header,
+.entity-modal-ondeletion .modal-header {
   border-bottom: none;
 }
-.delete-product-modal .modal-body {
+.delete-entity-modal .modal-body,
+.entity-modal-ondeletion .modal-body {
   text-align: center;
   font-size: 14px;
   padding-top: 10px;
 }
-.delete-product-modal .modal-footer {
+.delete-entity-modal .modal-footer,
+.entity-modal-ondeletion .modal-footer {
   justify-content: center;
   font-size: 14px;
   border-top: none;
