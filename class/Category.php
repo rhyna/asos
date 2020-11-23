@@ -187,14 +187,13 @@ class Category
     public function deleteCategory(PDO $conn, int $id): bool
     {
         if ($this->isNotParent($conn, $id) && $this->ifNoProducts($conn, $id)) {
-//            $sql = "delete from category where id = :id";
-//
-//            $statement = $conn->prepare($sql);
-//
-//            $statement->bindValue(':id', $id, PDO::PARAM_INT);
-//
-//            return $statement->execute();
-            return true;
+            $sql = "delete from category where id = :id";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+            return $statement->execute();
         } else {
             return false;
         }
