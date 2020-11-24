@@ -299,7 +299,7 @@ class Product
         return (bool)$result->fetch();
     }
 
-    static public function getProduct(PDO $conn, $id): ?Product
+    static public function getProduct(PDO $conn, int $id): ?Product
     {
         $sql = "select p.id, 
                 p.title,

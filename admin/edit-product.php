@@ -31,8 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <main>
     <div class="container">
-        <div class="add-product-page">
-            <div class="add-product-title">
+        <div class="edit-product-page">
+            <div class="admin-title">
                 Edit product
             </div>
             <?php

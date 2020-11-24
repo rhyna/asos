@@ -60,7 +60,7 @@ $images = $product->getImagesArray();
         <select class="form-control" id="categoryId" name="categoryId">
             <?php foreach ($categoryLevels as $categoryLevels1): ?>
                 <option class="product-form-option--disabled" value=""
-                        style="font-weight: 600;
+                        style=" font-weight: 600;
                         text-transform: uppercase">
                     <?= htmlspecialchars($categoryLevels1['title']) ?>
                 </option>

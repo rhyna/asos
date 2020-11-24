@@ -38,6 +38,10 @@ button {
   }
 }
 
+label {
+  font-weight: bold;
+}
+
 .admin-header {
   font-size: 16px;
   margin-bottom: 20px;
@@ -94,10 +98,6 @@ button {
   }
 }
 
-.allproducts-list-title, .allcategories-list-title {
-  .admin-lists-title();
-}
-
 .admin-button {
   font-size: 16px;
   padding: 5px 20px;
@@ -121,7 +121,7 @@ button {
   text-align: center;
 }
 
-.admin-lists-title {
+.admin-list-title {
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
   margin-bottom: 25px;
@@ -136,14 +136,11 @@ button {
 }
 
 .edit-product-submit,
-.add-product-submit {
+.add-product-submit,
+.edit-category-submit {
   margin-top: 10px;
   margin-bottom: 30px;
   .admin-button();
-}
-
-.add-product-title, .edit-product-title {
-  .admin-title();
 }
 
 .edit-product-form-image,
@@ -155,13 +152,40 @@ button {
   margin: 10px 0 15px 0;
 }
 
+.edit-category-form-image {
+  height: 500px;
+  width: 300px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 10px 0 15px 0;
+}
+
 .edit-product-delete-image,
-.add-product-delete-image {
+.add-product-delete-image,
+.edit-category-delete-image {
   margin-top: 10px;
+}
+
+.edit-product-delete-image-button,
+.add-product-delete-image-button,
+.edit-category-delete-image-button {
+  background-color: #bd2130b5;
+  border: none;
+
+  &:hover, &:focus {
+    background-color: #bd21306b;
+    box-shadow: none;
+  }
+
+  &--deleted {
+    display: none;
+  }
 }
 
 .edit-product-form-image--deleted,
 .add-product-form-image--deleted,
+.edit-category-form-image--deleted,
 .products-item__img--deleted,
 .product-img--deleted {
   font-size: 16px;
@@ -170,11 +194,6 @@ button {
   justify-content: center;
   color: #ccc;
   border: 1px solid #ccc;
-}
-
-.edit-product-delete-image-button--deleted,
-.add-product-delete-image-button--deleted {
-  display: none;
 }
 
 .product-form-option--disabled {
@@ -213,11 +232,6 @@ button {
   justify-content: center;
   color: #ccc;
   border: 1px solid #ccc;
-}
-
-.edit-product-delete-image-button--deleted,
-.add-product-delete-image-button--deleted {
-  display: none;
 }
 
 .delete-entity-modal,

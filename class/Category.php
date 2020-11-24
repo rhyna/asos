@@ -18,6 +18,7 @@ class Category
      * @param int $id
      * @return Category|null
      */
+
     static public function getCategory(PDO $conn, int $id): ?Category
     {
         $sql = "select id, 
@@ -36,8 +37,6 @@ class Category
         $statement->execute();
 
         return $statement->fetchObject(Category::class) ?: null;
-
-
     }
 
     /**
