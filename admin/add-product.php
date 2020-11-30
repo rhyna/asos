@@ -4,8 +4,6 @@ require_once __DIR__ . '/include/header.php';
 
 Auth::ifNotLoggedIn();
 
-$mode = 'add-product';
-
 $categoryLevels = Category::getCategoryLevels($conn);
 
 $allBrands = Brand::getAllBrands($conn);

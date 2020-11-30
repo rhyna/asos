@@ -258,9 +258,7 @@ class Category
         $sql = "update category
         set     parent_id = :parentId,
                 title = :title,
-                description = :description,
-                root_women_category = :rootWomenCategory,
-                root_men_category = :rootMenCategory
+                description = :description
         where   id = :id";
 
         $statement = $conn->prepare($sql);
@@ -308,21 +306,13 @@ class Category
     {
         $statement->bindValue(':title', $this->title, PDO::PARAM_STR);
 
-        if (!$this->parentId) {
-            $statement->bindValue(':parentId', $this->parentId, PDO::PARAM_NULL);
-        } else {
-            $statement->bindValue(':parentId', $this->parentId, PDO::PARAM_STR);
-        }
+        $statement->bindValue(':parentId', $this->parentId, PDO::PARAM_STR);
 
         if (!$this->description) {
             $statement->bindValue(':description', $this->description, PDO::PARAM_NULL);
         } else {
             $statement->bindValue(':description', $this->description, PDO::PARAM_STR);
         }
-
-        $statement->bindValue(':rootWomenCategory', $this->rootWomenCategory, PDO::PARAM_STR);
-
-        $statement->bindValue(':rootMenCategory', $this->rootMenCategory, PDO::PARAM_STR);
     }
 
     /**
@@ -436,5 +426,26 @@ class Category
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
 
         return $statement->execute();
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function createCategory(PDO $conn): bool
+    {
+        $sql = "insert into category (parent_id, title, description)
+                values (:parentId, :title, :description)";
+
+        $statement = $conn->prepare($sql);
+
+        $this->fillCategoryStatement($statement);
+
+        if ($statement->execute()) {
+            $this->id = $conn->lastInsertId();
+            return true;
+        } else {
+            return false;
+        }
     }
 }

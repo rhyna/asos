@@ -49,8 +49,6 @@ if ($product->deleteProduct($conn)) {
         }
     }
 
-//    Url::redirect("/admin/products.php");
-
     echo 'Successfully deleted';
 
 

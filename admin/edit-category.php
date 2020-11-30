@@ -18,21 +18,7 @@ if ((int)$_GET['id'] === Category::getRootWomenCategoryId($conn) || (int)$_GET['
 $categories = Category::getCategoryLevels($conn);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $category->fillCategoryObject($_POST);
-
-    $category->validateCategory();
-
-    if ($_FILES['image']['name']) {
-        $category->validateCategoryImage($_FILES['image']);
-    }
-
-    if (!$category->validationErrors && !$category->imageValidationErrors) {
-        if ($category->updateCategory($conn)) {
-            if ($_FILES['image']['name']) {
-                $category->updateCategoryImage($conn, $_FILES['image']);
-            }
-        }
-    }
+    CategoryController::onPostCategoryAction($category, $conn, 'update');
 }
 
 ?>

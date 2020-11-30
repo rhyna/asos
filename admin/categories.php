@@ -28,7 +28,7 @@ $entityType = 'category';
                         <div class="allcategories-list-item">
                             <div class="row">
                                 <div class="col">
-                                    <a href="/edit-category.php?id=<?= $firstLevelCategory['id'] ?>">
+                                    <a href="/admin/edit-category.php?id=<?= $firstLevelCategory['id'] ?>">
                                         <?= $firstLevelCategory['title'] ?>
                                     </a>
                                 </div>
@@ -51,7 +51,7 @@ $entityType = 'category';
                             <div class="allcategories-list-item">
                                 <div class="row">
                                     <div class="col">
-                                        <a href="/edit-category.php?id=<?= $secondLevelCategory['id'] ?>">
+                                        <a href="/admin/edit-category.php?id=<?= $secondLevelCategory['id'] ?>">
                                             <?= $secondLevelCategory['title'] ?>
                                         </a>
                                     </div>
