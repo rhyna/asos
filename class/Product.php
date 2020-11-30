@@ -335,7 +335,7 @@ class Product
         $isImageValidated = $this->checkImageValidation($data);
 
         if ($this->validateProduct($conn) && $isImageValidated) {
-            $sql = "update  product 
+            $sql = "update product 
             set     category_id = :categoryId,
                     brand_id = :brandId,
                     product_code = :productCode,

@@ -5,6 +5,7 @@ class Category
 {
     public static $categoryLevels = [];
     public $validationErrors = [];
+    public $imageValidationErrors = [];
     public $id;
     public $parentId;
     public $title;
@@ -204,7 +205,7 @@ class Category
      * @return bool
      * @throws Exception
      */
-    public function isNotParent(PDO $conn, int $id): bool
+    private function isNotParent(PDO $conn, int $id): bool
     {
         $sql = "select id from category where parent_id = $id";
 
@@ -229,7 +230,7 @@ class Category
      * @return bool
      * @throws Exception
      */
-    public function ifNoProducts(PDO $conn, int $id): bool
+    private function ifNoProducts(PDO $conn, int $id): bool
     {
         $sql = "select id from product where category_id = $id";
 
@@ -246,5 +247,194 @@ class Category
         }
 
         return $this->validationErrors ? false : true;
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function updateCategory(PDO $conn): bool
+    {
+        $sql = "update category
+        set     parent_id = :parentId,
+                title = :title,
+                description = :description,
+                root_women_category = :rootWomenCategory,
+                root_men_category = :rootMenCategory
+        where   id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        $this->fillCategoryStatement($statement);
+
+        return $statement->execute();
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function validateCategory(): bool
+    {
+        if (!$this->title) {
+            $this->validationErrors[] = 'Please enter a title';
+        }
+
+        if ($this->id === $this->parentId) {
+            $this->validationErrors[] = 'The parent category cannot be the same as the current category';
+        }
+
+        return $this->validationErrors ? false : true;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function fillCategoryObject(array $data): void
+    {
+        $this->parentId = $data['parent'];
+
+        $this->title = $data['title'];
+
+        $this->description = $data['description'];
+    }
+
+    /**
+     * @param PDOStatement $statement
+     */
+    private function fillCategoryStatement(PDOStatement $statement): void
+    {
+        $statement->bindValue(':title', $this->title, PDO::PARAM_STR);
+
+        if (!$this->parentId) {
+            $statement->bindValue(':parentId', $this->parentId, PDO::PARAM_NULL);
+        } else {
+            $statement->bindValue(':parentId', $this->parentId, PDO::PARAM_STR);
+        }
+
+        if (!$this->description) {
+            $statement->bindValue(':description', $this->description, PDO::PARAM_NULL);
+        } else {
+            $statement->bindValue(':description', $this->description, PDO::PARAM_STR);
+        }
+
+        $statement->bindValue(':rootWomenCategory', $this->rootWomenCategory, PDO::PARAM_STR);
+
+        $statement->bindValue(':rootMenCategory', $this->rootMenCategory, PDO::PARAM_STR);
+    }
+
+    /**
+     * @param array $image
+     * @return bool
+     */
+    public function validateCategoryImage(array $image): bool
+    {
+        $extensions = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+
+        try {
+            $errorMessages = [];
+
+            if ($image['size'] > 1000000) {
+                $errorMessages[] = 'A file size can be 1 Mb max';
+            }
+
+            if (!in_array($image['type'], $extensions)) {
+                $errorMessages[] = 'The file is not an image. Eligible extensions: png, jpeg, jpg, gif';
+            }
+
+            if ($errorMessages) {
+                $errorMessage = implode('<br>', $errorMessages);
+
+                throw new Exception($errorMessage);
+            }
+
+        } catch (Exception $e) {
+            $imageErrors = $e->getMessage();
+
+            $imageErrors = explode('<br>', $imageErrors);
+
+            $this->imageValidationErrors = $imageErrors;
+        }
+
+        return $this->imageValidationErrors ? false : true;
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $image
+     * @return bool
+     */
+    public function updateCategoryImage(PDO $conn, array $image): bool
+    {
+        global $ROOT;
+
+        $pathInfo = pathinfo($image['name']);
+
+        $base = $pathInfo['filename'];
+
+        $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', $base); // all except a-z, A-Z, 0-9, _, -
+
+        $fileName = $base . '.' . $pathInfo['extension'];
+
+        $imageUploadDestination = '/upload/category/' . $fileName;
+
+        for ($i = 1; file_exists($ROOT . $imageUploadDestination); $i++) {
+            $imageUploadDestination = '/upload/category/' . $base . '-' . $i . '.' . $pathInfo['extension'];
+        }
+
+        $isFileMoved = move_uploaded_file($image['tmp_name'], $ROOT . $imageUploadDestination);
+
+        if (!$isFileMoved) {
+            return false;
+        }
+
+        $previousImage = $this->image;
+
+        $this->image = $imageUploadDestination;
+
+        if (!$this->setCategoryImage($conn)) {
+            return false;
+        }
+
+        if ($previousImage) {
+            unlink($ROOT . $previousImage);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    private function setCategoryImage(PDO $conn): bool
+    {
+        $sql = "update category set image = :image where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        $statement->bindValue(':image', $this->image, PDO::PARAM_STR);
+
+        return $statement->execute();
+    }
+
+    /**
+     * @param PDO $conn
+     * @param int $id
+     * @return bool
+     */
+    static public function deleteCategoryImage(PDO $conn, int $id): bool
+    {
+        $sql = "update category set image = null where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+        return $statement->execute();
     }
 }

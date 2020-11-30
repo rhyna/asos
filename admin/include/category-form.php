@@ -1,4 +1,19 @@
-<form action="" method="post" enctype="multipart/form-data" id="categoryForm" class="<?= $classMode ?>-category-form">
+<?php if ($category->validationErrors): ?>
+    <ul class="entity-form-errors">
+        <?php foreach ($category->validationErrors as $error): ?>
+            <li><?= $error ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+<?php if ($category->imageValidationErrors): ?>
+    <ul class="entity-form-errors entity-form-errors--image">
+        <?php foreach ($category->imageValidationErrors as $imageError): ?>
+            <li><?= $imageError ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+<form action="" method="post" enctype="multipart/form-data" id="categoryForm" class="entity-form">
     <div class="form-group">
         <label for="title">Title</label>
         <input class="form-control" type="text" name="title" id="title"
@@ -22,28 +37,32 @@
             <?php endforeach; ?>
         </select>
     </div>
-    <div class="form-group">
-        <div class="<?= $classMode ?>-category-form-image <?= $category->image ? '' : $classMode . '-category-form-image--deleted' ?>"
-            <?= ($category->image ? 'style="background-image: url(' . $category->image . ')"' : '') ?>>
-            <?= !$category->image ? 'No image' : '' ?>
-        </div>
-        <input class="form-control-file" name="image" id="image" type="file">
-    </div>
-    <div class="form-group <?= $classMode ?>-category-delete-image">
-        <?php if ($category->image): ?>
-            <button type="button"
-                    class="btn btn-danger <?= $classMode ?>-category-delete-image-button"
-                    name="delete-image"
-                    onclick="">
-                Delete image
-            </button>
-        <?php endif; ?>
-    </div>
+    <div class="form-image">
         <div class="form-group">
+            <div class="entity-form-image entity-form-image--category <?= $category->image ? '' : 'entity-form-image--deleted' ?>"
+                <?= ($category->image ? 'style="background-image: url(' . $category->image . ')"' : '') ?>>
+                <?= !$category->image ? 'No image' : '' ?>
+            </div>
+            <input class="form-control-file" name="image" id="image" type="file">
+        </div>
+        <div class="form-group entity-form-delete-image">
+            <?php if ($category->image): ?>
+                <button type="button"
+                        class="btn btn-danger entity-form-delete-image-button"
+                        name="delete-image"
+                        data-id="<?= $category->id ?>"
+                        data-image="<?= $category->image ?>"
+                        data-type="category"
+                        onclick="deleteEntityImage(this)">
+                    Delete image
+                </button>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="description">Description</label>
         <textarea class="form-control" type="text" name="description" id="description"
-                  rows="5"><?= htmlspecialchars($category->description) ?>
-        </textarea>
+                  rows="5"><?= htmlspecialchars($category->description) ?></textarea>
     </div>
-    <button type="submit" class="<?= $classMode ?>-category-submit">Submit</button>
+    <button type="submit" class="entity-form-submit">Submit</button>
 </form>

@@ -6,8 +6,8 @@ Auth::ifNotLoggedIn();
 
 ?>
 
-<main>
-    123
-</main>
+    <main>
+        123
+    </main>
 
-<?php require_once  __DIR__ . '/include/footer.php'; ?>
+<?php require_once __DIR__ . '/include/footer.php'; ?>

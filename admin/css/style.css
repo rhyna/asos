@@ -109,8 +109,7 @@ label {
   margin-bottom: 25px;
   text-align: center;
 }
-.add-product,
-.add-category {
+.add-entity {
   margin-bottom: 20px;
   margin-top: 20px;
   display: inline-block;
@@ -124,14 +123,11 @@ label {
   font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
-.add-product:hover,
-.add-category:hover {
+.add-entity:hover {
   background-color: #17a2b896;
   color: #fff;
 }
-.edit-product-submit,
-.add-product-submit,
-.edit-category-submit {
+.entity-form-submit {
   margin-top: 10px;
   margin-bottom: 30px;
   font-size: 16px;
@@ -144,56 +140,37 @@ label {
   font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
-.edit-product-submit:hover,
-.add-product-submit:hover,
-.edit-category-submit:hover {
+.entity-form-submit:hover {
   background-color: #17a2b896;
   color: #fff;
 }
-.edit-product-form-image,
-.add-product-form-image {
+.entity-form-image {
   height: 300px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   margin: 10px 0 15px 0;
 }
-.edit-category-form-image {
+.entity-form-image--category {
   height: 500px;
   width: 300px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin: 10px 0 15px 0;
 }
-.edit-product-delete-image,
-.add-product-delete-image,
-.edit-category-delete-image {
+.entity-form-delete-image {
   margin-top: 10px;
 }
-.edit-product-delete-image-button,
-.add-product-delete-image-button,
-.edit-category-delete-image-button {
+.entity-form-delete-image-button {
   background-color: #bd2130b5;
   border: none;
 }
-.edit-product-delete-image-button:hover,
-.add-product-delete-image-button:hover,
-.edit-category-delete-image-button:hover,
-.edit-product-delete-image-button:focus,
-.add-product-delete-image-button:focus,
-.edit-category-delete-image-button:focus {
+.entity-form-delete-image-button:hover,
+.entity-form-delete-image-button:focus {
   background-color: #bd21306b;
   box-shadow: none;
 }
-.edit-product-delete-image-button--deleted,
-.add-product-delete-image-button--deleted,
-.edit-category-delete-image-button--deleted {
+.entity-form-delete-image-button--deleted {
   display: none;
 }
-.edit-product-form-image--deleted,
-.add-product-form-image--deleted,
-.edit-category-form-image--deleted,
+.entity-form-image--deleted,
 .products-item__img--deleted,
 .product-img--deleted {
   font-size: 16px;
@@ -203,39 +180,25 @@ label {
   color: #ccc;
   border: 1px solid #ccc;
 }
-.product-form-option--disabled {
+.entity-form-option--disabled {
   opacity: 0.5;
 }
-.edit-product-errors,
-.add-product-errors {
+.entity-form-errors {
   margin-left: 20px;
   color: #ff253a;
   margin-bottom: 20px;
 }
-.edit-product-errors--image-group,
-.add-product-errors--image-group {
+.entity-form-errors--image-group {
   margin-bottom: 20px;
 }
-.edit-product-errors--image-group ul,
-.add-product-errors--image-group ul {
+.entity-form-errors--image-group ul {
   list-style: circle;
 }
-.edit-product-errors--image-group ul li,
-.add-product-errors--image-group ul li {
+.entity-form-errors--image-group ul li {
   margin-left: 30px;
 }
-.edit-product-errors:last-of-type,
-.add-product-errors:last-of-type {
+.entity-form-errors:last-of-type {
   margin-bottom: 20px;
-}
-.edit-product-form-image--deleted,
-.add-product-form-image--deleted {
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ccc;
-  border: 1px solid #ccc;
 }
 .delete-entity-modal .modal-header,
 .entity-modal-ondeletion .modal-header {
@@ -264,5 +227,8 @@ label {
 .login-form h1 {
   margin-bottom: 20px;
   text-align: center;
+}
+.login-form label {
+  font-weight: normal;
 }
 /*# sourceMappingURL=style.css.map */

@@ -9,33 +9,35 @@ $('.subbar-item').hover(function () {
     $(this).removeClass('subbar-item--active');
 })
 
-$('.product-form-option--disabled').prop('disabled', true);
+$('.entity-form-option--disabled').prop('disabled', true);
 
-function deleteProductImage(button) {
-    let $button = $(button);
+function deleteEntityImage(buttonElement) {
+    let button = $(buttonElement);
 
-    let productId = $button.data('id');
+    let entityType = button.data('type');
 
-    let image = $button.data('image')
+    let entityId = button.data('id');
 
-    let parentImage = $button.closest('.form-image');
+    let image = button.data('image');
+
+    let parentImage = button.closest('.form-image');
 
     $.ajax({
-        url: '/admin/delete-product-image.php',
+        url: '/admin/delete-' + entityType + '-image.php',
         type: 'POST',
         data: {
-            id: productId,
+            id: entityId,
             image: image,
         },
     })
-        .done(function (response) { // when the server code is 200
-            $(parentImage).find(".edit-product-form-image")
+        .done(function (response) {
+            $(parentImage).find(".entity-form-image")
                 .html('No image')
-                .addClass('edit-product-form-image--deleted')
+                .addClass('entity-form-image--deleted')
                 .css('background-image', '');
-            $($button).addClass('edit-product-delete-image-button--deleted');
+            $(button).addClass('entity-form-delete-image-button--deleted');
         })
-        .fail(function (response) { // when the server code is other than 200
+        .fail(function (response) {
             alert(response.responseText);
         })
 }

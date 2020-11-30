@@ -12,7 +12,7 @@ $entityType = 'category';
 
 <main>
     <div class="container">
-        <a href="/admin/add-category.php" class="add-category">Add category</a>
+        <a href="/admin/add-category.php" class="add-entity">Add category</a>
         <h1 class="admin-list-title">Categories</h1>
         <div class="allcategories-list">
             <div class="allcategories-list-header">

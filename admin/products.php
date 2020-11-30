@@ -12,7 +12,7 @@ $entityType = 'product';
 
 <main>
     <div class="container">
-        <a href="/admin/add-product.php" class="add-product">Add product</a>
+        <a href="/admin/add-product.php" class="add-entity">Add product</a>
         <h1 class="admin-list-title">Products</h1>
         <div class="allproducts-list">
             <div class="allproducts-list-header">
