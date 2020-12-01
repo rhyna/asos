@@ -19,6 +19,10 @@ class Product
     public $productErrors = [];
     public $imageErrors = [];
 
+    /**
+     * @param PDO $conn
+     * @return array
+     */
     static public function getAllProducts(PDO $conn): array
     {
         $sql = "select p.*,
@@ -33,7 +37,11 @@ class Product
         return $result->fetchAll(PDO::FETCH_CLASS, Product::class);
     }
 
-    public function validateProduct($conn)
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function validateProduct(PDO $conn): bool
     {
 
         if (!$this->title) {
@@ -61,7 +69,11 @@ class Product
         return $this->productErrors ? false : true;
     }
 
-    public function checkImageValidation($data)
+    /**
+     * @param array $data
+     * @return bool
+     */
+    private function checkImageValidation(array $data): bool
     {
         $imagesArray = [
             'image' => $data['image'],
@@ -85,7 +97,12 @@ class Product
         return $isImageValidated;
     }
 
-    public function createProduct($conn, $data): bool
+    /**
+     * @param PDO $conn
+     * @param array $data
+     * @return bool
+     */
+    public function createProduct(PDO $conn, array $data): bool
     {
         $isImageValidated = $this->checkImageValidation($data);
 
@@ -123,7 +140,10 @@ class Product
         }
     }
 
-    private function fillProductStatement($statement)
+    /**
+     * @param PDOStatement $statement
+     */
+    private function fillProductStatement(PDOStatement $statement): void
     {
         $statement->bindValue(':categoryId', $this->category_id, PDO::PARAM_STR);
 
@@ -158,7 +178,10 @@ class Product
         }
     }
 
-    public function fillProductObject($data)
+    /**
+     * @param array $data
+     */
+    public function fillProductObject(array $data): void
     {
         if (!isset($data['categoryId'])) {
             $this->category_id = '';
@@ -181,7 +204,11 @@ class Product
         $this->about_me = $data['aboutMe'];
     }
 
-    public function validateProductImage($image)
+    /**
+     * @param array $image
+     * @return bool
+     */
+    private function validateProductImage(array $image): bool
     {
         $extensions = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 
@@ -210,7 +237,13 @@ class Product
         return $this->imageErrors ? false : true;
     }
 
-    public function setProductImage($conn, $currentImage, $imagePath)
+    /**
+     * @param PDO $conn
+     * @param string $currentImage
+     * @param string $imagePath
+     * @return bool
+     */
+    private function setProductImage(PDO $conn, string $currentImage, string $imagePath): bool
     {
         $imageColNames = [
             'image',
@@ -233,9 +266,15 @@ class Product
             }
         }
 
+        return false;
     }
 
-    public function updateProductImage($conn, $data): bool
+    /**
+     * @param PDO $conn
+     * @param array $data
+     * @return bool
+     */
+    public function updateProductImage(PDO $conn, array $data): bool
     {
         if ($this->imageErrors || $this->productErrors) {
             return false;
@@ -290,7 +329,11 @@ class Product
         return true;
     }
 
-    public function checkProductCodeDupes(PDO $conn): bool
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    private function checkProductCodeDupes(PDO $conn): bool
     {
         $sql = "select id from product where product_code = $this->product_code";
 
@@ -299,6 +342,11 @@ class Product
         return (bool)$result->fetch();
     }
 
+    /**
+     * @param PDO $conn
+     * @param int $id
+     * @return Product|null
+     */
     static public function getProduct(PDO $conn, int $id): ?Product
     {
         $sql = "select p.id, 
@@ -330,7 +378,12 @@ class Product
         return $statement->fetchObject(Product::class) ?: null;
     }
 
-    public function updateProduct($conn, $data): bool
+    /**
+     * @param PDO $conn
+     * @param array $data
+     * @return bool
+     */
+    public function updateProduct(PDO $conn, array $data): bool
     {
         $isImageValidated = $this->checkImageValidation($data);
 
@@ -358,7 +411,10 @@ class Product
         }
     }
 
-    public function getImagesArray()
+    /**
+     * @return array[]
+     */
+    public function getImagesArray(): array
     {
         return [
             'image' => [
@@ -376,7 +432,12 @@ class Product
         ];
     }
 
-    public function deleteProductImage(PDO $conn, $image)
+    /**
+     * @param PDO $conn
+     * @param string $image
+     * @return bool
+     */
+    public function deleteProductImage(PDO $conn, string $image): bool
     {
         global $ROOT;
 
@@ -396,10 +457,13 @@ class Product
         } else {
             return false;
         }
-
     }
 
-    public function deleteProduct($conn): bool
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function deleteProduct(PDO $conn): bool
     {
         $sql = "delete from product where id = :id";
 
