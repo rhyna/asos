@@ -148,6 +148,32 @@ label {
   background-size: cover;
   margin: 10px 0 15px 0;
 
+  &:after {
+    opacity: 0;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(180deg, #ccccccb3 0%, rgba(255, 255, 255, 0) 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: top;
+    transition: opacity 0.2s linear;
+  }
+
+  &:hover {
+    &:after {
+      opacity: 1;
+    }
+
+    .entity-form-delete-image-button {
+      opacity: 1;
+    }
+
+  }
+
   &--category {
     height: 500px;
     width: 300px;
@@ -159,16 +185,21 @@ label {
 }
 
 .entity-form-delete-image-button {
-  background-color: #bd2130b5;
-  border: none;
-
-  &:hover, &:focus {
-    background-color: #bd21306b;
-    box-shadow: none;
-  }
+  background-color: transparent;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s linear;
 
   &--deleted {
     display: none;
+  }
+
+  i {
+    font-size: 20px;
+    color: #1d2124cf;
   }
 }
 
@@ -181,6 +212,10 @@ label {
   justify-content: center;
   color: #ccc;
   border: 1px solid #ccc;
+
+  &:after {
+    display: none;
+  }
 }
 
 .entity-form-option--disabled {

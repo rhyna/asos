@@ -34,6 +34,10 @@ if ($category->deleteCategory($conn, $id)) {
     header("HTTP/2.0 200 OK");
 
     echo 'Successfully deleted';
+
+    if($category->image) {
+        unlink($ROOT . $category->image);
+    }
 } elseif ($category->validationErrors) {
     header('HTTP/2.0 422 Validation Error');
 

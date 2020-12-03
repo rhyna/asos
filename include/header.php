@@ -118,6 +118,43 @@ $config = [
                             </div>
                         </li>
                     <?php endforeach; ?>
+                    <li class="subbar-item">
+                        <button type="button" class="subbar-button">Brands</button>
+                        <div class="subbar-dropdown-menu__wrapper">
+                            <div class="subbar-dropdown-menu__inner">
+                                <div class="subbar-dropdown-menu subbar-dropdown-menu--brand">
+                                    <div class="subbar-dropdown-title">
+                                        <span>All brands</span>
+                                    </div>
+                                    <div class="subbar-dropdown-menu__content">
+                                        <ul>
+                                            <li>Brand name</li>
+                                            <li>Brand name</li>
+                                            <li>Brand name</li>
+                                            <li>Brand name</li>
+                                            <li>Brand name</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="subbar-dropdown-menu subbar-dropdown-menu--preview">
+                                    <div class="subbar-dropdown-menu-preview__inner">
+                                        <div class="subbar-dropdown-menu-preview-image__wrapper">
+                                            <div class="subbar-dropdown-menu-preview-image"
+                                                 style='background-image: url("#")'>
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                        <div class="subbar-dropdown-menu-preview-image__wrapper">
+                                            <div class="subbar-dropdown-menu-preview-image"
+                                                 style='background-image: url("#")'>
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                 <?php endif; ?>
             <?php endforeach; ?>
         </ul>

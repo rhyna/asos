@@ -42,21 +42,19 @@
             <div class="entity-form-image entity-form-image--category <?= $category->image ? '' : 'entity-form-image--deleted' ?>"
                 <?= ($category->image ? 'style="background-image: url(' . $category->image . ')"' : '') ?>>
                 <?= !$category->image ? 'No image' : '' ?>
+                <?php if ($category->image): ?>
+                    <button type="button"
+                            class="entity-form-delete-image-button"
+                            name="delete-image"
+                            data-id="<?= $category->id ?>"
+                            data-image="<?= $category->image ?>"
+                            data-type="category"
+                            onclick="deleteEntityImage(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                <?php endif; ?>
             </div>
             <input class="form-control-file" name="image" id="image" type="file">
-        </div>
-        <div class="form-group entity-form-delete-image">
-            <?php if ($category->image): ?>
-                <button type="button"
-                        class="btn btn-danger entity-form-delete-image-button"
-                        name="delete-image"
-                        data-id="<?= $category->id ?>"
-                        data-image="<?= $category->image ?>"
-                        data-type="category"
-                        onclick="deleteEntityImage(this)">
-                    Delete image
-                </button>
-            <?php endif; ?>
         </div>
     </div>
     <div class="form-group">

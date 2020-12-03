@@ -18,20 +18,20 @@ function deleteEntityImage(buttonElement) {
 
     let entityId = button.data('id');
 
-    let image = button.data('image');
+    let imageLink = button.data('image');
 
-    let parentImage = button.closest('.form-image');
+    let image = button.closest('.form-image');
 
     $.ajax({
         url: '/admin/delete-' + entityType + '-image.php',
         type: 'POST',
         data: {
             id: entityId,
-            image: image,
+            image: imageLink,
         },
     })
         .done(function (response) {
-            $(parentImage).find(".entity-form-image")
+            $(image).find(".entity-form-image")
                 .html('No image')
                 .addClass('entity-form-image--deleted')
                 .css('background-image', '');

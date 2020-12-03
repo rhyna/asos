@@ -11,7 +11,6 @@
 а textarea также снаружи в nl2br(чтобы переносы строк в textarea перевести в br)
 на бонлибро book-form.php надо переложить в папку include?
 
-- удалить пункт бренды из таблицы категорий, в шапку выводить его отдельно
 - в updateCategory $statement->bindValue(':id', $this->id, PDO::PARAM_INT); - или параметр STRING?
     аналогично в Product
 - в setProductImage в строке 230, наверно, не нужна проверка на null, потому что пустой destination никогда не придет

@@ -105,22 +105,20 @@ $images = $product->getImagesArray();
                             <div class="entity-form-image <?= $imageUrl ? '' : 'entity-form-image--deleted' ?>"
                                 <?= ($imageUrl ? 'style="background-image: url(' . $imageUrl . ')"' : null) ?>>
                                 <?= !$imageUrl ? 'No image' : null ?>
+                                <?php if ($imageUrl): ?>
+                                    <button type="button"
+                                            class="entity-form-delete-image-button"
+                                            name="delete-image"
+                                            data-id="<?= $product->id ?>"
+                                            data-image="<?= $imageName ?>"
+                                            data-type="product"
+                                            onclick="deleteEntityImage(this)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                <?php endif; ?>
                             </div>
                             <input class="form-control-file" name="<?= $imageAlias ?>" id="<?= $imageAlias ?>"
                                    type="file">
-                        </div>
-                        <div class="form-group entity-form-delete-image">
-                            <?php if ($imageUrl): ?>
-                                <button type="button"
-                                        class="btn btn-danger entity-form-delete-image-button"
-                                        name="delete-image"
-                                        data-id="<?= $product->id ?>"
-                                        data-image="<?= $imageName ?>"
-                                        data-type="product"
-                                        onclick="deleteEntityImage(this)">
-                                    Delete image
-                                </button>
-                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
