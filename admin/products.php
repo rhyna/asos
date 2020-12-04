@@ -13,9 +13,9 @@ $entityType = 'product';
 <main>
     <div class="container">
         <a href="/admin/add-product.php" class="add-entity">Add product</a>
-        <h1 class="admin-list-title">Products</h1>
-        <div class="allproducts-list">
-            <div class="allproducts-list-header">
+        <h1 class="entity-list-title">Products</h1>
+        <div class="entity-list entity-list--product">
+            <div class="entity-list-header">
                 <div class="row">
                     <div class="col"></div>
                     <div class="col-3">Title</div>
@@ -26,12 +26,12 @@ $entityType = 'product';
                     <div class="col-1"></div>
                 </div>
             </div>
-            <div class="allproducts-list-content">
+            <div class="entity-list-content">
                 <?php foreach ($allProducts as $product) : ?>
-                    <div class="allproducts-list-item">
+                    <div class="entity-list-item">
                         <div class="row">
                             <div class="col">
-                                <div class="allproducts-list-item-image"
+                                <div class="entity-list-item-image"
                                      style="background-image: url('<?= $product->image ?>')"></div>
                             </div>
                             <div class="col-3">
@@ -43,7 +43,7 @@ $entityType = 'product';
                             <div class="col"><?= $product->price ?></div>
                             <div class="col"><?= $product->brand_title ?></div>
                             <div class="col"><?= $product->category_title ?></div>
-                            <div class="col-1 allproducts-list-item-icons">
+                            <div class="col-1 entity-list-item-icons">
                                 <a href="/admin/edit-product.php?id=<?= $product->id ?>">
                                     <i class="far fa-edit"></i>
                                 </a>

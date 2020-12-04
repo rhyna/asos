@@ -1,32 +1,4 @@
-<?php
-
-$images = $product->getImagesArray();
-
-?>
-
-<?php if ($product->productErrors): ?>
-    <ul class="entity-form-errors">
-        <?php foreach ($product->productErrors as $fileName => $productError): ?>
-            <li><?= $productError ?></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
-<?php if ($product->imageErrors): ?>
-    <ul class="entity-form-errors entity-form-errors--image">
-        <?php foreach ($product->imageErrors as $imageName => $imageErrorArray): ?>
-            <li class="entity-form-errors--image-group"><?= $imageName ?>:
-                <ul>
-                    <?php foreach ($imageErrorArray as $imageError): ?>
-                        <li><?= $imageError ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
-
-
-<form action="" method="post" enctype="multipart/form-data" id="productForm" class="entity-form">
+<form action="" method="post" enctype="multipart/form-data" id="brandForm" class="entity-form">
     <div class="form-group">
         <label for="title">Title</label>
         <input class="form-control" type="text" name="title" id="title"

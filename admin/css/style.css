@@ -42,43 +42,34 @@ label {
 .admin-header-nav-item:last-child {
   padding-right: 0;
 }
-.allproducts-list,
-.allcategories-list {
+.entity-list {
   font-weight: lighter;
 }
-.allproducts-list-item,
-.allcategories-list-item {
+.entity-list-item {
   margin-bottom: 15px;
 }
-.allproducts-list-item a:hover,
-.allcategories-list-item a:hover {
+.entity-list-item a:hover {
   color: #0770cf;
 }
-.allproducts-list-item-image,
-.allcategories-list-item-image {
+.entity-list-item-image {
   height: 100px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
 }
-.allproducts-list-item-icons a,
-.allcategories-list-item-icons a {
+.entity-list-item-icons a {
   margin-right: 15px;
 }
-.allproducts-list-item-icons a:last-child,
-.allcategories-list-item-icons a:last-child {
+.entity-list-item-icons a:last-child {
   margin-right: 0;
 }
-.allproducts-list-item-icons button,
-.allcategories-list-item-icons button {
+.entity-list-item-icons button {
   background: transparent;
 }
-.allproducts-list-item-icons button:hover,
-.allcategories-list-item-icons button:hover {
+.entity-list-item-icons button:hover {
   color: #0770cf;
 }
-.allproducts-list-header,
-.allcategories-list-header {
+.entity-list-header {
   margin-bottom: 10px;
   font-size: 16px;
   font-weight: normal;
@@ -103,7 +94,7 @@ label {
   font-size: 20px;
   text-align: center;
 }
-.admin-list-title {
+.entity-list-title {
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
   margin-bottom: 25px;

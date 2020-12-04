@@ -13,19 +13,19 @@ $entityType = 'category';
 <main>
     <div class="container">
         <a href="/admin/add-category.php" class="add-entity">Add category</a>
-        <h1 class="admin-list-title">Categories</h1>
-        <div class="allcategories-list">
-            <div class="allcategories-list-header">
+        <h1 class="entity-list-title">Categories</h1>
+        <div class="entity-list entity-list--category">
+            <div class="entity-list-header">
                 <div class="row">
                     <div class="col">Title</div>
                     <div class="col">Parent Category</div>
                     <div class="col-1"></div>
                 </div>
             </div>
-            <div class="allcategories-list-content">
+            <div class="entity-list-content">
                 <?php foreach ($categories as $rootCategory): ?>
                     <?php foreach ($rootCategory['child_category1'] as $firstLevelCategory): ?>
-                        <div class="allcategories-list-item">
+                        <div class="entity-list-item">
                             <div class="row">
                                 <div class="col">
                                     <a href="/admin/edit-category.php?id=<?= $firstLevelCategory['id'] ?>">
@@ -33,7 +33,7 @@ $entityType = 'category';
                                     </a>
                                 </div>
                                 <div class="col"><?= $firstLevelCategory['parent_title'] ?></div>
-                                <div class="col-1 allcategories-list-item-icons">
+                                <div class="col-1 entity-list-item-icons">
                                     <a href="/admin/edit-category.php?id=<?= $firstLevelCategory['id'] ?>">
                                         <i class="far fa-edit"></i>
                                     </a>
@@ -48,7 +48,7 @@ $entityType = 'category';
                     <?php endforeach; ?>
                     <?php foreach ($rootCategory['child_category1'] as $firstLevelCategory): ?>
                         <?php foreach ($firstLevelCategory['child_category2'] as $secondLevelCategory): ?>
-                            <div class="allcategories-list-item">
+                            <div class="entity-list-item">
                                 <div class="row">
                                     <div class="col">
                                         <a href="/admin/edit-category.php?id=<?= $secondLevelCategory['id'] ?>">
@@ -56,7 +56,7 @@ $entityType = 'category';
                                         </a>
                                     </div>
                                     <div class="col"><?= $firstLevelCategory['parent_title'] ?> <?= $secondLevelCategory['parent_title'] ?></div>
-                                    <div class="col-1 allcategories-list-item-icons">
+                                    <div class="col-1 entity-list-item-icons">
                                         <a href="/admin/edit-category.php?id=<?= $secondLevelCategory['id'] ?>">
                                             <i class="far fa-edit"></i>
                                         </a>
