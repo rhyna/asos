@@ -20,6 +20,15 @@ try {
     if (!$brand) {
         throw new Exception('Such a brand does not exist');
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $brand->fillBrandObject($_POST);
+
+        if ($brand->updateBrand($conn)) {
+            Url::redirect('/admin/brands.php');
+        }
+    }
+
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
@@ -33,11 +42,11 @@ try {
                 Edit brand
             </div>
             <?php
-                if ($error) {
-                    echo $error;
-                } else {
-                    include_once __DIR__ . '/include/brand-form.php';
-                }
+            if ($error) {
+                echo $error;
+            } else {
+                include_once __DIR__ . '/include/brand-form.php';
+            }
             ?>
         </div>
     </div>

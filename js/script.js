@@ -55,17 +55,9 @@ function deleteEntity(form) {
 
     let onDeletionModal = $('#onDeletionResponse');
 
-    let entityType = '';
+    let a = $('.entity-list-item').find("a[href*='id=" + id + "']");
 
-    if (url.includes('product')) {
-        entityType = 'products';
-    } else if (url.includes('category')) {
-        entityType = 'categories';
-    }
-
-    let a = $('.all' + entityType + '-list-item').find("a[href*='id=" + id + "']");
-
-    let listItem = a.closest('.all' + entityType + '-list-item');
+    let listItem = a.closest('.entity-list-item');
 
     $.ajax({
         url: url,

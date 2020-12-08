@@ -6,6 +6,8 @@ Auth::ifNotLoggedIn();
 
 $brands = Brand::getAllBrands($conn);
 
+$entityType = 'brand';
+
 ?>
 
 <main>
@@ -45,5 +47,9 @@ $brands = Brand::getAllBrands($conn);
         </div>
     </div>
 </main>
+
+<?php require_once __DIR__ . '/include/delete-entity-confirmation.php'; ?>
+
+<?php require_once __DIR__ . '/include/on-entity-deletion-modal.php'; ?>
 
 <?php require_once __DIR__ . '/include/footer.php'; ?>

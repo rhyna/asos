@@ -51,4 +51,94 @@ class Brand
 
         return $statement->fetchObject(Brand::class) ?: null;
     }
+
+    /**
+     * @param array $data
+     */
+    public function fillBrandObject(array $data): void
+    {
+        $this->title = $data['title'];
+
+        $this->descriptionWomen = $data['descriptionWomen'];
+
+        $this->descriptionMen = $data['descriptionMen'];
+    }
+
+    /**
+     * @param PDOStatement $statement
+     */
+    private function fillBrandStatement(PDOStatement $statement): void
+    {
+        $statement->bindValue(':title', $this->title, PDO::PARAM_STR);
+
+        if ($this->descriptionWomen) {
+            $statement->bindValue(':descriptionWomen', $this->descriptionWomen, PDO::PARAM_STR);
+        } else {
+            $statement->bindValue(':descriptionWomen', $this->descriptionWomen, PDO::PARAM_NULL);
+        }
+
+        if ($this->descriptionMen) {
+            $statement->bindValue(':descriptionMen', $this->descriptionMen, PDO::PARAM_STR);
+        } else {
+            $statement->bindValue(':descriptionMen', $this->descriptionMen, PDO::PARAM_NULL);
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function updateBrand(PDO $conn): bool
+    {
+        $sql = "update brand 
+        set     title = :title,
+                description_women = :descriptionWomen,
+                description_men = :descriptionMen
+        where   id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $this->fillBrandStatement($statement);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+
+        return $statement->execute();
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function createBrand(PDO $conn): bool
+    {
+        $sql = "insert into brand 
+                (title, description_women, description_men)
+                values  (:title, :descriptionWomen, :descriptionMen)";
+
+        $statement = $conn->prepare($sql);
+
+        $this->fillBrandStatement($statement);
+
+        if ($statement->execute()) {
+            $this->id = $conn->lastInsertId();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function deleteBrand(PDO $conn): bool
+    {
+        $sql = "delete from brand where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+
+        return $statement->execute();
+    }
 }
