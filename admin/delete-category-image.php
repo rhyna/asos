@@ -6,36 +6,47 @@ Auth::ifNotLoggedIn();
 
 $conn = require_once __DIR__ . "/../include/db.php";
 
-$id = $_POST['id'] ?? null;
-
-if (!$id) {
-    header('HTTP/2.0 404 Not Found');
-    die ('The category id is not provided');
-}
-
-$id = (int)$id;
-
-$image = $_POST['image'] ?? null;
-
 global $ROOT;
 
-if (!$image) {
-    header('HTTP/2.0 400 Bad Request');
-    die ('The image is not provided');
-}
+try {
+    $id = $_POST['id'] ?? null;
 
-$category = Category::getCategory($conn, $id);
+    if (!$id) {
+        throw new BadRequestException('The category id is not provided');
+    }
 
-if (!$category) {
+    $id = (int)$id;
+
+    $image = $_POST['image'] ?? null;
+
+    if (!$image) {
+        throw new BadRequestException('The image is not provided');
+    }
+
+    $category = Category::getCategory($conn, $id);
+
+    if (!$category) {
+        throw new NotFoundException('The category is not found');
+    }
+
+    if ($category::deleteCategoryImage($conn, $id)) {
+        unlink($ROOT . $image);
+
+    } else {
+        throw new Exception('A problem occurred, the image has not been deleted');
+    }
+
+} catch (NotFoundException $e) {
     header('HTTP/2.0 404 Not Found');
-    die ('The category is not found');
-}
+    die ($e->getMessage());
 
-if ($category::deleteCategoryImage($conn, $id)) {
-    unlink($ROOT . $image);
-} else {
+} catch (BadRequestException $e) {
+    header('HTTP/2.0 400 Bad Request');
+    die ($e->getMessage());
+
+} catch (Throwable $e) {
     header('HTTP/2.0 500 Internal Server Error');
-    die ('A problem occurred, the image has not been deleted');
+    die ($e->getMessage());
 }
 
 

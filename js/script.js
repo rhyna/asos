@@ -18,7 +18,7 @@ function deleteEntityImage(buttonElement) {
 
     let entityId = button.data('id');
 
-    let imageLink = button.data('image');
+    let imageName = button.data('image');
 
     let image = button.closest('.form-image');
 
@@ -27,7 +27,7 @@ function deleteEntityImage(buttonElement) {
         type: 'POST',
         data: {
             id: entityId,
-            image: imageLink,
+            image: imageName,
         },
     })
         .done(function (response) {
