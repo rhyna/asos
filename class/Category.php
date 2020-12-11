@@ -194,6 +194,7 @@ class Category
             $statement->bindValue(':id', $id, PDO::PARAM_INT);
 
             return $statement->execute();
+
         } else {
             return false;
         }

@@ -6,50 +6,65 @@ Auth::ifNotLoggedIn();
 
 $conn = require_once __DIR__ . '/../include/db.php';
 
-$id = $_POST['id'] ?? null;
+global $ROOT;
 
-if (!$id) {
+try {
+    $id = $_POST['id'] ?? null;
+
+    if (!$id) {
+        throw new BadRequestException('The category id is not provided');
+    }
+
+    if ($id !== (string)((int)$id)) {
+        throw new ValidationErrorException('The category id is not a valid number');
+    }
+
+    $id = (int)$id;
+
+    $category = Category::getCategory($conn, $id);
+
+    if (!$category) {
+        throw new NotFoundException('The category to delete is not found');
+    }
+
+    if ($category->deleteCategory($conn, $id)) {
+        if ($category->image) {
+            unlink($ROOT . $category->image);
+        }
+
+        header("HTTP/2.0 200 OK");
+
+        echo 'Successfully deleted';
+
+    } elseif ($category->validationErrors) {
+        $errors = implode('<br>', $category->validationErrors);
+
+        throw new ValidationErrorException($errors);
+
+    } else {
+        throw new Exception('A problem occurred, the category has not been deleted');
+    }
+
+} catch (BadRequestException $e) {
     header('HTTP/2.0 400 Bad Request');
 
-    die('The category id is not provided');
-}
+    die($e->getMessage());
 
-if ($id !== (string)((int)$id)) {
+} catch (ValidationErrorException $e) {
     header('HTTP/2.0 422 Validation Error');
 
-    die('The category id is not a valid number');
-}
+    die($e->getMessage());
 
-$id = (int)$id;
-
-$category = Category::getCategory($conn, $id);
-
-if (!$category) {
+} catch (NotFoundException $e) {
     header('HTTP/2.0 404 Not Found');
 
-    die('The category to delete is not found');
-}
+    die($e->getMessage());
 
-if ($category->deleteCategory($conn, $id)) {
-    header("HTTP/2.0 200 OK");
-
-    echo 'Successfully deleted';
-
-    if($category->image) {
-        unlink($ROOT . $category->image);
-    }
-} elseif ($category->validationErrors) {
-    header('HTTP/2.0 422 Validation Error');
-
-    foreach ($category->validationErrors as $error) {
-        echo $error;
-    }
-} else {
+} catch (Throwable $e) {
     header('HTTP/2.0 500 Internal Server Error');
 
-    die('A problem occurred. The category has not been deleted');
+    die($e->getMessage());
 }
-
 
 
 

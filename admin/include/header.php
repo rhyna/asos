@@ -4,6 +4,20 @@ require_once __DIR__ . "/../../include/init.php";
 
 $conn = require_once __DIR__ . "/../../include/db.php";
 
+$headerNav = [
+    'Home' => '/admin/',
+    'Banners' => '/admin/banners.php',
+    'Brands' => '/admin/brands.php',
+    'Categories' => '/admin/categories.php',
+    'Products' => '/admin/products.php',
+];
+
+if (Auth::isLoggedIn()) {
+    $headerNav['Log Out'] = '/admin/logout.php';
+} else {
+    $headerNav['Log In'] = '/admin/login.php';
+}
+
 ?>
 
 <!doctype html>
@@ -30,30 +44,11 @@ $conn = require_once __DIR__ . "/../../include/db.php";
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item active admin-header-nav-item">
-                    <a class="nav-link" href="/admin/index.php">Home<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item admin-header-nav-item">
-                    <a class="nav-link" href="/admin/banners.php">Banners</a>
-                </li>
-                <li class="nav-item admin-header-nav-item">
-                    <a class="nav-link" href="/admin/brands.php">Brands</a>
-                </li>
-                <li class="nav-item admin-header-nav-item">
-                    <a class="nav-link" href="/admin/categories.php">Categories</a>
-                </li>
-                <li class="nav-item admin-header-nav-item">
-                    <a class="nav-link" href="/admin/products.php">Products</a>
-                </li>
-                <?php if (Auth::isLoggedIn()): ?>
-                    <li class="nav-item admin-header-nav-item">
-                        <a class="nav-link" href="/admin/logout.php">Log out</a>
+                <?php foreach ($headerNav as $title => $link): ?>
+                    <li class="nav-item <?= $_SERVER['REQUEST_URI'] === $link ? 'active' : '' ?> admin-header-nav-item">
+                        <a class="nav-link" href="<?= $link ?>"><?= $title ?></a>
                     </li>
-                <?php else: ?>
-                    <li class="nav-item admin-header-nav-item">
-                        <a class="nav-link" href="/admin/login.php">Log in</a>
-                    </li>
-                <?php endif; ?>
+                <?php endforeach; ?>
             </ul>
         </div>
     </nav>
