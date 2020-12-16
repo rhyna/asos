@@ -38,11 +38,13 @@ class Auth
         }
     }
 
+    /**
+     * @throws Exception
+     */
     static public function ifNotLoggedIn(): void
     {
         if (!self::isLoggedIn()) {
-            echo "<p>Access denied to unauthorised users, <a href='/admin/login.php' style='color: #0770cf'>login</a> first</p>";
-            exit;
+            throw new Exception("<p>Access denied to unauthorised users, <a href='/admin/login.php' style='color: #0770cf'>login</a> first</p>");
         }
     }
 }

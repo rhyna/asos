@@ -1,5 +1,3 @@
-
-
 <form action="" method="post" enctype="multipart/form-data" id="brandForm" class="entity-form">
     <div class="form-group">
         <label for="title">Title</label>

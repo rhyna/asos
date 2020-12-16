@@ -6,25 +6,46 @@ Auth::ifNotLoggedIn();
 
 $mode = 'edit-product';
 
-if (isset($_GET['id'])) {
-    $product = Product::getProduct($conn, $_GET['id']);
-} else {
-    $product = null;
-}
+$error = null;
 
-$categoryLevels = Category::getCategoryLevels($conn);
+try {
+    $id = $_GET['id'] ?? null;
 
-$allBrands = Brand::getAllBrands($conn);
+    if (!$id) {
+        throw new BadRequestException('The id is not provided');
+    }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id = (int)$id;
 
-    $product->fillProductObject($_POST);
+    $product = Product::getProduct($conn, $id) ?? null;
 
-    if ($product->updateProduct($conn, $_FILES)) {
-        if ($product->updateProductImage($conn, $_FILES)) {
-            Url::redirect("/admin/products.php");
+    if (!$product) {
+        throw new NotFoundException('Such a product does not exist');
+    }
+
+    $categoryLevels = Category::getCategoryLevels($conn);
+
+    $allBrands = Brand::getAllBrands($conn);
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        $product->fillProductObject($_POST);
+
+        if ($product->updateProduct($conn, $_FILES)) {
+            if ($product->updateProductImage($conn, $_FILES)) {
+                Url::redirect("/admin/products.php");
+            }
         }
     }
+
+} catch (BadRequestException $e) {
+    $error = $e->getMessage();
+
+} catch (NotFoundException $e) {
+    $error = $e->getMessage();
+
+} catch (Throwable $e) {
+    $error = $e->getMessage();
 }
 
 ?>
@@ -36,8 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 Edit product
             </div>
             <?php
-            if (!$product) {
-                echo 'Such a product doesn\'t exist';
+            if ($error) {
+                echo $error;
             } else {
                 include_once __DIR__ . '/include/product-form.php';
             }

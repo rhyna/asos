@@ -2,25 +2,32 @@
 
 require_once __DIR__ . '/include/header.php';
 
-Auth::ifNotLoggedIn();
+$error = null;
 
-$categoryLevels = Category::getCategoryLevels($conn);
+try {
+    Auth::ifNotLoggedIn();
 
-$allBrands = Brand::getAllBrands($conn);
+    $categoryLevels = Category::getCategoryLevels($conn);
 
-$product = new Product();
+    $allBrands = Brand::getAllBrands($conn);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $product->fillProductObject($_POST);
+    $product = new Product();
 
-    if ($product->createProduct($conn, $_FILES)) {
-        if ($product->updateProductImage($conn, $_FILES)) {
-            Url::redirect("/admin/products.php");
-        };
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $product->fillProductObject($_POST);
+
+        if ($product->createProduct($conn, $_FILES)) {
+            if ($product->updateProductImage($conn, $_FILES)) {
+                Url::redirect("/admin/products.php");
+            };
+        }
     }
-}
 
-$mode = '';
+    $mode = '';
+
+} catch (Throwable $e) {
+    $error = $e->getMessage();
+}
 
 ?>
 
@@ -30,7 +37,13 @@ $mode = '';
             <div class="admin-title">
                 Add product
             </div>
-            <?php include_once __DIR__ . '/include/product-form.php' ?>
+            <?php
+            if ($error) {
+                echo $error;
+            } else {
+                include_once __DIR__ . '/include/product-form.php';
+            }
+            ?>
         </div>
     </div>
 </main>

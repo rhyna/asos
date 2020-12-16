@@ -2,18 +2,25 @@
 
 require_once __DIR__ . '/include/header.php';
 
-Auth::ifNotLoggedIn();
+$error = null;
 
-$category = new Category();
+try {
+    Auth::ifNotLoggedIn();
 
-$categories = Category::getCategoryLevels($conn);
+    $category = new Category();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (CategoryController::onPostCategoryAction($category, $conn, 'create')) {
-        $id = $category->id;
+    $categories = Category::getCategoryLevels($conn);
 
-        Url::redirect("/admin/edit-category.php?id=$id");
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (CategoryController::onPostCategoryAction($category, $conn, 'create')) {
+            $id = $category->id;
+
+            Url::redirect("/admin/edit-category.php?id=$id");
+        }
     }
+
+} catch (Throwable $e) {
+    $error = $e->getMessage();
 }
 
 ?>
@@ -24,7 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="admin-title">
                 Add category
             </div>
-            <?php include_once __DIR__ . '/include/category-form.php' ?>
+            <?php
+            if ($error) {
+                echo $error;
+            } else {
+                include_once __DIR__ . '/include/category-form.php';
+            }
+            ?>
         </div>
     </div>
 </main>

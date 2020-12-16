@@ -2,16 +2,24 @@
 
 require_once __DIR__ . '/include/header.php';
 
-Auth::ifNotLoggedIn();
+$error = null;
 
-$brand = new Brand();
+try {
+    Auth::ifNotLoggedIn();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $brand->fillBrandObject($_POST);
+    $brand = new Brand();
 
-    if($brand->createBrand($conn)) {
-        Url::redirect('/admin/edit-brand.php?id=' . $brand->id);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $brand->fillBrandObject($_POST);
+
+        if ($brand->createBrand($conn)) {
+            Url::redirect('/admin/edit-brand.php?id=' . $brand->id);
+        }
     }
+
+
+} catch (Throwable $e) {
+    $error = $e->getMessage();
 }
 
 ?>
@@ -22,7 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="admin-title">
                 Add brand
             </div>
-            <?php include_once __DIR__ . '/include/brand-form.php'; ?>
+            <?php
+            if ($error) {
+                echo $error;
+            } else {
+                include_once __DIR__ . '/include/brand-form.php';
+            }
+            ?>
         </div>
     </div>
 </main>
