@@ -46,25 +46,55 @@ label {
   font-weight: lighter;
 }
 .entity-list-item {
-  margin-bottom: 15px;
+  padding: 10px 0 10px 0;
+}
+.entity-list-item__row {
+  align-items: center;
+}
+.entity-list-item__wrapper {
+  margin-bottom: 10px;
+  align-items: center;
+  padding: 0 10px 0 10px;
+}
+.entity-list-item__wrapper:hover {
+  background-color: #f8f9fa;
 }
 .entity-list-item a:hover {
   color: #0770cf;
 }
 .entity-list-item-image {
-  height: 100px;
-  background-position: center;
+  height: 150px;
+  background-position: left;
   background-repeat: no-repeat;
   background-size: contain;
 }
+.entity-list-item-image a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.entity-list-item-icons__inner {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 16px;
+}
 .entity-list-item-icons a {
   margin-right: 15px;
+  display: flex;
+  align-items: center;
 }
 .entity-list-item-icons a:last-child {
   margin-right: 0;
 }
+.entity-list-item-icons i {
+  color: #2d2d2dc7;
+}
+.entity-list-item-icons i:hover {
+  color: #0770cf;
+}
 .entity-list-item-icons button {
   background: transparent;
+  color: #2d2d2dc7;
 }
 .entity-list-item-icons button:hover {
   color: #0770cf;
@@ -73,6 +103,7 @@ label {
   margin-bottom: 10px;
   font-size: 16px;
   font-weight: normal;
+  padding: 0 10px 0 10px;
 }
 .admin-button {
   font-size: 16px;
@@ -97,12 +128,11 @@ label {
 .entity-list-title {
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
-  margin-bottom: 25px;
+  margin: 0 10px 25px 10px;
   text-align: center;
 }
 .add-entity {
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin: 20px 10px 20px 10px;
   display: inline-block;
   font-size: 16px;
   padding: 5px 20px;

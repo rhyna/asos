@@ -12,7 +12,7 @@ try {
     $id = $_GET['id'] ?? null;
 
     if (!$id) {
-        throw new BadRequestException('The id is not provided');
+        throw new Exception('The id is not provided');
     }
 
     $id = (int)$id;
@@ -20,7 +20,7 @@ try {
     $product = Product::getProduct($conn, $id) ?? null;
 
     if (!$product) {
-        throw new NotFoundException('Such a product does not exist');
+        throw new Exception('Such a product does not exist');
     }
 
     $categoryLevels = Category::getCategoryLevels($conn);
@@ -37,12 +37,6 @@ try {
             }
         }
     }
-
-} catch (BadRequestException $e) {
-    $error = $e->getMessage();
-
-} catch (NotFoundException $e) {
-    $error = $e->getMessage();
 
 } catch (Throwable $e) {
     $error = $e->getMessage();

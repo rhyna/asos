@@ -35,25 +35,29 @@ try {
                 </div>
                 <div class="entity-list-content">
                     <?php foreach ($brands as $brand) : ?>
+                    <div class="entity-list-item__wrapper">
                         <div class="entity-list-item">
-                            <div class="row">
+                            <div class="row entity-list-item__row">
                                 <div class="col">
                                     <a href="/admin/edit-brand.php?id=<?= $brand->id ?>">
                                         <?= $brand->title ?>
                                     </a>
                                 </div>
                                 <div class="col-1 entity-list-item-icons">
-                                    <a href="/admin/edit-brand.php?id=<?= $brand->id ?>">
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                    <button type="button" data-toggle="modal"
-                                            data-target="#deleteEntity"
-                                            onclick="passEntityId(<?= $brand->id ?>)">
-                                        <i class="far fa-trash-alt"></i>
-                                    </button>
+                                    <div class="entity-list-item-icons__inner">
+                                        <a href="/admin/edit-brand.php?id=<?= $brand->id ?>">
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        <button type="button" data-toggle="modal"
+                                                data-target="#deleteEntity"
+                                                onclick="passEntityId(<?= $brand->id ?>)">
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <?php endforeach; ?>
                 </div>
             </div>

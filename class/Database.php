@@ -22,17 +22,10 @@ class Database
     {
         $dsn = 'mysql:host=' . $this->db_host . ';dbname=' . $this->db_name . ';charset=utf8';
 
-        try {
-            $db = new PDO($dsn, $this->db_user, $this->db_pass);
+        $db = new PDO($dsn, $this->db_user, $this->db_pass);
 
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            return $db;
-
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-
-            exit;
-        }
+        return $db;
     }
 }

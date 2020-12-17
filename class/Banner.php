@@ -26,7 +26,8 @@ class Banner
                     banner.title,
                     banner.description,
                     banner.button_label as buttonLabel,
-                    bp.alias 
+                    bp.alias,
+                    bp.title as aliasTitle 
                 from banner 
                 left join banner_place bp 
                 on bp.id = banner.banner_place_id';

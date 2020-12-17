@@ -10,7 +10,7 @@ try {
     $id = $_GET['id'] ?? null;
 
     if (!$id) {
-        throw new BadRequestException('The id is not provided');
+        throw new Exception('The id is not provided');
     }
 
     $id = (int)$id;
@@ -18,11 +18,11 @@ try {
     $category = Category::getCategory($conn, $id);
 
     if (!$category) {
-        throw new NotFoundException('Such a category does not exist');
+        throw new Exception('Such a category does not exist');
     }
 
     if ($id === Category::getRootWomenCategoryId($conn) || $id === Category::getRootMenCategoryId($conn)) {
-        throw new ValidationErrorException('Editing root categories is prohibited');
+        throw new Exception('Editing root categories is prohibited');
     }
 
     $categories = Category::getCategoryLevels($conn);
@@ -30,15 +30,6 @@ try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         CategoryController::onPostCategoryAction($category, $conn, 'update');
     }
-
-} catch (BadRequestException $e) {
-    $error = $e->getMessage();
-
-} catch (NotFoundException $e) {
-    $error = $e->getMessage();
-
-} catch (ValidationErrorException $e) {
-    $error = $e->getMessage();
 
 } catch (Throwable $e) {
     $error = $e->getMessage();

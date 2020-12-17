@@ -8,12 +8,25 @@ if ($_SERVER['REQUEST_URI'] === '/admin/index.php') {
 
 require_once __DIR__ . '/include/header.php';
 
-Auth::ifNotLoggedIn();
+$error = null;
 
+try {
+    Auth::ifNotLoggedIn();
+
+} catch (Throwable $e) {
+    $error = $e->getMessage();
+}
 ?>
-
     <main>
-        123
+        <div class="container">
+            <?php if ($error): ?>
+                <div><?= $error ?></div>
+            <?php else: ?>
+                <div>
+                    Home
+                </div>
+            <?php endif; ?>
+        </div>
     </main>
 
 <?php require_once __DIR__ . '/include/footer.php'; ?>
