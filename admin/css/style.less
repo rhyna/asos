@@ -241,6 +241,27 @@ label {
   }
 }
 
+.entity-form-image--banner {
+  height: 500px;
+  background-size: contain;
+  background-position: left;
+
+  &:after {
+    display: none;
+  }
+}
+
+.entity-form-delete-image-button--banner {
+  .admin-button();
+  background-color: #b8174bb8;
+  margin: 15px 0;
+  font-size: 14px;
+
+  &:hover {
+    background-color: #b8174b87;
+  }
+}
+
 .entity-form-image--deleted,
 .products-item__img--deleted,
 .product-img--deleted {

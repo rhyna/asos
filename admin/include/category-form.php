@@ -26,12 +26,12 @@
                 <option value="<?= $rootCategory['id'] ?>"
                         style='font-weight: bold;'
                     <?= $category->parentId === $rootCategory['id'] ? 'selected' : '' ?>>
-                    <?= $rootCategory['title'] ?>
+                    <?= htmlspecialchars($rootCategory['title']) ?>
                 </option>
                 <?php foreach ($rootCategory['child_category1'] as $firstLevelCategory): ?>
                     <option value="<?= $firstLevelCategory['id'] ?>"
                         <?= $category->parentId === $firstLevelCategory['id'] ? 'selected' : '' ?>>
-                        -- <?= $firstLevelCategory['title'] ?>
+                        -- <?= htmlspecialchars($firstLevelCategory['title']) ?>
                     </option>
                 <?php endforeach; ?>
             <?php endforeach; ?>

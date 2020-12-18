@@ -215,6 +215,35 @@ label {
   font-size: 20px;
   color: #1d2124cf;
 }
+.entity-form-image--banner {
+  height: 500px;
+  background-size: contain;
+  background-position: left;
+}
+.entity-form-image--banner:after {
+  display: none;
+}
+.entity-form-delete-image-button--banner {
+  font-size: 16px;
+  padding: 5px 20px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  transition: background-color 0.1s linear;
+  background-color: #17a2b8;
+  color: #fff;
+  font-family: "Futura PT", sans-serif;
+  letter-spacing: 0.5px;
+  background-color: #b8174bb8;
+  margin: 15px 0;
+  font-size: 14px;
+}
+.entity-form-delete-image-button--banner:hover {
+  background-color: #17a2b896;
+  color: #fff;
+}
+.entity-form-delete-image-button--banner:hover {
+  background-color: #b8174b87;
+}
 .entity-form-image--deleted,
 .products-item__img--deleted,
 .product-img--deleted {

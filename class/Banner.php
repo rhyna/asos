@@ -127,4 +127,35 @@ class Banner
 
         return $trendingBrands;
     }
+
+    /**
+     * @param PDO $conn
+     * @param int $id
+     * @return Banner|null
+     */
+    public static function getBanner(PDO $conn, int $id): ?Banner
+    {
+        $sql = "select 
+                    banner.id, 
+                    banner.banner_place_id as bannerPlaceId,
+                    banner.image,
+                    banner.link,
+                    banner.title,
+                    banner.description,
+                    banner.button_label as buttonLabel,
+                    bp.alias,
+                    bp.title as aliasTitle 
+                from banner 
+                left join banner_place bp 
+                on bp.id = banner.banner_place_id
+                where banner.id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $id, PDO::PARAM_STR);
+
+        $statement->execute();
+
+        return $statement->fetchObject(Banner::class) ?: null;
+    }
 }
