@@ -10,7 +10,7 @@ class Banner
     public $description;
     public $buttonLabel;
     public $alias;
-    public $validationErrors = [];
+    public $validationError;
 
     /**
      * @param PDO $conn
@@ -176,7 +176,24 @@ class Banner
         $this->buttonLabel = $data['button-label'];
     }
 
-    public function updateBanner(PDO $conn)
+    /**
+     * @return bool
+     */
+    public function validateBanner(): bool
+    {
+        if (!$this->link) {
+            $this->validationError = 'Please enter a link';
+        }
+
+        return $this->validationError ? false : true;
+
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function updateBanner(PDO $conn): bool
     {
         $sql = "update banner 
         set     banner_place_id = :bannerPlaceId, 
@@ -192,7 +209,7 @@ class Banner
 
         $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
 
-        $statement->execute();
+        return $statement->execute();
     }
 
     /**
@@ -229,9 +246,9 @@ class Banner
 
     /**
      * @param PDO $conn
-     * @return bool
+     * @return int
      */
-    public function placeIdDupes(PDO $conn): bool
+    public function placeIdDupes(PDO $conn): int
     {
         $sql = "select id from banner where banner_place_id = :bannerPlaceId";
 
@@ -241,6 +258,22 @@ class Banner
 
         $statement->execute();
 
-        return (bool) $statement->fetchColumn();
+        return (int)$statement->fetchColumn();
+    }
+
+    /**
+     * @param PDO $conn
+     * @param int $id
+     * @return bool
+     */
+    public static function replaceBannerPlace(PDO $conn, int $id): bool
+    {
+        $sql = "update banner set banner_place_id = null where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $id, PDO::PARAM_STR);
+
+        return $statement->execute();
     }
 }

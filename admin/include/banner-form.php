@@ -1,14 +1,12 @@
-<?php //if ($category->validationErrors): ?>
-<!--    <ul class="entity-form-errors">-->
-<!--        --><?php //foreach ($category->validationErrors as $error): ?>
-<!--            <li>--><? //= $error ?><!--</li>-->
-<!--        --><?php //endforeach; ?>
-<!--    </ul>-->
-<?php //endif; ?>
+<?php if ($banner->validationError): ?>
+    <ul class="entity-form-errors">
+        <li><?= $banner->validationError ?></li>
+    </ul>
+<?php endif; ?>
 <?php //if ($category->imageValidationErrors): ?>
 <!--    <ul class="entity-form-errors entity-form-errors--image">-->
 <!--        --><?php //foreach ($category->imageValidationErrors as $imageError): ?>
-<!--            <li>--><? //= $imageError ?><!--</li>-->
+<!--            <li>--><?// //= $imageError ?><!--</li>-->
 <!--        --><?php //endforeach; ?>
 <!--    </ul>-->
 <?php //endif; ?>
@@ -39,7 +37,7 @@
     <div class="form-group">
         <label for="link">Link</label>
         <input class="form-control" type="text" name="link" id="link"
-               value="<?= htmlspecialchars($banner->link) ?>" required>
+               value="<?= htmlspecialchars($banner->link) ?>">
     </div>
     <div class="form-group">
         <label for="title">Title</label>
@@ -58,5 +56,7 @@
         <input class="form-control" type="text" name="button-label" id="button-label"
                value="<?= htmlspecialchars($banner->buttonLabel) ?>">
     </div>
-    <button type="submit" class="entity-form-submit">Submit</button>
+    <button type="submit" class="entity-form-submit" onclick="event.preventDefault();
+            updateBanner(<?= $banner->id ?>)">Submit
+    </button>
 </form>
