@@ -25,6 +25,16 @@ try {
 
     $bannerPlaces = BannerPlace::getBannerPlaces($conn);
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $banner->fillBannerObject($_POST);
+
+        if ($banner->placeIdDupes($conn)) {
+
+        }
+
+        $banner->updateBanner($conn);
+    }
+
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }

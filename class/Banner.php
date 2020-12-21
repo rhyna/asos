@@ -10,6 +10,7 @@ class Banner
     public $description;
     public $buttonLabel;
     public $alias;
+    public $validationErrors = [];
 
     /**
      * @param PDO $conn
@@ -157,5 +158,89 @@ class Banner
         $statement->execute();
 
         return $statement->fetchObject(Banner::class) ?: null;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function fillBannerObject(array $data): void
+    {
+        $this->bannerPlaceId = $data['banner-place'];
+
+        $this->link = $data['link'];
+
+        $this->title = $data['title'];
+
+        $this->description = $data['description'];
+
+        $this->buttonLabel = $data['button-label'];
+    }
+
+    public function updateBanner(PDO $conn)
+    {
+        $sql = "update banner 
+        set     banner_place_id = :bannerPlaceId, 
+                link = :link,
+                title = :title,
+                description = :description,
+                button_label = :buttonLabel
+        where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $this->fillBannerStatement($statement);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+
+        $statement->execute();
+    }
+
+    /**
+     * @param PDOStatement $statement
+     */
+    private function fillBannerStatement(PDOStatement $statement): void
+    {
+        if ($this->bannerPlaceId) {
+            $statement->bindValue(':bannerPlaceId', $this->bannerPlaceId, PDO::PARAM_STR);
+        } else {
+            $statement->bindValue(':bannerPlaceId', $this->bannerPlaceId, PDO::PARAM_NULL);
+        }
+
+        $statement->bindValue(':link', $this->link, PDO::PARAM_STR);
+
+        if ($this->title) {
+            $statement->bindValue(':title', $this->title, PDO::PARAM_STR);
+        } else {
+            $statement->bindValue(':title', $this->title, PDO::PARAM_NULL);
+        }
+
+        if ($this->description) {
+            $statement->bindValue(':description', $this->description, PDO::PARAM_STR);
+        } else {
+            $statement->bindValue(':description', $this->description, PDO::PARAM_NULL);
+        }
+
+        if ($this->buttonLabel) {
+            $statement->bindValue(':buttonLabel', $this->buttonLabel, PDO::PARAM_STR);
+        } else {
+            $statement->bindValue(':buttonLabel', $this->buttonLabel, PDO::PARAM_NULL);
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     */
+    public function placeIdDupes(PDO $conn): bool
+    {
+        $sql = "select id from banner where banner_place_id = :bannerPlaceId";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':bannerPlaceId', $this->bannerPlaceId, PDO::PARAM_STR);
+
+        $statement->execute();
+
+        return (bool) $statement->fetchColumn();
     }
 }

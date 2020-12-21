@@ -16,22 +16,10 @@
 <form action="" method="post" enctype="multipart/form-data" id="bannerForm" class="entity-form">
     <div class="form-image">
         <div class="form-group">
-            <div class="entity-form-image entity-form-image--banner <?= $banner->image ? '' : 'entity-form-image--deleted' ?>"
-                <?= ($banner->image ? 'style="background-image: url(' . $banner->image . ')"' : '') ?>>
-                <?= !$banner->image ? 'No image' : '' ?>
+            <div class="entity-form-image entity-form-image--banner"
+                 style="background-image: url('<?= $banner->image ?>')">
             </div>
             <input class="form-control-file" name="image" id="image" type="file">
-            <?php if ($banner->image): ?>
-                <button type="button"
-                        class="entity-form-delete-image-button--banner"
-                        name="delete-image"
-                        data-id="<?= $banner->id ?>"
-                        data-image="<?= $banner->image ?>"
-                        data-type="banner"
-                        onclick="deleteEntityImage(this)">
-                    Delete image
-                </button>
-            <?php endif; ?>
         </div>
     </div>
     <div class="form-group">
@@ -43,12 +31,15 @@
                     <?= htmlspecialchars($bannerPlace->title) ?>
                 </option>
             <?php endforeach; ?>
+            <option value="" <?= !$banner->bannerPlaceId ? 'selected' : '' ?>>
+                NO PLACE (Banner not posted yet)
+            </option>
         </select>
     </div>
     <div class="form-group">
         <label for="link">Link</label>
-        <input class="form-control" type="url" name="link" id="link"
-               value="<?= htmlspecialchars($banner->link) ?>">
+        <input class="form-control" type="text" name="link" id="link"
+               value="<?= htmlspecialchars($banner->link) ?>" required>
     </div>
     <div class="form-group">
         <label for="title">Title</label>

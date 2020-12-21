@@ -28,7 +28,7 @@ try {
                 <div class="entity-list-header">
                     <div class="row">
                         <div class="col-3"></div>
-                        <div class="col">Banner Place Alias</div>
+                        <div class="col">Banner Place</div>
                         <div class="col">Title</div>
                         <div class="col">Link</div>
                         <div class="col-1"></div>
@@ -47,7 +47,7 @@ try {
                                 </div>
                                 <div class="col">
                                     <a href="/admin/edit-banner.php?id=<?= $banner->id ?>">
-                                        <?= $banner->aliasTitle ?>
+                                        <?= $banner->aliasTitle ?: 'NO PLACE (Banner not posted yet)' ?>
                                     </a>
                                 </div>
                                 <div class="col">
