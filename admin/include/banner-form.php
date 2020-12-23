@@ -3,13 +3,13 @@
         <li><?= $banner->validationError ?></li>
     </ul>
 <?php endif; ?>
-<?php //if ($category->imageValidationErrors): ?>
-<!--    <ul class="entity-form-errors entity-form-errors--image">-->
-<!--        --><?php //foreach ($category->imageValidationErrors as $imageError): ?>
-<!--            <li>--><?// //= $imageError ?><!--</li>-->
-<!--        --><?php //endforeach; ?>
-<!--    </ul>-->
-<?php //endif; ?>
+<?php if ($banner->imageValidationErrors): ?>
+    <ul class="entity-form-errors entity-form-errors--image">
+        <?php foreach ($banner->imageValidationErrors as $imageError): ?>
+            <li><?= $imageError ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
 
 <form action="" method="post" enctype="multipart/form-data" id="bannerForm" class="entity-form">
     <div class="form-image">

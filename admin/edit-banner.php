@@ -28,22 +28,30 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $banner->fillBannerObject($_POST);
 
-        if ($banner->validateBanner()) {
+        $banner->validateBanner();
+
+        if ($_FILES['image']['name']) {
+            $banner->validateBannerImage($_FILES);
+        }
+
+        if (!$banner->validationError && !$banner->imageValidationErrors) {
             $bannerToReplaceId = $banner->placeIdDupes($conn);
 
             if ($bannerToReplaceId) {
-                if (Banner::replaceBannerPlace($conn, $bannerToReplaceId)) {
-                    if ($banner->updateBanner($conn)) {
-                        Url::redirect('/admin/banners.php');
-                    }
-                } else {
-                    throw new Exception('An error occurred during banner place replacement');
-                }
-            } else {
-                if ($banner->updateBanner($conn)) {
-                    Url::redirect('/admin/banners.php');
+                if (!Banner::replaceBannerPlace($conn, $bannerToReplaceId)) {
+                    throw new Exception('The banner has not been replaced');
                 }
             }
+
+            if (!$banner->updateBanner($conn)) {
+                throw new Exception('The banner has not been updated');
+            }
+
+            if (!$banner->updateBannerImage($conn, $_FILES)) {
+                throw new Exception('The banner image has not been updated');
+            }
+
+            Url::redirect('/admin/banners.php');
         }
     }
 

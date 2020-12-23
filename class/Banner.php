@@ -11,6 +11,7 @@ class Banner
     public $buttonLabel;
     public $alias;
     public $validationError;
+    public $imageValidationErrors = [];
 
     /**
      * @param PDO $conn
@@ -273,6 +274,103 @@ class Banner
         $statement = $conn->prepare($sql);
 
         $statement->bindValue(':id', $id, PDO::PARAM_STR);
+
+        return $statement->execute();
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     */
+    public function validateBannerImage(array $data): bool
+    {
+        $image = $data['image'];
+
+        $eligibleExtensions = [
+            'image/jpeg',
+            'image/jpg',
+            'image/png',
+            'image/gif'
+        ];
+
+        if (!in_array($image['type'], $eligibleExtensions)) {
+            $this->imageValidationErrors[] =
+                'The file is not an image, eligible extensions are: jpeg, jpg, png, gif';
+        }
+
+        if ($image['size'] > 1000000) {
+            $this->imageValidationErrors[] =
+                'The file size can be 1 Mb max';
+        }
+
+        return $this->imageValidationErrors ? false : true;
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $data
+     * @return bool
+     */
+    public function updateBannerImage(PDO $conn, array $data): bool
+    {
+        global $ROOT;
+
+        $image = $data['image']['name'];
+
+        if (!$image) {
+            return true;
+        }
+
+        $imageInfo = pathinfo($image);
+
+        $fileName = $imageInfo['filename'];
+
+        $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', $fileName);
+
+        $extension = $imageInfo['extension'];
+
+        $destination = "/upload/banner/$base.$extension";
+
+        for ($i = 1; file_exists($ROOT . $destination); $i++) {
+            $destination = "/upload/banner/$base-$i.$extension";
+        }
+
+        $tempPath = $data['image']['tmp_name'];
+
+        if (!move_uploaded_file($tempPath, $ROOT . $destination)) {
+            return false;
+        }
+
+        if (!$this->setBannerImage($conn, $destination)) {
+           return false;
+        }
+
+        if (!$this->image) {
+            return true;
+        }
+
+        if (!unlink($ROOT . $this->image)) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * @param PDO $conn
+     * @param string $image
+     * @return bool
+     */
+    public function setBannerImage(PDO $conn, string $image): bool
+    {
+        $sql = "update banner set image = :image where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':image', $image, PDO::PARAM_STR);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
 
         return $statement->execute();
     }

@@ -365,7 +365,7 @@ class Category
 
         $base = $pathInfo['filename'];
 
-        $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', $base); // all except a-z, A-Z, 0-9, _, -
+        $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', $base); // replace all except a-z, A-Z, 0-9, _, -
 
         $fileName = $base . '.' . $pathInfo['extension'];
 
