@@ -342,7 +342,7 @@ class Banner
         }
 
         if (!$this->setBannerImage($conn, $destination)) {
-           return false;
+            return false;
         }
 
         if (!$this->image) {
@@ -355,6 +355,29 @@ class Banner
 
         return true;
 
+    }
+
+    private static function prepareBannerImage(PDO $conn, array $data): string
+    {
+        global $ROOT;
+
+        $image = $data['image']['name'];
+
+        $imageInfo = pathinfo($image);
+
+        $fileName = $imageInfo['filename'];
+
+        $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', $fileName);
+
+        $extension = $imageInfo['extension'];
+
+        $destination = "/upload/banner/$base.$extension";
+
+        for ($i = 1; file_exists($ROOT . $destination); $i++) {
+            $destination = "/upload/banner/$base-$i.$extension";
+        }
+
+        return $destination;
     }
 
     /**
@@ -373,5 +396,56 @@ class Banner
         $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
 
         return $statement->execute();
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $data
+     * @return bool
+     */
+    public function createBanner(PDO $conn, array $data): bool
+    {
+        $image = self::prepareBannerImage($conn, $data);
+
+        $sql = "insert into banner 
+        (banner_place_id, image, link, title, description, button_label)
+        values
+        (:bannerPlaceId, :image, :link, :title, :description, :buttonLabel)";
+
+        $statement = $conn->prepare($sql);
+
+        $this->fillBannerStatement($statement);
+
+        $statement->bindValue(':image', $image, PDO::PARAM_STR);
+
+        if ($statement->execute()) {
+            $this->id = $conn->lastInsertId();
+
+            return true;
+
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
+     * @param $conn
+     * @param $data
+     * @return bool
+     */
+    public static function uploadBannerImage($conn, $data): bool
+    {
+        global $ROOT;
+
+        $destination = self::prepareBannerImage($conn, $data);
+
+        $tempPath = $data['image']['tmp_name'];
+
+        if (!move_uploaded_file($tempPath, $ROOT . $destination)) {
+            return false;
+        }
+
+        return true;
     }
 }

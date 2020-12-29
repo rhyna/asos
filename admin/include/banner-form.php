@@ -14,9 +14,11 @@
 <form action="" method="post" enctype="multipart/form-data" id="bannerForm" class="entity-form">
     <div class="form-image">
         <div class="form-group">
-            <div class="entity-form-image entity-form-image--banner"
-                 style="background-image: url('<?= $banner->image ?>')">
-            </div>
+            <?php if ($banner->image): ?>
+                <div class="entity-form-image entity-form-image--banner"
+                     style="background-image: url('<?= $banner->image ?>')">
+                </div>
+            <?php endif; ?>
             <input class="form-control-file" name="image" id="image" type="file">
         </div>
     </div>
@@ -57,6 +59,7 @@
                value="<?= htmlspecialchars($banner->buttonLabel) ?>">
     </div>
     <button type="submit" class="entity-form-submit" onclick="event.preventDefault();
-            updateBanner(<?= $banner->id ?>)">Submit
+            updateBanner(<?= $banner->id ?>)">
+        Submit
     </button>
 </form>
