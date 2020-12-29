@@ -448,4 +448,20 @@ class Banner
 
         return true;
     }
+
+    /**
+     * @param PDO $conn
+     * @param $id
+     * @return void
+     */
+    public function deleteBanner(PDO $conn, $id): void
+    {
+        $sql = "delete from banner where id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $id, PDO::PARAM_STR);
+
+        $statement->execute();
+    }
 }

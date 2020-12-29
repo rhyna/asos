@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/../include/init.php';
 
-Auth::ifNotLoggedIn();
-
 $conn = require_once __DIR__ . '/../include/db.php';
 
-global $ROOT;
-
 try {
+    Auth::ifNotLoggedIn();
+
+    global $ROOT;
+
     $id = $_POST['id'] ?? null;
 
     if (!$id) {

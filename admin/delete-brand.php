@@ -2,11 +2,11 @@
 
 require_once __DIR__ . "/../include/init.php";
 
-Auth::ifNotLoggedIn();
-
 $conn = require_once __DIR__ . "/../include/db.php";
 
 try {
+    Auth::ifNotLoggedIn();
+
     $id = $_POST['id'] ?? null;
 
     if (!$id) {
@@ -19,6 +19,12 @@ try {
 
     if (!$brand) {
         throw new NotFoundException('Such a brand does not exist');
+    }
+
+    $hasProducts = $brand->checkBrandProducts($conn);
+
+    if ($hasProducts) {
+        throw new ValidationErrorException("Cannot delete a brand that has products linked to it. <br> Delete products first");
     }
 
     if ($brand->deleteBrand($conn)) {
@@ -39,7 +45,13 @@ try {
 
     die($e->getMessage());
 
-} catch (Throwable $e) {
+} catch (ValidationErrorException $e) {
+    header('HTTP/2.0 422 Validation Error');
+
+    die($e->getMessage());
+}
+
+catch (Throwable $e) {
     header('HTTP/2.0 500 Internal Server Error');
 
     die($e->getMessage());

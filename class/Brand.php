@@ -141,4 +141,21 @@ class Brand
 
         return $statement->execute();
     }
+
+    /**
+     * @param PDO $conn
+     * @return int
+     */
+    public function checkBrandProducts(PDO $conn): int
+    {
+        $sql = "select id from product where brand_id = :id";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+
+        $statement->execute();
+
+        return (int) $statement->fetchColumn();
+    }
 }

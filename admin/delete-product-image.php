@@ -2,11 +2,11 @@
 
 require_once __DIR__ . "/../include/init.php";
 
-Auth::ifNotLoggedIn();
-
 $conn = require_once __DIR__ . "/../include/db.php";
 
 try {
+    Auth::ifNotLoggedIn();
+
     if (!isset($_POST['id'])) {
         throw new BadRequestException('The id parameter isn\'t provided or empty');
     }
