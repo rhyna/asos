@@ -23,12 +23,7 @@ try {
         throw new NotFoundException('Such a banner does not exist');
     }
 
-    try {
-        $banner->deleteBanner($conn, $id);
-
-    } catch (PDOException $e) {
-        throw new Exception('The banner has not been deleted');
-    }
+    $banner->deleteBanner($conn, $id);
 
     try {
         unlink($ROOT . $banner->image);

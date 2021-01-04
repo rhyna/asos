@@ -28,16 +28,12 @@ try {
             $bannerToReplaceId = $banner->placeIdDupes($conn);
 
             if ($bannerToReplaceId) {
-                if (!Banner::replaceBannerPlace($conn, $bannerToReplaceId)) {
-                    throw new Exception('The banner has not been replaced');
-                }
+                Banner::replaceBannerPlace($conn, $bannerToReplaceId);
             }
 
-            if (!$banner->createBanner($conn, $_FILES)) {
-                throw new Exception('The banner has not been created');
-            }
+            $banner->createBanner($conn, $_FILES);
 
-            if (!Banner::uploadBannerImage($conn, $_FILES)) {
+            if (!Banner::uploadBannerImage($_FILES)) {
                 throw new Exception('The banner image has not been uploaded');
             }
 

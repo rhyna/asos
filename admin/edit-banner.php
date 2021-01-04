@@ -38,14 +38,10 @@ try {
             $bannerToReplaceId = $banner->placeIdDupes($conn);
 
             if ($bannerToReplaceId) {
-                if (!Banner::replaceBannerPlace($conn, $bannerToReplaceId)) {
-                    throw new Exception('The banner has not been replaced');
-                }
+                Banner::replaceBannerPlace($conn, $bannerToReplaceId);
             }
 
-            if (!$banner->updateBanner($conn)) {
-                throw new Exception('The banner has not been updated');
-            }
+            $banner->updateBanner($conn);
 
             if (!$banner->updateBannerImage($conn, $_FILES)) {
                 throw new Exception('The banner image has not been updated');
