@@ -16,7 +16,7 @@ class Banner
     /**
      * @param PDO $conn
      * @return array
-     * @throws Exception
+     * @throws SystemErrorException
      */
     public static function getAllBanners(PDO $conn): array
     {
@@ -40,7 +40,7 @@ class Banner
             return $result->fetchAll(PDO::FETCH_CLASS, Banner::class);
 
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
     }
 
@@ -132,7 +132,7 @@ class Banner
      * @param PDO $conn
      * @param int $id
      * @return Banner|null
-     * @throws Exception
+     * @throws SystemErrorException
      */
     public static function getBanner(PDO $conn, int $id): ?Banner
     {
@@ -161,10 +161,8 @@ class Banner
             return $statement->fetchObject(Banner::class) ?: null;
 
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
-
-
     }
 
     /**
@@ -198,10 +196,9 @@ class Banner
 
     /**
      * @param PDO $conn
-     * @return bool
-     * @throws Exception
+     * @throws SystemErrorException
      */
-    public function updateBanner(PDO $conn): bool
+    public function updateBanner(PDO $conn): void
     {
         try {
             $sql = "update banner 
@@ -218,10 +215,10 @@ class Banner
 
             $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
 
-            return $statement->execute();
+            $statement->execute();
 
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
     }
 
@@ -260,7 +257,7 @@ class Banner
     /**
      * @param PDO $conn
      * @return int
-     * @throws Exception
+     * @throws SystemErrorException
      */
     public function placeIdDupes(PDO $conn): int
     {
@@ -276,7 +273,7 @@ class Banner
             return (int)$statement->fetchColumn();
 
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
 
     }
@@ -284,10 +281,9 @@ class Banner
     /**
      * @param PDO $conn
      * @param int $id
-     * @return bool
-     * @throws Exception
+     * @throws SystemErrorException
      */
-    public static function replaceBannerPlace(PDO $conn, int $id): bool
+    public static function replaceBannerPlace(PDO $conn, int $id): void
     {
         try {
             $sql = "update banner set banner_place_id = null where id = :id";
@@ -296,10 +292,10 @@ class Banner
 
             $statement->bindValue(':id', $id, PDO::PARAM_STR);
 
-            return $statement->execute();
+            $statement->execute();
 
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
     }
 
@@ -335,7 +331,7 @@ class Banner
      * @param PDO $conn
      * @param array $data
      * @return bool
-     * @throws Exception
+     * @throws SystemErrorException
      */
     public function updateBannerImage(PDO $conn, array $data): bool
     {
@@ -356,9 +352,7 @@ class Banner
                 return false;
             }
 
-            if (!$this->setBannerImage($conn, $destination)) {
-                return false;
-            }
+            $this->setBannerImage($conn, $destination);
 
             if (!$this->image) {
                 return true;
@@ -369,7 +363,7 @@ class Banner
             return true;
 
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
 
     }
@@ -404,10 +398,9 @@ class Banner
     /**
      * @param PDO $conn
      * @param string $image
-     * @return bool
-     * @throws Exception
+     * @throws SystemErrorException
      */
-    private function setBannerImage(PDO $conn, string $image): bool
+    private function setBannerImage(PDO $conn, string $image): void
     {
         try {
             $sql = "update banner set image = :image where id = :id";
@@ -418,20 +411,19 @@ class Banner
 
             $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
 
-            return $statement->execute();
+            $statement->execute();
 
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
     }
 
     /**
      * @param PDO $conn
      * @param array $data
-     * @return bool
-     * @throws Exception
+     * @throws SystemErrorException
      */
-    public function createBanner(PDO $conn, array $data): bool
+    public function createBanner(PDO $conn, array $data): void
     {
         try {
             $image = self::prepareBannerImage($data);
@@ -451,10 +443,8 @@ class Banner
 
             $this->id = $conn->lastInsertId();
 
-            return true;
-
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
 
     }
@@ -481,8 +471,7 @@ class Banner
     /**
      * @param PDO $conn
      * @param $id
-     * @return void
-     * @throws Exception
+     * @throws SystemErrorException
      */
     public function deleteBanner(PDO $conn, $id): void
     {
@@ -496,7 +485,7 @@ class Banner
             $statement->execute();
 
         } catch (Throwable $e) {
-            throw new Exception('A system error occurred');
+            throw new SystemErrorException();
         }
     }
 }

@@ -11,21 +11,24 @@ class Brand
     /**
      * @param PDO $conn
      * @return array
-     * @throws Exception
+     * @throws SystemErrorException
      */
     static public function getAllBrands(PDO $conn): array
     {
-        $sql = "select title, id, description_women as descriptionWomen, description_men as descriptionMen
-                from brand order by title asc";
+        try {
+            $sql = "select title, 
+                    id, 
+                    description_women as descriptionWomen, 
+                    description_men as descriptionMen
+                    from brand 
+                    order by title asc";
 
-        $result = $conn->query($sql);
+            $result = $conn->query($sql);
 
-        $fetchedResult = $result->fetchAll(PDO::FETCH_CLASS, Brand::class);
+            return $result->fetchAll(PDO::FETCH_CLASS, Brand::class);
 
-        if (is_array($fetchedResult) && $fetchedResult) {
-            return $fetchedResult;
-        } else {
-            throw new Exception('The brand list is empty or a fetch error occurred');
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
         }
     }
 
@@ -33,23 +36,29 @@ class Brand
      * @param PDO $conn
      * @param int $id
      * @return Brand|null
+     * @throws SystemErrorException
      */
     static public function getBrand(PDO $conn, int $id): ?Brand
     {
-        $sql = "select title, 
-                id, 
-                description_women as descriptionWomen, 
-                description_men as descriptionMen
-        from brand
-        where id = :id";
+        try {
+            $sql = "select title, 
+                    id, 
+                    description_women as descriptionWomen, 
+                    description_men as descriptionMen
+                    from brand
+                    where id = :id";
 
-        $statement = $conn->prepare($sql);
+            $statement = $conn->prepare($sql);
 
-        $statement->bindValue(':id', $id, PDO::PARAM_STR);
+            $statement->bindValue(':id', $id, PDO::PARAM_STR);
 
-        $statement->execute();
+            $statement->execute();
 
-        return $statement->fetchObject(Brand::class) ?: null;
+            return $statement->fetchObject(Brand::class) ?: null;
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
     }
 
     /**
@@ -86,76 +95,94 @@ class Brand
 
     /**
      * @param PDO $conn
-     * @return bool
+     * @throws SystemErrorException
      */
-    public function updateBrand(PDO $conn): bool
+    public function updateBrand(PDO $conn): void
     {
-        $sql = "update brand 
-        set     title = :title,
-                description_women = :descriptionWomen,
-                description_men = :descriptionMen
-        where   id = :id";
+        try {
+            $sql = "update brand 
+                    set title = :title,
+                    description_women = :descriptionWomen,
+                    description_men = :descriptionMen
+                    where id = :id";
 
-        $statement = $conn->prepare($sql);
+            $statement = $conn->prepare($sql);
 
-        $this->fillBrandStatement($statement);
+            $this->fillBrandStatement($statement);
 
-        $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+            $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
 
-        return $statement->execute();
-    }
+            $statement->execute();
 
-    /**
-     * @param PDO $conn
-     * @return bool
-     */
-    public function createBrand(PDO $conn): bool
-    {
-        $sql = "insert into brand 
-                (title, description_women, description_men)
-                values  (:title, :descriptionWomen, :descriptionMen)";
-
-        $statement = $conn->prepare($sql);
-
-        $this->fillBrandStatement($statement);
-
-        if ($statement->execute()) {
-            $this->id = $conn->lastInsertId();
-            return true;
-        } else {
-            return false;
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
         }
     }
 
     /**
      * @param PDO $conn
-     * @return bool
+     * @throws SystemErrorException
      */
-    public function deleteBrand(PDO $conn): bool
+    public function createBrand(PDO $conn): void
     {
-        $sql = "delete from brand where id = :id";
+        try {
+            $sql = "insert into brand 
+                    (title, description_women, description_men)
+                    values  (:title, :descriptionWomen, :descriptionMen)";
 
-        $statement = $conn->prepare($sql);
+            $statement = $conn->prepare($sql);
 
-        $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+            $this->fillBrandStatement($statement);
 
-        return $statement->execute();
+            $statement->execute();
+
+            $this->id = $conn->lastInsertId();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @throws SystemErrorException
+     */
+    public function deleteBrand(PDO $conn): void
+    {
+        try {
+            $sql = "delete from brand where id = :id";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+
+            $statement->execute();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
     }
 
     /**
      * @param PDO $conn
      * @return int
+     * @throws SystemErrorException
      */
     public function checkBrandProducts(PDO $conn): int
     {
-        $sql = "select id from product where brand_id = :id";
+        try {
+            $sql = "select id from product where brand_id = :id";
 
-        $statement = $conn->prepare($sql);
+            $statement = $conn->prepare($sql);
 
-        $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+            $statement->bindValue(':id', $this->id, PDO::PARAM_STR);
 
-        $statement->execute();
+            $statement->execute();
 
-        return (int) $statement->fetchColumn();
+            return (int)$statement->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
     }
 }

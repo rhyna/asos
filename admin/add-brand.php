@@ -12,11 +12,11 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $brand->fillBrandObject($_POST);
 
-        if ($brand->createBrand($conn)) {
-            Url::redirect('/admin/edit-brand.php?id=' . $brand->id);
-        }
-    }
+        $brand->createBrand($conn);
 
+        Url::redirect('/admin/edit-brand.php?id=' . $brand->id);
+
+    }
 
 } catch (Throwable $e) {
     $error = $e->getMessage();

@@ -8,6 +8,7 @@ class CategoryController
      * @param PDO $conn
      * @param string $actionType
      * @return bool
+     * @throws SystemErrorException
      */
     static public function onPostCategoryAction(Category $category, PDO $conn, string $actionType): bool
     {
@@ -16,6 +17,7 @@ class CategoryController
         $category->validateCategory();
 
         if ($_FILES['image']['name']) {
+
             $category->validateCategoryImage($_FILES['image']);
         }
 
@@ -23,18 +25,12 @@ class CategoryController
             return false;
         }
 
-        $categoryDone = false;
-
         if ($actionType === 'create') {
-            $categoryDone = $category->createCategory($conn);
+            $category->createCategory($conn);
         }
 
         if ($actionType === 'update') {
-            $categoryDone = $category->updateCategory($conn);
-        }
-
-        if (!$categoryDone) {
-            return false;
+            $category->updateCategory($conn);
         }
 
         if (!$_FILES['image']['name']) {

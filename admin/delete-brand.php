@@ -27,13 +27,11 @@ try {
         throw new ValidationErrorException("Cannot delete a brand that has products linked to it. <br> Delete products first");
     }
 
-    if ($brand->deleteBrand($conn)) {
-        header('HTTP/2.0 200 OK');
+    $brand->deleteBrand($conn);
 
-        die('Successfully deleted');
-    } else {
-        throw new Exception('An error occurred, the brand has not been deleted');
-    }
+    header('HTTP/2.0 200 OK');
+
+    die('Successfully deleted');
 
 } catch (BadRequestException $e) {
     header('HTTP/2.0 400 Bad Request');
@@ -49,9 +47,8 @@ try {
     header('HTTP/2.0 422 Validation Error');
 
     die($e->getMessage());
-}
 
-catch (Throwable $e) {
+} catch (Throwable $e) {
     header('HTTP/2.0 500 Internal Server Error');
 
     die($e->getMessage());

@@ -29,12 +29,15 @@ try {
         throw new NotFoundException('The category is not found');
     }
 
-    if ($category::deleteCategoryImage($conn, $id)) {
+    $category::deleteCategoryImage($conn, $id);
+
+    try {
         unlink($ROOT . $image);
 
-    } else {
-        throw new Exception('A problem occurred, the image has not been deleted');
+    } catch (Throwable $e) {
+        throw new Exception('Unable to delete the image file');
     }
+
 
 } catch (NotFoundException $e) {
     header('HTTP/2.0 404 Not Found');

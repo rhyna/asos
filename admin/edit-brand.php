@@ -24,9 +24,9 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $brand->fillBrandObject($_POST);
 
-        if ($brand->updateBrand($conn)) {
-            Url::redirect('/admin/brands.php');
-        }
+        $brand->updateBrand($conn);
+
+        Url::redirect('/admin/brands.php');
     }
 
 } catch (Throwable $e) {
