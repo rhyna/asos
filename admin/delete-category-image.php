@@ -38,7 +38,6 @@ try {
         throw new Exception('Unable to delete the image file');
     }
 
-
 } catch (NotFoundException $e) {
     header('HTTP/2.0 404 Not Found');
 

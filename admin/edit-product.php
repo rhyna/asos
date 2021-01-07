@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/include/header.php';
 
-Auth::ifNotLoggedIn();
-
 $mode = 'edit-product';
 
 $error = null;
 
 try {
+    Auth::ifNotLoggedIn();
+
     $id = $_GET['id'] ?? null;
 
     if (!$id) {

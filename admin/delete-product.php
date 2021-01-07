@@ -29,28 +29,30 @@ try {
 
     }
 
-    if ($product->deleteProduct($conn)) {
-        $images = $product->getImagesArray();
+    $product->deleteProduct($conn);
 
-        foreach ($images as $imageArray) {
-            foreach ($imageArray as $key => $value) {
-                if ($product->$key == '') {
-                    continue;
-                }
+    $images = $product->getImagesArray();
 
-                $imageToDelete = $product->$key;
+    foreach ($images as $imageArray) {
+        foreach ($imageArray as $key => $value) {
+            if ($product->$key == '') {
+                continue;
+            }
 
-                unlink($ROOT . $imageToDelete);
+            $imageToDelete = $product->$key;
+
+            try {
+                unlink($ROOT . $imageToDelete . 111);
+
+            } catch (Throwable $e) {
+                throw new SystemErrorException();
             }
         }
-
-        header("HTTP/2.0 200 OK");
-
-        echo 'Successfully deleted';
-
-    } else {
-        throw new Exception('A problem occurred, the product has not been deleted');
     }
+
+    header("HTTP/2.0 200 OK");
+
+    echo 'Successfully deleted';
 
 } catch (BadRequestException $e) {
     header('HTTP/2.0 400 Bad Request');

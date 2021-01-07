@@ -43,9 +43,7 @@ try {
         throw new NotFoundException('The image to delete is not found in the database');
     }
 
-    if (!$product->deleteProductImage($conn, $image)) {
-        throw new Exception('A problem occurred, the image has not been deleted');
-    }
+    $product->deleteProductImage($conn, $image);
 
 } catch (BadRequestException $e) {
     header('HTTP/2.0 400 Bad Request');

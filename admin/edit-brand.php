@@ -2,11 +2,11 @@
 
 require_once __DIR__ . '/include/header.php';
 
-Auth::ifNotLoggedIn();
-
 $error = null;
 
 try {
+    Auth::ifNotLoggedIn();
+
     $id = $_GET['id'] ?? null;
 
     if (!$id) {
