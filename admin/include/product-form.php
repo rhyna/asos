@@ -26,7 +26,7 @@ $images = $product->getImagesArray();
 <?php endif; ?>
 
 
-<form action="" method="post" enctype="multipart/form-data" id="productForm" class="entity-form">
+<form action="" method="post" enctype="multipart/form-data" id="productForm" class="entity-form product-form">
     <div class="form-group">
         <label for="title">Title</label>
         <input class="form-control" type="text" name="title" id="title"
@@ -85,6 +85,9 @@ $images = $product->getImagesArray();
                 </option>
             <?php endforeach; ?>
         </select>
+        <button type="button" class="add-brand" data-toggle="modal" data-target="#addBrand">
+            + new brand
+        </button>
     </div>
     <div class="form-group">
         <label for="lookAfterMe">Look After Me</label>

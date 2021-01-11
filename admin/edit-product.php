@@ -54,7 +54,9 @@ try {
             if ($error) {
                 echo $error;
             } else {
-                include_once __DIR__ . '/include/product-form.php';
+                require_once __DIR__ . '/include/product-form.php';
+
+                require_once __DIR__ . '/include/add-brand-from-product-modal.php';
             }
             ?>
         </div>
