@@ -18,6 +18,7 @@ class Product
     public $image_3;
     public $productErrors = [];
     public $imageErrors = [];
+    public $sizes = [];
 
     /**
      * @param PDO $conn
@@ -71,6 +72,10 @@ class Product
             if ($this->checkProductCodeDupes($conn)) {
                 $this->productErrors[] = 'An item with the entered product code already exists';
             }
+        }
+
+        if (!$this->sizes) {
+            $this->productErrors[] = 'Please select at least one size';
         }
 
         return $this->productErrors ? false : true;
@@ -215,6 +220,10 @@ class Product
         $this->look_after_me = $data['lookAfterMe'];
 
         $this->about_me = $data['aboutMe'];
+
+        if (isset($data['sizes'])) {
+            $this->sizes = $data['sizes'];
+        }
     }
 
     /**
@@ -515,4 +524,88 @@ class Product
             throw new SystemErrorException();
         }
     }
+
+    /**
+     * @param PDO $conn
+     * @param int $sizeId
+     * @return int
+     * @throws SystemErrorException
+     */
+    public function productSizeExists(PDO $conn, int $sizeId): int
+    {
+        try {
+            $sql = "select id 
+                from product_size 
+                where product_id = :productId 
+                and size_id = :sizeId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':productId', $this->id, PDO::PARAM_INT);
+
+            $statement->bindValue(':sizeId', $sizeId, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return (int)$statement->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @return bool
+     * @throws SystemErrorException
+     */
+    public function updateProductSizes(PDO $conn): bool
+    {
+        foreach ($this->sizes as $sizeId) {
+
+            if ($this->productSizeExists($conn, (int)$sizeId)) {
+                continue;
+            }
+
+            $sql = "insert into product_size 
+                        (product_id, size_id) 
+                        values (:productId, :sizeId)";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':productId', $this->id, PDO::PARAM_INT);
+
+            $statement->bindValue(':sizeId', $sizeId, PDO::PARAM_INT);
+
+            $statement->execute();
+        }
+
+        return true;
+    }
+
+    /**
+     * @param PDO $conn
+     * @return array
+     * @throws SystemErrorException
+     */
+    public function getProductSizes(PDO $conn): array
+    {
+        try {
+            $sql = "select size_id from product_size where product_id = :productId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':productId', $this->id, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+
+    }
+
+
 }

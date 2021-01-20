@@ -8,7 +8,10 @@ try {
     Auth::ifNotLoggedIn();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
         $productId = $_POST['productId'];
+
+        $productMode = $_POST['productMode'];
 
         $brand = new Brand();
 
@@ -16,7 +19,9 @@ try {
 
         $brand->createBrand($conn);
 
-        Url::redirect('/admin/edit-product.php?id=' . $productId);
+        $newBrand = $brand::getBrand($conn, $brand->id);
+
+         echo(json_encode($newBrand));
     }
 
 } catch (Throwable $e) {

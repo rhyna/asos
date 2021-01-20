@@ -130,3 +130,110 @@ function updateBanner(id) {
         })
 
 }
+
+function addBrandFromProduct(form) {
+    let url = form.action;
+
+    let productId = $('.add-brand-modal').find("input[name='productId']").val();
+
+    let productMode = $('.add-brand-modal').find("input[name='productMode']").val();
+
+    let title = $('.add-brand-modal').find("input[name='title']").val();
+
+    let descriptionWomen = $('.add-brand-modal').find("textarea[name='descriptionWomen']").val();
+
+    let descriptionMen = $('.add-brand-modal').find("textarea[name='descriptionMen']").val();
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            productId: productId,
+            productMode: productMode,
+            title: title,
+            descriptionWomen: descriptionWomen,
+            descriptionMen: descriptionMen,
+        },
+    })
+        .done(function (response) {
+            $('#addBrand').modal('hide');
+
+            let newOption = JSON.parse(response);
+
+            let option = $("<option></option>");
+
+            option.val(newOption['id']).html(newOption['title']);
+
+            $('select#brand').append(option);
+
+            $('option[value=' + newOption['id'] + ']').attr('selected', 'selected');
+
+        })
+        .fail(function (response) {
+            alert(response);
+        })
+}
+
+function showSizes() {
+    let selectedOptionId = $('#categoryId').val();
+
+    let selectedSizeList = $('#productSizes').val();
+
+    let selectedSizes = JSON.parse(selectedSizeList);
+
+    $.ajax({
+        url: '../admin/get-product-sizes.php',
+        type: 'POST',
+        data: {
+            categoryId: selectedOptionId,
+        },
+    })
+        .done(function (response) {
+            let sizes = JSON.parse(response);
+
+            $('.product-size-list__content').remove();
+
+            let content = "<div class='product-size-list__content'></div>";
+
+            $('.product-size-list').append(content);
+
+            if (sizes.length === 0) {
+                $('.product-size-list-empty').addClass('product-size-list-empty--show')
+            } else {
+                $('.product-size-list-empty').removeClass('product-size-list-empty--show');
+            }
+
+            sizes.forEach(function (size) {
+
+                size['id'] = Number(size['id']);
+
+                let productSizeItem = "<div class='product-size-item' data-id='" + size['id'] + "'>";
+
+                $('.product-size-list__content').append(productSizeItem);
+
+                let currentItem = $('.product-size-item[data-id=' + size['id'] + ']');
+
+                let checkbox = '<input type="checkbox" class="form-control" name="sizes[]" id="size" value="' + size['id'] + '">';
+
+                currentItem.append(checkbox);
+
+                let label = '<label for="size">' + size['title'] + '</label>';
+
+                currentItem.append(label);
+
+                selectedSizes.forEach(function (selectedSize){
+                    if (selectedSize === size['id']) {
+                        currentItem.find("input[type='checkbox']").prop('checked', true);
+                    }
+                })
+            })
+        })
+        .fail(function (response) {
+            alert(response);
+        })
+}
+
+if ($('.product-form #categoryId').length) {
+    showSizes();
+}
+

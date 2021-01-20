@@ -49,7 +49,8 @@ $images = $product->getImagesArray();
     </div>
     <div class="form-group">
         <label for="categoryId">Category</label>
-        <select class="form-control" id="categoryId" name="categoryId">
+        <select class="form-control" id="categoryId" name="categoryId"
+                onchange="showSizes()">
             <?php foreach ($categoryLevels as $categoryLevels1): ?>
                 <option class="entity-form-option--disabled" value=""
                         style=" font-weight: 600;
@@ -71,6 +72,21 @@ $images = $product->getImagesArray();
                 <?php endforeach; ?>
             <?php endforeach; ?>
         </select>
+    </div>
+    <div class="form-group product-size-list">
+        <?php
+        if (!isset($sizeIds)) {
+            $sizeIds = [];
+        }
+
+        echo '<input type="hidden" id="productSizes" value="' . json_encode($sizeIds) . '">';
+        ?>
+        <label>Select sizes</label>
+        <div class="product-size-list-empty">
+            Please select a category first
+        </div>
+        <div class="product-size-list__content">
+        </div>
     </div>
     <div class="form-group">
         <label for="brand">Brand</label>

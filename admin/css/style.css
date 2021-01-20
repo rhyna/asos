@@ -325,6 +325,28 @@ label {
   border-bottom: 1px solid #0770cf;
   color: #0770cf;
 }
+.product-size-list-empty {
+  display: none;
+  margin-left: 20px;
+  font-style: italic;
+}
+.product-size-list-empty--show {
+  display: block;
+}
+.product-size-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.product-size-item input[type='checkbox'] {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin-right: 10px;
+}
+.product-size-item label {
+  margin-bottom: 0;
+}
 .add-brand-modal-submit {
   margin-right: 10px;
 }

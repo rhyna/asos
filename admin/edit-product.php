@@ -23,17 +23,26 @@ try {
         throw new Exception('Such a product does not exist');
     }
 
+    $sizes = $product->getProductSizes($conn);
+
+    $sizeIds = [];
+
+    foreach ($sizes as $size) {
+        $sizeIds[] = (int)$size['size_id'];
+    }
+
     $categoryLevels = Category::getCategoryLevels($conn);
 
     $allBrands = Brand::getAllBrands($conn);
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
         $product->fillProductObject($_POST);
 
         if ($product->updateProduct($conn, $_FILES)) {
             if ($product->updateProductImage($conn, $_FILES)) {
-                Url::redirect("/admin/products.php");
+                if ($product->updateProductSizes($conn)) {
+                    Url::redirect("/admin/products.php");
+                }
             }
         }
     }

@@ -481,4 +481,28 @@ class Category
             throw new SystemErrorException();
         }
     }
+
+    /**
+     * @param PDO $conn
+     * @param int $id
+     * @return int
+     * @throws SystemErrorException
+     */
+    public static function getParentCategory(PDO $conn, int $id): int
+    {
+        try {
+            $sql = "select parent_id from category where id = :id";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return (int)$statement->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
 }

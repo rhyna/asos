@@ -9,7 +9,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/admin/add-brand-from-product-action.php" method="post" id="brandFormProduct">
+                <form
+                        action="/admin/add-brand-from-product-action.php"
+                        method="post"
+                        id="brandFormProduct"
+                        onsubmit="event.preventDefault(); addBrandFromProduct(this);">
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input class="form-control" type="text" name="title" id="title"
@@ -26,7 +30,16 @@
                                   rows="5"></textarea>
                     </div>
                     <input type="hidden" value="<?= $product->id ?>" name="productId">
-                    <button type="submit" class="btn btn-primary add-brand-modal-submit">Submit</button>
+                    <?php if ($mode === 'edit-product'): ?>
+                        <input type="hidden" value="edit" name="productMode">
+                    <?php elseif ($mode === 'add-product'): ?>
+                        <input type="hidden" value="add" name="productMode">
+                    <?php endif; ?>
+                    <button
+                            type="submit"
+                            class="btn btn-primary add-brand-modal-submit">
+                        Submit
+                    </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </form>
             </div>
