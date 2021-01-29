@@ -25,6 +25,7 @@ try {
             <div><?= $error ?></div>
         <?php else: ?>
             <a href="/admin/add-product.php" class="add-entity">Add product</a>
+            <a href="/admin/sizes.php" class="add-entity">Manage sizes</a>
             <h1 class="entity-list-title">Products</h1>
             <div class="entity-list entity-list--product">
                 <div class="entity-list-header">

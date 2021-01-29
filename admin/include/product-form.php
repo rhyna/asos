@@ -58,7 +58,9 @@ $images = $product->getImagesArray();
                     <?= htmlspecialchars($categoryLevels1['title']) ?>
                 </option>
                 <?php foreach ($categoryLevels1['child_category1'] as $categoryLevels2): ?>
-                    <option class="entity-form-option--disabled" value="" style="font-weight: 600">
+                    <option class="entity-form-option--disabled"
+                            value=""
+                            style="font-weight: 600">
                         -- <?= htmlspecialchars($categoryLevels2['title']) ?>
                     </option>
                     <?php foreach ($categoryLevels2['child_category2'] as $categoryLevels3): ?>
@@ -86,6 +88,7 @@ $images = $product->getImagesArray();
             Please select a category first
         </div>
         <div class="product-size-list__content">
+<!--            content uploaded via JS-->
         </div>
     </div>
     <div class="form-group">

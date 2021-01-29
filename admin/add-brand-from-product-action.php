@@ -21,11 +21,14 @@ try {
 
         $newBrand = $brand::getBrand($conn, $brand->id);
 
-         echo(json_encode($newBrand));
+        echo(json_encode($newBrand));
     }
 
 } catch (Throwable $e) {
-    echo $e->getMessage();
+    header('HTTP/2.0 500 Internal Server Error');
+
+    die($e->getMessage());
+
 }
 
 

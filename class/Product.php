@@ -561,15 +561,12 @@ class Product
      */
     public function updateProductSizes(PDO $conn): bool
     {
+        $this->deleteProductSizes($conn);
+
         foreach ($this->sizes as $sizeId) {
-
-            if ($this->productSizeExists($conn, (int)$sizeId)) {
-                continue;
-            }
-
             $sql = "insert into product_size 
-                        (product_id, size_id) 
-                        values (:productId, :sizeId)";
+                    (product_id, size_id) 
+                    values (:productId, :sizeId)";
 
             $statement = $conn->prepare($sql);
 
@@ -605,6 +602,26 @@ class Product
             throw new SystemErrorException();
         }
 
+    }
+
+    /**
+     * @param PDO $conn
+     * @throws SystemErrorException
+     */
+    public function deleteProductSizes(PDO $conn): void
+    {
+        try {
+            $sql = "delete from product_size where product_id = :productId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':productId', $this->id, PDO::PARAM_INT);
+
+            $statement->execute();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
     }
 
 

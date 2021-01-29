@@ -170,22 +170,22 @@ function addBrandFromProduct(form) {
 
         })
         .fail(function (response) {
-            alert(response);
+            alert(response.responseText);
         })
 }
 
 function showSizes() {
-    let selectedOptionId = $('#categoryId').val();
+    let productCategoryId = $('#categoryId').val();
 
-    let selectedSizeList = $('#productSizes').val();
+    let productSizeList = $('#productSizes').val();
 
-    let selectedSizes = JSON.parse(selectedSizeList);
+    let productSizes = JSON.parse(productSizeList);
 
     $.ajax({
         url: '../admin/get-product-sizes.php',
         type: 'POST',
         data: {
-            categoryId: selectedOptionId,
+            categoryId: productCategoryId,
         },
     })
         .done(function (response) {
@@ -207,33 +207,187 @@ function showSizes() {
 
                 size['id'] = Number(size['id']);
 
-                let productSizeItem = "<div class='product-size-item' data-id='" + size['id'] + "'>";
+                let sizeItem = "<div class='product-size-item' data-id='" + size['id'] + "'>";
 
-                $('.product-size-list__content').append(productSizeItem);
+                $('.product-size-list__content').append(sizeItem);
 
                 let currentItem = $('.product-size-item[data-id=' + size['id'] + ']');
 
-                let checkbox = '<input type="checkbox" class="form-control" name="sizes[]" id="size" value="' + size['id'] + '">';
+                let checkbox = '<input type="checkbox" class="form-control" name="sizes[]" id="size-' + size['id'] + '" value="' + size['id'] + '">';
 
                 currentItem.append(checkbox);
 
-                let label = '<label for="size">' + size['title'] + '</label>';
+                let label = '<label for="size-' + size['id'] + '">' + size['title'] + '</label>';
 
                 currentItem.append(label);
 
-                selectedSizes.forEach(function (selectedSize){
-                    if (selectedSize === size['id']) {
+                productSizes.forEach(function (productSize) {
+                    if (productSize === size['id']) {
                         currentItem.find("input[type='checkbox']").prop('checked', true);
                     }
                 })
             })
         })
         .fail(function (response) {
-            alert(response);
+            alert(response.responseText);
         })
 }
 
 if ($('.product-form #categoryId').length) {
     showSizes();
+
+    $(document).on('change', '.product-size-item input[type="checkbox"]', function () {
+        let checkedSizes = $('.product-size-item input[type="checkbox"]:checked');
+
+        let ids = [];
+
+        checkedSizes.each(function (key, item) {
+            if ($(item).is(':checked')) {
+                ids.push(Number($(item).val()));
+            }
+        });
+
+        $('#productSizes').val(JSON.stringify(ids));
+    })
 }
+
+function createSizeItem(size) {
+    let listItemWrapper = $('<div class="entity-list-item__wrapper"></div>');
+
+    listItemWrapper.appendTo('.entity-list-content');
+
+    let listItem = $('<div class="entity-list-item"></div>');
+
+    listItem.appendTo(listItemWrapper);
+
+    let listItemRow = $('<div class="row entity-list-item__row"></div>');
+
+    listItemRow.appendTo(listItem);
+
+    let listItemCol = $('<div class="col"></div>');
+
+    listItemCol.appendTo(listItemRow);
+
+    let sizeItem = $("<div class='size-item' data-id='" + size['id'] + "'>" + size['title'] + "</div>");
+
+    sizeItem.appendTo(listItemCol);
+
+    let icons = $('<div class="col-1 entity-list-item-icons"></div>');
+
+    icons.appendTo(listItemRow);
+
+    let iconsInner = $('<div class="entity-list-item-icons__inner">');
+
+    iconsInner.appendTo(icons);
+
+    let editButton = $('<button ' +
+        'type="button" ' +
+        'data-toggle="modal" ' +
+        'data-target="#editSize" ' +
+        'onclick="passSizeTitle(\'' + size['title'] + '\')">');
+
+    editButton.appendTo(iconsInner);
+
+    let editIcon = $('<i class="far fa-edit"></i>');
+
+    editIcon.appendTo(editButton);
+
+    let deleteButton = $('<button type="button">');
+
+    deleteButton.appendTo(iconsInner);
+
+    let deleteIcon = $('<i class="far fa-trash-alt"></i>');
+
+    deleteIcon.appendTo(deleteButton);
+}
+
+function manageSizes() {
+    let productCategoryId = $('#categoryId option:selected').val();
+
+    let productCategoryTitle = $('#categoryId option:selected').text().trim().replace('-- ', '');
+
+    $('.add-size-modal input#categoryId').val(productCategoryId);
+
+    $('.add-size-modal #categoryTitle').html(productCategoryTitle);
+
+    if (!productCategoryId) {
+        $('.product-size-list-empty').addClass('product-size-list-empty--show')
+
+        return;
+
+    } else {
+        $('.product-size-list-empty').removeClass('product-size-list-empty--show');
+    }
+
+    $.ajax({
+        url: '../admin/manage-sizes.php',
+        type: 'POST',
+        data: {
+            categoryId: productCategoryId,
+        },
+    })
+        .done(function (response) {
+            let sizes = JSON.parse(response);
+
+            $('.entity-list-content').remove();
+
+            let listContent = $('<div class="entity-list-content"></div>');
+
+            listContent.appendTo('.entity-list--size');
+
+            $('.add-size-button').addClass('add-size-button--show');
+
+            sizes.forEach(function (size) {
+                size['id'] = Number(size['id']);
+
+                createSizeItem(size);
+            })
+        })
+        .fail(function (response) {
+            alert(response.responseText);
+        })
+}
+
+if ($('.size-form #categoryId').length) {
+    manageSizes();
+}
+
+function addSize(form) {
+    let categoryId = $('.add-size-modal input#categoryId').val();
+
+    let size = $('.add-size-modal #size').val();
+
+    $.ajax({
+        url: form.action,
+        type: 'POST',
+        data: {
+            categoryId: categoryId,
+            size: size,
+        },
+    })
+        .done(function (response) {
+            let addedSize = JSON.parse(response);
+
+            let itemExists = $('.size-item[data-id=' + addedSize['id'] + ']').length;
+
+            if (!itemExists) {
+                $('.existing-size-warning').removeClass('existing-size-warning--show');
+
+                $('.add-size-modal').modal('hide');
+
+                createSizeItem(addedSize);
+
+            } else {
+                $('.existing-size-warning').addClass('existing-size-warning--show');
+            }
+        })
+        .fail(function (response) {
+            alert(response.responseText);
+        })
+}
+
+function passSizeTitle(sizeTitle) {
+    $('#editSizeForm input#size').val(sizeTitle);
+}
+
 

@@ -505,4 +505,5 @@ class Category
             throw new SystemErrorException();
         }
     }
+
 }

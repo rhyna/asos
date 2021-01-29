@@ -122,6 +122,13 @@ label {
     button {
       background: transparent;
       color: #2d2d2dc7;
+      display: flex;
+      align-items: center;
+      margin-right: 15px;
+
+      &:last-child {
+        margin-right: 0;
+      }
 
       &:hover {
         color: #0770cf;
@@ -392,4 +399,25 @@ label {
 
 .add-brand-modal-submit {
   margin-right: 10px;
+}
+
+.add-size-button {
+  display: none;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  
+  &--show {
+    display: block;
+  }
+}
+
+.existing-size-warning {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  font-style: italic;
+  display: none;
+
+  &--show {
+    display: block;
+  }
 }
