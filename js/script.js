@@ -284,7 +284,7 @@ function createSizeItem(size) {
         'type="button" ' +
         'data-toggle="modal" ' +
         'data-target="#editSize" ' +
-        'onclick="passSizeTitle(\'' + size['title'] + '\')">');
+        `onclick="passSize('${size['title']}', ${size['id']})">`);
 
     editButton.appendTo(iconsInner);
 
@@ -302,13 +302,13 @@ function createSizeItem(size) {
 }
 
 function manageSizes() {
-    let productCategoryId = $('#categoryId option:selected').val();
+    let productCategoryId = $('#categoryId--sizeList option:selected').val();
 
-    let productCategoryTitle = $('#categoryId option:selected').text().trim().replace('-- ', '');
+    let productCategoryTitle = $('#categoryId--sizeList option:selected').text().trim().replace('-- ', '');
 
-    $('.add-size-modal input#categoryId').val(productCategoryId);
+    $('.add-size-modal input#categoryId--addSize').val(productCategoryId);
 
-    $('.add-size-modal #categoryTitle').html(productCategoryTitle);
+    $('.add-size-modal #categoryTitle--addSize').html(productCategoryTitle);
 
     if (!productCategoryId) {
         $('.product-size-list-empty').addClass('product-size-list-empty--show')
@@ -348,14 +348,14 @@ function manageSizes() {
         })
 }
 
-if ($('.size-form #categoryId').length) {
+if ($('.size-form #categoryId--sizeList').length) {
     manageSizes();
 }
 
 function addSize(form) {
-    let categoryId = $('.add-size-modal input#categoryId').val();
+    let categoryId = $('.add-size-modal input#categoryId--addSize').val();
 
-    let size = $('.add-size-modal #size').val();
+    let size = $('.add-size-modal #size--addSize').val();
 
     $.ajax({
         url: form.action,
@@ -371,23 +371,70 @@ function addSize(form) {
             let itemExists = $('.size-item[data-id=' + addedSize['id'] + ']').length;
 
             if (!itemExists) {
-                $('.existing-size-warning').removeClass('existing-size-warning--show');
+                $('.existing-size-warning--add').removeClass('existing-size-warning--show');
 
                 $('.add-size-modal').modal('hide');
 
                 createSizeItem(addedSize);
 
             } else {
-                $('.existing-size-warning').addClass('existing-size-warning--show');
+                $('.existing-size-warning--add').addClass('existing-size-warning--show');
             }
+
+            $(".add-size-modal").on("hidden.bs.modal", function () {
+                $('.add-size-modal #size--addSize').val('');
+
+                $('.existing-size-warning--add').removeClass('existing-size-warning--show');
+            });
         })
         .fail(function (response) {
             alert(response.responseText);
         })
 }
 
-function passSizeTitle(sizeTitle) {
-    $('#editSizeForm input#size').val(sizeTitle);
+function passSize(sizeTitle, sizeId) {
+    $('#editSizeForm input#size--editSize').val(sizeTitle);
+
+    $('#editSizeForm input#size--editSize').attr('data-id', sizeId);
+}
+
+function editSize(form) {
+    let sizeTitle = $('.edit-size-modal #size--editSize').val();
+
+    let sizeId = $('.edit-size-modal #size--editSize').attr('data-id');
+
+    $.ajax({
+        url: form.action,
+        type: 'POST',
+        data: {
+            sizeTitle: sizeTitle,
+            sizeId: sizeId,
+        },
+    })
+        .done(function (response) {
+            let editSizeResponse = JSON.parse(response);
+
+            if (editSizeResponse['errorMessage'] === 'size exists') {
+                $('.existing-size-warning--edit').addClass('existing-size-warning--show');
+
+            } else {
+                $('.existing-size-warning--edit').removeClass('existing-size-warning--show');
+
+                $('.edit-size-modal').modal('hide');
+
+                $('.size-item[data-id=' + sizeId + ']').html(editSizeResponse['title']);
+            }
+
+            $(".edit-size-modal").on("hidden.bs.modal", function () {
+                $('.edit-size-modal #size--editSize').val('');
+
+                $('.existing-size-warning--edit').removeClass('existing-size-warning--show');
+            });
+
+        })
+        .fail(function (response) {
+            alert(response.responseText);
+        })
 }
 
 

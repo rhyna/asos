@@ -15,14 +15,11 @@
                         id="editSizeForm"
                         onsubmit="event.preventDefault(); editSize(this);">
                     <div class="form-group">
-                        <label for="categoryId">Category</label>
-                        <input type="hidden" id="categoryId" name="categoryId" value="">
-                        <div id="categoryTitle"></div>
-                        <div class="existing-size-warning">Such a size already exists in this category</div>
+                        <div class="existing-size-warning existing-size-warning--edit">Such a size already exists</div>
                     </div>
                     <div class="form-group">
-                        <label for="size">Size</label>
-                        <input class="form-control" type="text" name="size" id="size"
+                        <label for="size--editSize">Size</label>
+                        <input class="form-control" type="text" name="size--editSize" id="size--editSize"
                                value="" required>
                     </div>
                     <button type="submit"

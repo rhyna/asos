@@ -28,8 +28,8 @@ try {
         </div>
             <form action="" method="post" enctype="multipart/form-data" id="sizeForm" class="entity-form size-form">
                 <div class="form-group">
-                    <label for="categoryId">Select category</label>
-                    <select class="form-control" id="categoryId" name="categoryId"
+                    <label for="categoryId--sizeList">Select category</label>
+                    <select class="form-control" id="categoryId--sizeList" name="categoryId--sizeList"
                             onchange="manageSizes()">
                         <?php foreach ($categoryLevels as $categoryLevels1): ?>
                             <option class="entity-form-option--disabled" value=""

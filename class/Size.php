@@ -122,11 +122,70 @@ class Size
     public static function getSizeByNormalizedTitle(PDO $conn, string $normalizedTitle): ?Size
     {
         try {
-            $sql = "select * from size where normalized_title = :normalizedTitle";
+            $sql = "select id, title, normalized_title as normalizedTitle
+                    from size 
+                    where normalized_title = :normalizedTitle";
 
             $statement = $conn->prepare($sql);
 
             $statement->bindValue(':normalizedTitle', $normalizedTitle, PDO::PARAM_STR);
+
+            $statement->execute();
+
+            return $statement->fetchObject(Size::class) ?: null;
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param int $id
+     * @param string $title
+     * @param string $normalizedTitle
+     * @return void
+     * @throws SystemErrorException
+     */
+    public static function editSize(PDO $conn, int $id, string $title, string $normalizedTitle): void
+    {
+        try {
+            $sql = "update size 
+                    set title = :title, 
+                    normalized_title = :normalizedTitle
+                    where id = :id";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+            $statement->bindValue(':title', $title, PDO::PARAM_STR);
+
+            $statement->bindValue(':normalizedTitle', $normalizedTitle, PDO::PARAM_STR);
+
+            $statement->execute();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param int $id
+     * @return Size|null
+     * @throws SystemErrorException
+     */
+    public static function getSize(PDO $conn, int $id): ?Size
+    {
+        try {
+            $sql = "select id, title, normalized_title as normalizedTitle
+                    from size
+                    where id = :id";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
 
             $statement->execute();
 
