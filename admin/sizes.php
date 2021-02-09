@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/include/header.php';
 
+$entityType = 'size';
+
 $error = null;
 
 $categoryLevels = [];
@@ -21,11 +23,11 @@ try {
         <?php if ($error): ?>
             <p><?= $error ?></p>
         <?php else: ?>
-        <div class="manage-sizes-page">
-            <div class="admin-title">
-                Manage sizes
+            <div class="manage-sizes-page">
+                <div class="admin-title">
+                    Manage sizes
+                </div>
             </div>
-        </div>
             <form action="" method="post" enctype="multipart/form-data" id="sizeForm" class="entity-form size-form">
                 <div class="form-group">
                     <label for="categoryId--sizeList">Select category</label>
@@ -68,8 +70,16 @@ try {
     </div>
 </main>
 
-<?php require_once __DIR__ . '/include/add-size-modal.php'; ?>
+<?php
 
-<?php require_once __DIR__ . '/include/edit-size-modal.php'; ?>
+require_once __DIR__ . '/include/add-size-modal.php';
 
-<?php require_once __DIR__ . '/include/footer.php'; ?>
+require_once __DIR__ . '/include/edit-size-modal.php';
+
+require_once __DIR__ . '/include/delete-entity-confirmation.php';
+
+require_once __DIR__ . '/include/on-entity-deletion-modal.php';
+
+require_once __DIR__ . '/include/footer.php';
+
+?>

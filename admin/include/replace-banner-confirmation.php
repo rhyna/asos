@@ -14,7 +14,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No, close</button>
-                <button type="button" class="btn btn-primary submit-banner-data">
+                <button type="button" class="btn btn-primary primary-button submit-banner-data">
                     Yes, replace
                 </button>
             </div>

@@ -111,6 +111,17 @@ label {
   font-weight: normal;
   padding: 0 10px 0 10px;
 }
+.primary-button {
+  background-color: #6b7cba;
+  border-color: #6b7cba;
+}
+.primary-button:active,
+.primary-button:hover,
+.primary-button:focus,
+.primary-button:not(:disabled):not(.disabled):active {
+  background-color: #5a689d;
+  border-color: #5a689d;
+}
 .admin-button {
   font-size: 16px;
   padding: 5px 20px;
@@ -372,5 +383,8 @@ label {
 }
 .existing-size-warning--show {
   display: block;
+}
+.entity-list-item .size-item__inner {
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */

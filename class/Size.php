@@ -196,4 +196,51 @@ class Size
         }
     }
 
+    /**
+     * @param PDO $conn
+     * @param int $categoryId
+     * @throws SystemErrorException
+     */
+    public function deleteSizeFromCategory(PDO $conn, int $categoryId): void
+    {
+        try {
+            $sql = "delete
+                    from category_size
+                    where size_id = :sizeId and category_id = :categoryId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':sizeId', $this->id, PDO::PARAM_INT);
+
+            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+            $statement->execute();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @return array
+     * @throws SystemErrorException
+     */
+    public function checkSizeProducts(PDO $conn): array
+    {
+        try {
+            $sql = "select id, product_id as productId from product_size where size_id = :sizeId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':sizeId', $this->id, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
 }

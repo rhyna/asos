@@ -48,22 +48,31 @@ function passEntityId(entityId) {
     modalHiddenInput.val(entityId);
 }
 
-function deleteEntity(form) {
+function deleteEntity(form, entityType) {
     let url = form.action;
 
     let id = $('#deleteEntity').find('.delete-entity-modal-entity-id')[0].defaultValue;
 
     let onDeletionModal = $('#onDeletionResponse');
 
-    let a = $('.entity-list-item').find("a[href*='id=" + id + "']");
+    let identifier = $('.entity-list-item').find("a[href*='id=" + id + "']");
 
-    let listItem = a.closest('.entity-list-item');
+    let categoryId = null;
+
+    if (entityType === 'size') {
+        identifier = $('.entity-list-item .size-item[data-id="' + id + '"]');
+
+        categoryId = $('#categoryId--sizeList option:selected').val();
+    }
+
+    let listItemElement = identifier.closest('.entity-list-item__wrapper');
 
     $.ajax({
         url: url,
         type: 'POST',
         data: {
             id: id,
+            categoryId: categoryId,
         },
     })
         .done(function (response) {
@@ -75,7 +84,7 @@ function deleteEntity(form) {
 
             onDeletionModal.modal('show');
 
-            listItem.remove();
+            listItemElement.remove();
         })
         .fail(function (response) {
             $('#deleteEntity').modal('hide');
@@ -268,9 +277,20 @@ function createSizeItem(size) {
 
     listItemCol.appendTo(listItemRow);
 
-    let sizeItem = $("<div class='size-item' data-id='" + size['id'] + "'>" + size['title'] + "</div>");
+    let sizeItem = $(`<div class="size-item" data-id="${size['id']}"></div>`);
+
+    //let sizeItem = $("<div " + "class='size-item' " + "data-id='" + size['id'] + "' onclick='editSize()' >" + size['title'] + "</div>");
 
     sizeItem.appendTo(listItemCol);
+
+    let sizeItemInner = $(`<span 
+        class="size-item__inner"
+        data-toggle="modal"
+        data-target="#editSize"
+        onclick="passSize('${size['title']}', ${size['id']})"
+        >${size['title']}</span>`)
+
+    sizeItemInner.appendTo(sizeItem);
 
     let icons = $('<div class="col-1 entity-list-item-icons"></div>');
 
@@ -292,7 +312,10 @@ function createSizeItem(size) {
 
     editIcon.appendTo(editButton);
 
-    let deleteButton = $('<button type="button">');
+    let deleteButton = $(`<button type="button"
+        data-toggle="modal"
+        data-target="#deleteEntity"
+        onclick="passEntityId(${size['id']})">`);
 
     deleteButton.appendTo(iconsInner);
 

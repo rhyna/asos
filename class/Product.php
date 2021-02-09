@@ -624,5 +624,39 @@ class Product
         }
     }
 
+    /**
+     * @param PDO $conn
+     * @param array $productIds
+     * @param int $categoryId
+     * @return int
+     * @throws SystemErrorException
+     */
+    public static function checkProductsInParentCategory(PDO $conn, array $productIds, int $categoryId): int
+    {
+        $idsString = implode(',', $productIds);
+
+        try {
+            $sql = "select count(*)
+                    from product p 
+                    join category c 
+                    on p.category_id = c.id
+                    where FIND_IN_SET(p.id, :productIds)
+                    and c.parent_id = :categoryId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':productIds', $idsString, PDO::PARAM_STR);
+
+            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return (int)$statement->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
 
 }

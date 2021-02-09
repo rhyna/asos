@@ -144,6 +144,16 @@ label {
   }
 }
 
+.primary-button {
+  background-color: #6b7cba;
+  border-color: #6b7cba;
+
+  &:active, &:hover, &:focus, &:not(:disabled):not(.disabled):active {
+    background-color: #5a689d;
+    border-color: #5a689d;
+  }
+}
+
 .admin-button {
   font-size: 16px;
   padding: 5px 20px;
@@ -405,7 +415,7 @@ label {
   display: none;
   margin-bottom: 20px;
   margin-top: 20px;
-  
+
   &--show {
     display: block;
   }
@@ -419,5 +429,11 @@ label {
 
   &--show {
     display: block;
+  }
+}
+
+.entity-list-item {
+  .size-item__inner {
+    cursor: pointer;
   }
 }

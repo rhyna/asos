@@ -10,11 +10,11 @@
             <div class="modal-body">
                 Are you sure you want to delete the <?= $entityType ?>?
             </div>
-            <form action="/admin/delete-<?= $entityType ?>.php" method="post" onsubmit="event.preventDefault(); deleteEntity(this)">
+            <form action="/admin/delete-<?= $entityType ?>.php" method="post" onsubmit="event.preventDefault(); deleteEntity(this, '<?= $entityType ?>')">
                 <input type="hidden" class="delete-entity-modal-entity-id" value="" name="id">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No, close</button>
-                    <button type="submit" class="btn btn-primary">Yes, delete</button>
+                    <button type="submit" class="btn btn-primary primary-button">Yes, delete</button>
                 </div>
             </form>
         </div>

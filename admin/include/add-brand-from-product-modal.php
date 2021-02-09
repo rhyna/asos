@@ -37,7 +37,7 @@
                     <?php endif; ?>
                     <button
                             type="submit"
-                            class="btn btn-primary add-brand-modal-submit">
+                            class="btn btn-primary primary-button add-brand-modal-submit">
                         Submit
                     </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
