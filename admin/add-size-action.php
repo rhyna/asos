@@ -13,6 +13,22 @@ try {
         throw new BadRequestException('No size title provided');
     }
 
+    if (!isset($_POST['sortOrder'])) {
+        throw new BadRequestException('No sorting number field provided in the request');
+    }
+
+    $sortOrder = $_POST['sortOrder'] ?: null;
+
+    $sortOrder = (int)$sortOrder;
+
+    if (Size::checkIfSortOrderExists($conn, $sortOrder)) {
+        $addSizeError = [
+            'errorMessage' => 'sort order exists',
+        ];
+
+        die(json_encode($addSizeError));
+    }
+
     $categoryId = $_POST['categoryId'] ?? null;
 
     if (!$categoryId) {
@@ -33,6 +49,8 @@ try {
         $size->title = $sizeTitle;
 
         $size->normalizedTitle = $normalizedTitle;
+
+        $size->sortOrder = $sortOrder;
 
         $size->addSize($conn);
     }

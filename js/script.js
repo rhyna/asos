@@ -279,20 +279,26 @@ function createSizeItem(size) {
 
     let sizeItem = $(`<div class="size-item" data-id="${size['id']}"></div>`);
 
-    //let sizeItem = $("<div " + "class='size-item' " + "data-id='" + size['id'] + "' onclick='editSize()' >" + size['title'] + "</div>");
-
     sizeItem.appendTo(listItemCol);
 
     let sizeItemInner = $(`<span 
         class="size-item__inner"
         data-toggle="modal"
         data-target="#editSize"
-        onclick="passSize('${size['title']}', ${size['id']})"
+        onclick="passSize('${size['title']}', ${size['id']}, ${size['sortOrder']})"
         >${size['title']}</span>`)
 
     sizeItemInner.appendTo(sizeItem);
 
-    let icons = $('<div class="col-1 entity-list-item-icons"></div>');
+    if (!size['sortOrder']) {
+        size['sortOrder'] = 0;
+    }
+
+    let sizeOrder = $(`<div class="col-3 size-item-order" data-id="${size['id']}">${size['sortOrder']}</div>`);
+
+    sizeOrder.appendTo(listItemRow);
+
+    let icons = $(`<div class="col-1 entity-list-item-icons" data-id="${size['id']}"></div>`);
 
     icons.appendTo(listItemRow);
 
@@ -304,7 +310,7 @@ function createSizeItem(size) {
         'type="button" ' +
         'data-toggle="modal" ' +
         'data-target="#editSize" ' +
-        `onclick="passSize('${size['title']}', ${size['id']})">`);
+        `onclick="passSize('${size['title']}', ${size['id']}, ${size['sortOrder']})">`);
 
     editButton.appendTo(iconsInner);
 
@@ -354,17 +360,23 @@ function manageSizes() {
 
             $('.entity-list-content').remove();
 
-            let listContent = $('<div class="entity-list-content"></div>');
+            if (sizes.length === 0) {
+                $('.product-size-list__header').removeClass('product-size-list__header--show');
+            } else {
+                $('.product-size-list__header').addClass('product-size-list__header--show');
 
-            listContent.appendTo('.entity-list--size');
+                let listContent = $('<div class="entity-list-content"></div>');
 
-            $('.add-size-button').addClass('add-size-button--show');
+                listContent.appendTo('.entity-list--size');
 
-            sizes.forEach(function (size) {
-                size['id'] = Number(size['id']);
+                $('.add-size-button').addClass('add-size-button--show');
 
-                createSizeItem(size);
-            })
+                sizes.forEach(function (size) {
+                    size['id'] = Number(size['id']);
+
+                    createSizeItem(size);
+                })
+            }
         })
         .fail(function (response) {
             alert(response.responseText);
@@ -380,45 +392,67 @@ function addSize(form) {
 
     let size = $('.add-size-modal #size--addSize').val();
 
+    let sortOrder = $('.add-size-modal #sortOrder--addSize').val();
+
     $.ajax({
         url: form.action,
         type: 'POST',
         data: {
             categoryId: categoryId,
             size: size,
+            sortOrder: sortOrder,
         },
     })
         .done(function (response) {
-            let addedSize = JSON.parse(response);
+            let addSizeResponse = JSON.parse(response);
 
-            let itemExists = $('.size-item[data-id=' + addedSize['id'] + ']').length;
+            if (addSizeResponse['errorMessage'] === 'sort order exists') {
+                $('.error-warning--add')
+                    .html('');
 
-            if (!itemExists) {
-                $('.existing-size-warning--add').removeClass('existing-size-warning--show');
-
-                $('.add-size-modal').modal('hide');
-
-                createSizeItem(addedSize);
+                $('.error-warning--add')
+                    .html('Such a sorting number already exists');
 
             } else {
-                $('.existing-size-warning--add').addClass('existing-size-warning--show');
+                let itemExists = $('.size-item[data-id=' + addSizeResponse['id'] + ']').length;
+
+                if (!itemExists) {
+                    $('.error-warning--add')
+                        .html('');
+
+                    $('.add-size-modal').modal('hide');
+
+                    createSizeItem(addSizeResponse);
+
+                } else {
+                    $('.error-warning--add')
+                        .html('');
+
+                    $('.error-warning--add')
+                        .html('Such a size already exists');
+                }
+
+                $(".add-size-modal").on("hidden.bs.modal", function () {
+                    $('.add-size-modal #size--addSize').val('');
+
+                    $('.add-size-modal #sortOrder--addSize').val('');
+
+                    $('.error-warning--add')
+                        .html('');
+                });
             }
-
-            $(".add-size-modal").on("hidden.bs.modal", function () {
-                $('.add-size-modal #size--addSize').val('');
-
-                $('.existing-size-warning--add').removeClass('existing-size-warning--show');
-            });
         })
         .fail(function (response) {
             alert(response.responseText);
         })
 }
 
-function passSize(sizeTitle, sizeId) {
+function passSize(sizeTitle, sizeId, sortOrder) {
     $('#editSizeForm input#size--editSize').val(sizeTitle);
 
     $('#editSizeForm input#size--editSize').attr('data-id', sizeId);
+
+    $('#editSizeForm input#sortOrder--editSize').val(sortOrder);
 }
 
 function editSize(form) {
@@ -426,32 +460,54 @@ function editSize(form) {
 
     let sizeId = $('.edit-size-modal #size--editSize').attr('data-id');
 
+    let sortOrder = $('.edit-size-modal #sortOrder--editSize').val();
+
     $.ajax({
         url: form.action,
         type: 'POST',
         data: {
             sizeTitle: sizeTitle,
             sizeId: sizeId,
+            sortOrder: sortOrder,
         },
     })
         .done(function (response) {
             let editSizeResponse = JSON.parse(response);
 
             if (editSizeResponse['errorMessage'] === 'size exists') {
-                $('.existing-size-warning--edit').addClass('existing-size-warning--show');
+                $('.error-warning--edit').html('');
 
+                $('.error-warning--edit').html('Such a size already exists');
+
+            } else if (editSizeResponse['errorMessage'] === 'sort order exists') {
+                //$('.error-warning--edit').addClass('error-warning--show');
+
+                $('.error-warning--edit').html('');
+
+                $('.error-warning--edit').html('Such a sorting number already exists');
             } else {
-                $('.existing-size-warning--edit').removeClass('existing-size-warning--show');
+                $('.error-warning--edit').html('');
 
                 $('.edit-size-modal').modal('hide');
 
-                $('.size-item[data-id=' + sizeId + ']').html(editSizeResponse['title']);
+                if (editSizeResponse['sortOrder'] === null) {
+                    editSizeResponse['sortOrder'] = 0;
+                }
+
+                $('.size-item[data-id=' + sizeId + '] .size-item__inner').html(editSizeResponse['title']);
+
+                $('.size-item[data-id=' + sizeId + '] .size-item__inner').attr('onclick', `passSize('${editSizeResponse['title']}', ${sizeId}, ${editSizeResponse['sortOrder']})`);
+
+                $(`.size-item-order[data-id=${sizeId}]`).html(editSizeResponse['sortOrder']);
+
+                $(`.entity-list-item-icons[data-id=${sizeId}] button[data-target="#editSize"]`)
+                    .attr('onclick', `passSize('${editSizeResponse['title']}', ${sizeId}, ${editSizeResponse['sortOrder']})`);
             }
 
             $(".edit-size-modal").on("hidden.bs.modal", function () {
                 $('.edit-size-modal #size--editSize').val('');
 
-                $('.existing-size-warning--edit').removeClass('existing-size-warning--show');
+                $('.error-warning--edit').html('');
             });
 
         })

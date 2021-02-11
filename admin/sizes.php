@@ -57,6 +57,13 @@ try {
                     <div class="product-size-list-empty">
                         Please select a category first
                     </div>
+                    <div class="product-size-list__header">
+                        <div class="row">
+                            <div class="col">Size</div>
+                            <div class="col-3">Size sorting order</div>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
                     <div class="product-size-list__content">
                         <div class="entity-list entity-list--size">
                             <div class="entity-list-content">

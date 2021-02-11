@@ -6,6 +6,7 @@ class Size
     public $id;
     public $title;
     public $normalizedTitle;
+    public $sortOrder;
 
     /**
      * @param PDO $conn
@@ -13,15 +14,16 @@ class Size
      * @return array
      * @throws SystemErrorException
      */
-    public static function getSizesByCategory(PDO $conn, int $categoryId): array
+    public static function  getSizesByCategory(PDO $conn, int $categoryId): array
     {
         try {
-            $sql = "select s.*, cs.id 
-                as categorySizeId, cs.category_id 
+            $sql = "select s.id, s.title, s.sort_order as sortOrder, cs.id 
+                as categorySizeId, cs.category_id as categoryId
                 from size s 
                 join category_size cs 
                 on s.id = cs.size_id 
-                where category_id = :category_id";
+                where category_id = :category_id
+                order by sort_order asc";
 
             $statement = $conn->prepare($sql);
 
@@ -45,13 +47,21 @@ class Size
     public function addSize(PDO $conn): void
     {
         try {
-            $sql = "insert into size (title, normalized_title) values (:title, :normalizedTitle)";
+            $sql = "insert into size 
+                    (title, normalized_title, sort_order) 
+                    values (:title, :normalizedTitle, :sortOrder)";
 
             $statement = $conn->prepare($sql);
 
             $statement->bindValue(':title', $this->title, PDO::PARAM_STR);
 
             $statement->bindValue(':normalizedTitle', $this->normalizedTitle, PDO::PARAM_STR);
+
+            if ($this->sortOrder) {
+                $statement->bindValue(':sortOrder', $this->sortOrder, PDO::PARAM_INT);
+            } else {
+                $statement->bindValue(':sortOrder', $this->sortOrder, PDO::PARAM_NULL);
+            }
 
             $statement->execute();
 
@@ -122,7 +132,10 @@ class Size
     public static function getSizeByNormalizedTitle(PDO $conn, string $normalizedTitle): ?Size
     {
         try {
-            $sql = "select id, title, normalized_title as normalizedTitle
+            $sql = "select id, 
+                    title, 
+                    normalized_title as normalizedTitle,
+                    sort_order as sortOrder
                     from size 
                     where normalized_title = :normalizedTitle";
 
@@ -144,15 +157,17 @@ class Size
      * @param int $id
      * @param string $title
      * @param string $normalizedTitle
+     * @param int $sortOrder
      * @return void
      * @throws SystemErrorException
      */
-    public static function editSize(PDO $conn, int $id, string $title, string $normalizedTitle): void
+    public static function editSize(PDO $conn, int $id, string $title, string $normalizedTitle, int $sortOrder): void
     {
         try {
             $sql = "update size 
                     set title = :title, 
-                    normalized_title = :normalizedTitle
+                    normalized_title = :normalizedTitle,
+                    sort_order = :sortOrder
                     where id = :id";
 
             $statement = $conn->prepare($sql);
@@ -162,6 +177,12 @@ class Size
             $statement->bindValue(':title', $title, PDO::PARAM_STR);
 
             $statement->bindValue(':normalizedTitle', $normalizedTitle, PDO::PARAM_STR);
+
+            if ($sortOrder) {
+                $statement->bindValue(':sortOrder', $sortOrder, PDO::PARAM_INT);
+            } else {
+                $statement->bindValue(':sortOrder', $sortOrder, PDO::PARAM_NULL);
+            }
 
             $statement->execute();
 
@@ -179,7 +200,10 @@ class Size
     public static function getSize(PDO $conn, int $id): ?Size
     {
         try {
-            $sql = "select id, title, normalized_title as normalizedTitle
+            $sql = "select id, 
+                    title, 
+                    normalized_title as normalizedTitle,
+                    sort_order as sortOrder
                     from size
                     where id = :id";
 
@@ -238,6 +262,30 @@ class Size
             $statement->execute();
 
             return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param int $sortOrder
+     * @return int
+     * @throws SystemErrorException
+     */
+    public static function checkIfSortOrderExists(PDO $conn, int $sortOrder): int
+    {
+        try {
+            $sql = "select id from size where sort_order = :sortOrder";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':sortOrder', $sortOrder, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return (int) $statement->fetchColumn();
 
         } catch (Throwable $e) {
             throw new SystemErrorException();

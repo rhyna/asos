@@ -15,12 +15,16 @@
                         id="editSizeForm"
                         onsubmit="event.preventDefault(); editSize(this);">
                     <div class="form-group">
-                        <div class="existing-size-warning existing-size-warning--edit">Such a size already exists</div>
+                        <div class="error-warning error-warning--edit"></div>
                     </div>
                     <div class="form-group">
                         <label for="size--editSize">Size</label>
                         <input class="form-control" type="text" name="size--editSize" id="size--editSize"
                                value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sortOrder--editSize">Sorting number</label>
+                        <input type="number" class="form-control" name="sortOrder--editSize" id="sortOrder--editSize">
                     </div>
                     <button type="submit"
                             class="btn btn-primary primary-button add-brand-modal-submit">

@@ -17,7 +17,23 @@ try {
         throw new BadRequestException('No size id provided');
     }
 
-    $sizeId = (int) $sizeId;
+    $sizeId = (int)$sizeId;
+
+    if (!isset($_POST['sortOrder'])) {
+        throw new BadRequestException('No sorting number field provided in the request');
+    }
+
+    $sortOrder = $_POST['sortOrder'] ?: null;
+
+    $sortOrder = (int)$sortOrder;
+
+    if (Size::checkIfSortOrderExists($conn, $sortOrder) && Size::checkIfSortOrderExists($conn, $sortOrder) !== $sizeId) {
+        $editSizeError = [
+            'errorMessage' => 'sort order exists',
+        ];
+
+        die(json_encode($editSizeError));
+    }
 
     $lowerCaseTitle = mb_strtolower($sizeTitle);
 
@@ -25,7 +41,7 @@ try {
 
     $size = Size::getSizeByNormalizedTitle($conn, $normalizedTitle);
 
-    if ($size && (int) $size->id !== $sizeId) {
+    if ($size && (int)$size->id !== $sizeId) {
         $editSizeError = [
             'errorMessage' => 'size exists',
         ];
@@ -33,12 +49,11 @@ try {
         die(json_encode($editSizeError));
     }
 
-    if (!$size) {
-        Size::editSize($conn, $sizeId, $sizeTitle, $normalizedTitle);
+//    if (!$size) {
+        Size::editSize($conn, $sizeId, $sizeTitle, $normalizedTitle, $sortOrder);
 
         $size = Size::getSize($conn, $sizeId);
-
-    }
+//    }
 
     echo json_encode($size);
 

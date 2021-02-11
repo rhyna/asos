@@ -91,6 +91,9 @@ $images = $product->getImagesArray();
 <!--            content uploaded via JS-->
         </div>
     </div>
+    <div class="manage-sizes">
+        <a class="manage-sizes-link" href="/admin/sizes.php">Manage sizes</a>
+    </div>
     <div class="form-group">
         <label for="brand">Brand</label>
         <select class="form-control" id="brand" name="brandId">

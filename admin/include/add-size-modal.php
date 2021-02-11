@@ -18,12 +18,16 @@
                         <label for="categoryId--addSize">Category</label>
                         <input type="hidden" id="categoryId--addSize" name="categoryId--addSize" value="">
                         <div id="categoryTitle--addSize"></div>
-                        <div class="existing-size-warning existing-size-warning--add">Such a size already exists in this category</div>
+                        <div class="error-warning error-warning--add"></div>
                     </div>
                     <div class="form-group">
                         <label for="size--addSize">Size</label>
                         <input class="form-control" type="text" name="size--addSize" id="size--addSize"
                                value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sortOrder--addSize">Sorting number</label>
+                        <input type="number" class="form-control" name="sortOrder--addSize" id="sortOrder--addSize">
                     </div>
                     <button type="submit"
                             class="btn btn-primary primary-button add-brand-modal-submit">
