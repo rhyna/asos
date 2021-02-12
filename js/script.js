@@ -406,41 +406,29 @@ function addSize(form) {
         .done(function (response) {
             let addSizeResponse = JSON.parse(response);
 
-            if (addSizeResponse['errorMessage'] === 'sort order exists') {
-                $('.error-warning--add')
-                    .html('');
+            if (addSizeResponse['errorMessages']) {
+                $('.error-warning--add').empty();
 
-                $('.error-warning--add')
-                    .html('Such a sorting number already exists');
+                addSizeResponse['errorMessages'].forEach(function (error) {
+                    let errorMessage = $(`<li class="error-warning-item error-warning-item--add">${error}</li>`)
 
+                    errorMessage.appendTo($('.error-warning--add'));
+                })
             } else {
-                let itemExists = $('.size-item[data-id=' + addSizeResponse['id'] + ']').length;
+                $('.error-warning--add').empty();
 
-                if (!itemExists) {
-                    $('.error-warning--add')
-                        .html('');
+                $('.add-size-modal').modal('hide');
 
-                    $('.add-size-modal').modal('hide');
-
-                    createSizeItem(addSizeResponse);
-
-                } else {
-                    $('.error-warning--add')
-                        .html('');
-
-                    $('.error-warning--add')
-                        .html('Such a size already exists');
-                }
-
-                $(".add-size-modal").on("hidden.bs.modal", function () {
-                    $('.add-size-modal #size--addSize').val('');
-
-                    $('.add-size-modal #sortOrder--addSize').val('');
-
-                    $('.error-warning--add')
-                        .html('');
-                });
+                createSizeItem(addSizeResponse);
             }
+
+            $(".add-size-modal").on("hidden.bs.modal", function () {
+                $('.add-size-modal #size--addSize').val('');
+
+                $('.add-size-modal #sortOrder--addSize').val('');
+
+                $('.error-warning--add').empty();
+            });
         })
         .fail(function (response) {
             alert(response.responseText);
@@ -474,19 +462,17 @@ function editSize(form) {
         .done(function (response) {
             let editSizeResponse = JSON.parse(response);
 
-            if (editSizeResponse['errorMessage'] === 'size exists') {
-                $('.error-warning--edit').html('');
+            if (editSizeResponse['errorMessages']) {
+                $('.error-warning--edit').empty();
 
-                $('.error-warning--edit').html('Such a size already exists');
+                editSizeResponse['errorMessages'].forEach(function (error) {
+                    let errorMessage = $(`<li class="error-warning-item error-warning-item--edit">${error}</li>`)
 
-            } else if (editSizeResponse['errorMessage'] === 'sort order exists') {
-                //$('.error-warning--edit').addClass('error-warning--show');
+                    errorMessage.appendTo($('.error-warning--edit'));
+                })
 
-                $('.error-warning--edit').html('');
-
-                $('.error-warning--edit').html('Such a sorting number already exists');
             } else {
-                $('.error-warning--edit').html('');
+                $('.error-warning--edit').empty();
 
                 $('.edit-size-modal').modal('hide');
 
@@ -494,9 +480,11 @@ function editSize(form) {
                     editSizeResponse['sortOrder'] = 0;
                 }
 
-                $('.size-item[data-id=' + sizeId + '] .size-item__inner').html(editSizeResponse['title']);
+                let sizeItemInner = $('.size-item[data-id=' + sizeId + '] .size-item__inner');
 
-                $('.size-item[data-id=' + sizeId + '] .size-item__inner').attr('onclick', `passSize('${editSizeResponse['title']}', ${sizeId}, ${editSizeResponse['sortOrder']})`);
+                sizeItemInner.html(editSizeResponse['title']);
+
+                sizeItemInner.attr('onclick', `passSize('${editSizeResponse['title']}', ${sizeId}, ${editSizeResponse['sortOrder']})`);
 
                 $(`.size-item-order[data-id=${sizeId}]`).html(editSizeResponse['sortOrder']);
 
@@ -507,10 +495,12 @@ function editSize(form) {
             $(".edit-size-modal").on("hidden.bs.modal", function () {
                 $('.edit-size-modal #size--editSize').val('');
 
-                $('.error-warning--edit').html('');
-            });
+                $('.add-size-modal #sortOrder--editSize').val('');
 
+                $('.error-warning--edit').empty();
+            });
         })
+
         .fail(function (response) {
             alert(response.responseText);
         })

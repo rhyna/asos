@@ -79,8 +79,8 @@ class Size
      */
     public function addSizeToCategory(PDO $conn, int $categoryId): void
     {
-        try {
-            if (!$this->checkSizeInCategory($conn, $categoryId)) {
+//        try {
+//            if (!$this->checkSizeInCategory($conn, $categoryId)) {
                 $sql = "insert into category_size (category_id, size_id) values (:categoryId, :sizeId)";
 
                 $statement = $conn->prepare($sql);
@@ -90,11 +90,11 @@ class Size
                 $statement->bindValue(':sizeId', $this->id, PDO::PARAM_INT);
 
                 $statement->execute();
-            }
+//            }
 
-        } catch (Throwable $e) {
-            throw new SystemErrorException();
-        }
+//        } catch (Throwable $e) {
+//            throw new SystemErrorException();
+//        }
     }
 
     /**

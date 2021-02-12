@@ -5,6 +5,12 @@ require_once __DIR__ . "/../include/init.php";
 $conn = require_once __DIR__ . "/../include/db.php";
 
 try {
+    Auth::ifNotLoggedIn();
+
+    $errors = [
+        'errorMessages' => [],
+    ];
+
     $sizeTitle = $_POST['sizeTitle'] ?? null;
 
     if (!$sizeTitle) {
@@ -28,11 +34,7 @@ try {
     $sortOrder = (int)$sortOrder;
 
     if (Size::checkIfSortOrderExists($conn, $sortOrder) && Size::checkIfSortOrderExists($conn, $sortOrder) !== $sizeId) {
-        $editSizeError = [
-            'errorMessage' => 'sort order exists',
-        ];
-
-        die(json_encode($editSizeError));
+        $errors['errorMessages'][] = 'Such a sorting number already exists';
     }
 
     $lowerCaseTitle = mb_strtolower($sizeTitle);
@@ -42,18 +44,16 @@ try {
     $size = Size::getSizeByNormalizedTitle($conn, $normalizedTitle);
 
     if ($size && (int)$size->id !== $sizeId) {
-        $editSizeError = [
-            'errorMessage' => 'size exists',
-        ];
-
-        die(json_encode($editSizeError));
+        $errors['errorMessages'][] = 'Such a size already exists';
     }
 
-//    if (!$size) {
-        Size::editSize($conn, $sizeId, $sizeTitle, $normalizedTitle, $sortOrder);
+    if ($errors['errorMessages']) {
+        die(json_encode($errors));
+    }
 
-        $size = Size::getSize($conn, $sizeId);
-//    }
+    Size::editSize($conn, $sizeId, $sizeTitle, $normalizedTitle, $sortOrder);
+
+    $size = Size::getSize($conn, $sizeId);
 
     echo json_encode($size);
 

@@ -7,26 +7,14 @@ $conn = require_once __DIR__ . "/../include/db.php";
 try {
     Auth::ifNotLoggedIn();
 
+    $errors = [
+        'errorMessages' => [],
+    ];
+
     $sizeTitle = $_POST['size'] ?? null;
 
     if (!$sizeTitle) {
         throw new BadRequestException('No size title provided');
-    }
-
-    if (!isset($_POST['sortOrder'])) {
-        throw new BadRequestException('No sorting number field provided in the request');
-    }
-
-    $sortOrder = $_POST['sortOrder'] ?: null;
-
-    $sortOrder = (int)$sortOrder;
-
-    if (Size::checkIfSortOrderExists($conn, $sortOrder)) {
-        $addSizeError = [
-            'errorMessage' => 'sort order exists',
-        ];
-
-        die(json_encode($addSizeError));
     }
 
     $categoryId = $_POST['categoryId'] ?? null;
@@ -37,6 +25,18 @@ try {
 
     $categoryId = (int)$categoryId;
 
+    if (!isset($_POST['sortOrder'])) {
+        throw new BadRequestException('No sorting number field provided in the request');
+    }
+
+    $sortOrder = $_POST['sortOrder'] ?: null;
+
+    $sortOrder = (int)$sortOrder;
+
+    if (Size::checkIfSortOrderExists($conn, $sortOrder)) {
+        $errors['errorMessages'][] = 'Such a sorting number already exists';
+    }
+
     $lowerCaseTitle = mb_strtolower($sizeTitle);
 
     $normalizedTitle = str_replace(' ', '', $lowerCaseTitle);
@@ -45,7 +45,17 @@ try {
 
     if (!$size) {
         $size = new Size();
+    }
 
+    if ($size->checkSizeInCategory($conn, $categoryId)) {
+        $errors['errorMessages'][] = 'Such a size already exists in this category';
+    }
+
+    if ($errors['errorMessages']) {
+        die(json_encode($errors));
+    }
+
+    if ($size->id === null) {
         $size->title = $sizeTitle;
 
         $size->normalizedTitle = $normalizedTitle;

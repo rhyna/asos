@@ -18,7 +18,7 @@
                         <label for="categoryId--addSize">Category</label>
                         <input type="hidden" id="categoryId--addSize" name="categoryId--addSize" value="">
                         <div id="categoryTitle--addSize"></div>
-                        <div class="error-warning error-warning--add"></div>
+                        <ul class="error-warning error-warning--add"></ul>
                     </div>
                     <div class="form-group">
                         <label for="size--addSize">Size</label>

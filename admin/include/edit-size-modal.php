@@ -15,7 +15,7 @@
                         id="editSizeForm"
                         onsubmit="event.preventDefault(); editSize(this);">
                     <div class="form-group">
-                        <div class="error-warning error-warning--edit"></div>
+                        <ul class="error-warning error-warning--edit"></ul>
                     </div>
                     <div class="form-group">
                         <label for="size--editSize">Size</label>
