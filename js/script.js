@@ -206,10 +206,14 @@ function showSizes() {
 
             $('.product-size-list').append(content);
 
-            if (sizes.length === 0) {
+            $('.product-size-list__content').removeClass('product-size-list__content--show');
+
+            if (sizes.length === 0 && !$('#categoryId option:selected').attr('value')) {
                 $('.product-size-list-empty').addClass('product-size-list-empty--show')
             } else {
                 $('.product-size-list-empty').removeClass('product-size-list-empty--show');
+
+                $('.product-size-list__content').addClass('product-size-list__content--show');
             }
 
             sizes.forEach(function (size) {
@@ -340,12 +344,12 @@ function manageSizes() {
     $('.add-size-modal #categoryTitle--addSize').html(productCategoryTitle);
 
     if (!productCategoryId) {
-        $('.product-size-list-empty').addClass('product-size-list-empty--show')
+        $('.product-size-list-empty--manageSizes').addClass('product-size-list-empty--show')
 
         return;
 
     } else {
-        $('.product-size-list-empty').removeClass('product-size-list-empty--show');
+        $('.product-size-list-empty--manageSizes').removeClass('product-size-list-empty--show');
     }
 
     $.ajax({
@@ -358,18 +362,18 @@ function manageSizes() {
         .done(function (response) {
             let sizes = JSON.parse(response);
 
-            $('.entity-list-content').remove();
+            $('.entity-list-content ').remove();
+
+            let listContent = $('<div class="entity-list-content"></div>');
+
+            listContent.appendTo('.entity-list--size');
+
+            $('.add-size-button').addClass('add-size-button--show');
 
             if (sizes.length === 0) {
                 $('.product-size-list__header').removeClass('product-size-list__header--show');
             } else {
                 $('.product-size-list__header').addClass('product-size-list__header--show');
-
-                let listContent = $('<div class="entity-list-content"></div>');
-
-                listContent.appendTo('.entity-list--size');
-
-                $('.add-size-button').addClass('add-size-button--show');
 
                 sizes.forEach(function (size) {
                     size['id'] = Number(size['id']);
@@ -420,6 +424,8 @@ function addSize(form) {
                 $('.add-size-modal').modal('hide');
 
                 createSizeItem(addSizeResponse);
+
+                manageSizes();
             }
 
             $(".add-size-modal").on("hidden.bs.modal", function () {

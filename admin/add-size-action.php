@@ -33,15 +33,15 @@ try {
 
     $sortOrder = (int)$sortOrder;
 
-    if (Size::checkIfSortOrderExists($conn, $sortOrder)) {
-        $errors['errorMessages'][] = 'Such a sorting number already exists';
-    }
-
     $lowerCaseTitle = mb_strtolower($sizeTitle);
 
     $normalizedTitle = str_replace(' ', '', $lowerCaseTitle);
 
     $size = Size::getSizeByNormalizedTitle($conn, $normalizedTitle);
+
+    if (Size::checkIfSortOrderExists($conn, $sortOrder) && (int)$size->sortOrder !== $sortOrder) {
+        $errors['errorMessages'][] = 'Such a sorting number already exists';
+    }
 
     if (!$size) {
         $size = new Size();

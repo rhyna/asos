@@ -54,7 +54,7 @@ try {
                     Add size
                 </button>
                 <div class="form-group product-size-list">
-                    <div class="product-size-list-empty">
+                    <div class="product-size-list-empty product-size-list-empty--manageSizes">
                         Please select a category first
                     </div>
                     <div class="product-size-list__header">

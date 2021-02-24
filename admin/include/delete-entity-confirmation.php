@@ -9,6 +9,7 @@
             </div>
             <div class="modal-body">
                 Are you sure you want to delete the <?= $entityType ?>?
+                <?= $entityType === 'size' ? '<br>The size will be deleted only from the current category' : '' ?>
             </div>
             <form action="/admin/delete-<?= $entityType ?>.php" method="post" onsubmit="event.preventDefault(); deleteEntity(this, '<?= $entityType ?>')">
                 <input type="hidden" class="delete-entity-modal-entity-id" value="" name="id">

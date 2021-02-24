@@ -346,12 +346,15 @@ label {
   margin-bottom: 0;
 }
 .product-form .product-size-list__content {
-  display: flex;
+  display: none;
   flex-direction: column;
-  height: calc(33px * 6);
+  max-height: calc(33px * 6);
   flex-wrap: wrap;
   align-content: flex-start;
   overflow-x: auto;
+}
+.product-form .product-size-list__content--show {
+  display: flex;
 }
 .product-form .product-size-list .product-size-item {
   height: 23px;
@@ -367,6 +370,7 @@ label {
   display: none;
   margin-left: 20px;
   font-style: italic;
+  margin-bottom: 10px;
 }
 .product-size-list-empty--show {
   display: block;

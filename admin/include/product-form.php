@@ -84,7 +84,7 @@ $images = $product->getImagesArray();
         echo '<input type="hidden" id="productSizes" value="' . json_encode($sizeIds) . '">';
         ?>
         <label>Select sizes</label>
-        <div class="product-size-list-empty">
+        <div class="product-size-list-empty product-size-list-empty--productForm">
             Please select a category first
         </div>
         <div class="product-size-list__content">

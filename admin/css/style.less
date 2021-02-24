@@ -384,12 +384,16 @@ label {
     margin-bottom: 0;
 
     &__content {
-      display: flex;
+      display: none;
       flex-direction: column;
-      height: calc(33px * 6);
+      max-height: calc(33px * 6);
       flex-wrap: wrap;
       align-content: flex-start;
       overflow-x: auto;
+
+      &--show {
+        display: flex;
+      }
     }
 
     .product-size-item {
@@ -411,6 +415,7 @@ label {
   display: none;
   margin-left: 20px;
   font-style: italic;
+  margin-bottom: 10px;
 
   &--show {
     display: block;
