@@ -668,7 +668,9 @@ class Product
                 $fetchedResult = $statement->fetch(PDO::FETCH_ASSOC);
 
                 if (!$fetchedResult) {
-                    $result[] = ['brand_id' => ''];
+                    $result[] = [
+                        'brand_id' => '',
+                    ];
 
                 } else {
                     $result[] = $fetchedResult;
@@ -685,6 +687,5 @@ class Product
 
         return $result;
     }
-
 
 }

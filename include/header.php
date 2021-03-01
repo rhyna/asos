@@ -90,23 +90,7 @@ foreach ($menSubCategories as $menSubCategory) {
         <ul class="subbar">
             <?php foreach ($config as $configItem): ?>
                 <?php if (strpos($_SERVER['REQUEST_URI'], '/' . $configItem['flag']) !== false): ?>
-                    <?php
-                    $categoriesForAllBrandsMenu = [];
-                    ?>
                     <?php foreach ($configItem['categories'] as $name => $category): ?>
-                        <?php
-                        for ($i = 0; $i <= 2; $i++) {
-                            $categoryInfo = [];
-
-                            if (isset($category[$i])) {
-                                $categoryInfo['category_id'] = $category[$i]['id'];
-
-                                $categoryInfo['parent_id'] = $category[$i]['parent_id'];
-                            }
-
-                            $categoriesForAllBrandsMenu[] = $categoryInfo;
-                        }
-                        ?>
                         <li class="subbar-item">
                             <button type="button" class="subbar-button"><?= $name ?></button>
                             <div class="subbar-dropdown-menu__wrapper">
@@ -157,13 +141,18 @@ foreach ($menSubCategories as $menSubCategory) {
                                         </div>
                                     </div>
                                     <div class="subbar-dropdown-menu subbar-dropdown-menu--preview">
-                                        <div class="subbar-dropdown-menu-preview__inner"><?php $previewSubCategories = Category::getPreviewSubCategories($category) ?>
+                                        <div class="subbar-dropdown-menu-preview__inner">
+                                            <?php
+                                            $previewSubCategories = Category::getPreviewSubCategories($category);
+                                            ?>
                                             <?php foreach ($previewSubCategories as $subCategory): ?>
                                                 <div class="subbar-dropdown-menu-preview-image__wrapper">
-                                                    <div class="subbar-dropdown-menu-preview-image"
-                                                         style='background-image: url("<?= $subCategory['image'] ?>")'>
-                                                        <span><?= $subCategory['title'] ?></span>
-                                                    </div>
+                                                    <a href="/<?= $configItem['flag'] ?>.php?category=<?= $subCategory['id'] ?>">
+                                                        <div class="subbar-dropdown-menu-preview-image"
+                                                             style='background-image: url("<?= $subCategory['image'] ?>")'>
+                                                            <span><?= $subCategory['title'] ?></span>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             <?php endforeach ?>
                                         </div>
@@ -172,7 +161,7 @@ foreach ($menSubCategories as $menSubCategory) {
                             </div>
                         </li>
                     <?php endforeach; ?>
-                    <li class="subbar-item">
+                    <li class="subbar-item subbar-item--brands">
                         <button type="button" class="subbar-button">Brands</button>
                         <div class="subbar-dropdown-menu__wrapper">
                             <div class="subbar-dropdown-menu__inner">
@@ -181,28 +170,46 @@ foreach ($menSubCategories as $menSubCategory) {
                                         <span>All brands</span>
                                     </div>
                                     <div class="subbar-dropdown-menu__content">
-                                        <ul>
-                                            <li>Brand name</li>
-                                            <li>Brand name</li>
-                                            <li>Brand name</li>
-                                            <li>Brand name</li>
-                                            <li>Brand name</li>
-                                        </ul>
+                                        <?php
+                                        $categoriesForAllBrandsMenu = [];
+
+                                        foreach ($configItem['categories'] as $name => $category) {
+                                            for ($i = 0; $i <= 3; $i++) {
+                                                if (isset($category[$i])) {
+                                                    $categoriesForAllBrandsMenu[] = $category[$i]['id'];
+                                                }
+                                            }
+                                        }
+                                        $allBrands = Product::getProductBrandsByCategories($conn, $categoriesForAllBrandsMenu);
+                                        ?>
+                                        <?php foreach ($allBrands as $brand): ?>
+                                            <?php if ($brand['brand_id']): ?>
+                                                <a href="/<?= $configItem['flag'] ?>.php?brand=<?= $brand['brand_id'] ?>"
+                                                   class="subbar-dropdown-item"><?= $brand['title'] ?></a>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
                                 <div class="subbar-dropdown-menu subbar-dropdown-menu--preview">
                                     <div class="subbar-dropdown-menu-preview__inner">
-                                        <div class="subbar-dropdown-menu-preview-image__wrapper">
-                                            <div class="subbar-dropdown-menu-preview-image"
-                                                 style='background-image: url("#")'>
-                                                <span></span>
-                                            </div>
-                                        </div>
-                                        <div class="subbar-dropdown-menu-preview-image__wrapper">
-                                            <div class="subbar-dropdown-menu-preview-image"
-                                                 style='background-image: url("#")'>
-                                                <span></span>
-                                            </div>
+                                        <div class="row subbar-dropdown-menu-preview__inner-row">
+                                            <?php
+                                                $allBrands = array_splice($allBrands, 0, 4);
+                                            ?>
+                                            <?php foreach ($allBrands as $brand): ?>
+                                                <div class="col-6 subbar-dropdown-menu-preview__inner-col">
+                                                    <div class="subbar-dropdown-menu-preview-image__wrapper">
+                                                        <a href="/<?= $configItem['flag'] ?>.php?brand=<?= $brand['brand_id'] ?>">
+                                                            <div class="subbar-dropdown-menu-preview-image"
+                                                                 style='background-image:
+                                                                         url("<?= $brand['image'] ?>")'
+                                                            >
+                                                                <span><?= $brand['title'] ?></span>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
                                 </div>

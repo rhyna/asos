@@ -82,6 +82,23 @@ ul {
 .subbar .subbar-item--active button {
   color: #666;
 }
+.subbar .subbar-item--brands .subbar-dropdown-menu--preview .subbar-dropdown-menu-preview-image__wrapper {
+  width: 100%;
+  height: 100%;
+}
+.subbar .subbar-item--brands .subbar-dropdown-menu--preview .subbar-dropdown-menu-preview-image__wrapper .subbar-dropdown-menu-preview-image {
+  width: 100%;
+  height: 100%;
+}
+.subbar .subbar-item--brands .subbar-dropdown-menu--preview .subbar-dropdown-menu-preview-image__wrapper .subbar-dropdown-menu-preview-image span {
+  margin-bottom: 20px;
+}
+.subbar .subbar-item--brands .subbar-dropdown-menu--preview .subbar-dropdown-menu-preview__inner-row {
+  width: 475px;
+}
+.subbar .subbar-item--brands .subbar-dropdown-menu--preview .subbar-dropdown-menu-preview__inner-col {
+  margin-bottom: 20px;
+}
 .subbar .subbar-button {
   color: #fff;
   letter-spacing: 0.8px;
