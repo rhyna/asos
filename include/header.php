@@ -23,6 +23,26 @@ $config = [
         'categories' => $menSubCategories]
 ];
 
+$categoriesForAllBrandsMenuWomen = [];
+
+foreach ($womenSubCategories as $womenSubCategory) {
+    for ($i = 0; $i <= 2; $i++) {
+        if (isset($womenSubCategory[$i])) {
+            $categoriesForAllBrandsMenuWomen[] = $womenSubCategory[$i];
+        }
+    }
+}
+
+$categoriesForAllBrandsMenuMen = [];
+
+foreach ($menSubCategories as $menSubCategory) {
+    for ($i = 0; $i <= 2; $i++) {
+        if (isset($menSubCategory[$i])) {
+            $categoriesForAllBrandsMenuMen[] = $menSubCategory[$i];
+        }
+    }
+}
+
 ?>
 
 <!doctype html>
@@ -70,7 +90,23 @@ $config = [
         <ul class="subbar">
             <?php foreach ($config as $configItem): ?>
                 <?php if (strpos($_SERVER['REQUEST_URI'], '/' . $configItem['flag']) !== false): ?>
+                    <?php
+                    $categoriesForAllBrandsMenu = [];
+                    ?>
                     <?php foreach ($configItem['categories'] as $name => $category): ?>
+                        <?php
+                        for ($i = 0; $i <= 2; $i++) {
+                            $categoryInfo = [];
+
+                            if (isset($category[$i])) {
+                                $categoryInfo['category_id'] = $category[$i]['id'];
+
+                                $categoryInfo['parent_id'] = $category[$i]['parent_id'];
+                            }
+
+                            $categoriesForAllBrandsMenu[] = $categoryInfo;
+                        }
+                        ?>
                         <li class="subbar-item">
                             <button type="button" class="subbar-button"><?= $name ?></button>
                             <div class="subbar-dropdown-menu__wrapper">
@@ -89,16 +125,34 @@ $config = [
                                         </div>
                                     </div>
                                     <div class="subbar-dropdown-menu subbar-dropdown-menu--brand">
+                                        <?php
+                                        $ids = [];
+
+                                        foreach ($category as $categoryInfo) {
+                                            $ids[] = (int)$categoryInfo['id'];
+                                        }
+
+                                        $idsSliced = array_slice($ids, 0, 5);
+
+                                        $brandsInfo = Product::getProductBrandsByCategories($conn, $idsSliced);
+                                        ?>
                                         <div class="subbar-dropdown-title">
                                             <span>Shop by brand</span>
                                         </div>
                                         <div class="subbar-dropdown-menu__content">
                                             <ul>
-                                                <li>Brand name</li>
-                                                <li>Brand name</li>
-                                                <li>Brand name</li>
-                                                <li>Brand name</li>
-                                                <li>Brand name</li>
+                                                <?php foreach ($brandsInfo as $item): ?>
+                                                    <?php if ($item['brand_id']): ?>
+                                                        <li class="subbar-dropdown-item--brand">
+                                                            <a href="/<?= $configItem['flag'] ?>.php?parent_category=<?= $item['parent_id'] ?>&brand=<?= $item['brand_id'] ?>">
+                                                                <div class="subbar-dropdown-item--brand-image"
+                                                                     style="background-image: url('<?= $item['image'] ?>')">
+                                                                </div>
+                                                                <?= $item['title'] ?>
+                                                            </a>
+                                                        </li>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
                                             </ul>
                                         </div>
                                     </div>

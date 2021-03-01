@@ -527,35 +527,6 @@ class Product
 
     /**
      * @param PDO $conn
-     * @param int $sizeId
-     * @return int
-     * @throws SystemErrorException
-     */
-    public function productSizeExists(PDO $conn, int $sizeId): int
-    {
-        try {
-            $sql = "select id 
-                from product_size 
-                where product_id = :productId 
-                and size_id = :sizeId";
-
-            $statement = $conn->prepare($sql);
-
-            $statement->bindValue(':productId', $this->id, PDO::PARAM_INT);
-
-            $statement->bindValue(':sizeId', $sizeId, PDO::PARAM_INT);
-
-            $statement->execute();
-
-            return (int)$statement->fetchColumn();
-
-        } catch (Throwable $e) {
-            throw new SystemErrorException();
-        }
-    }
-
-    /**
-     * @param PDO $conn
      * @return bool
      * @throws SystemErrorException
      */
@@ -656,6 +627,63 @@ class Product
         } catch (Throwable $e) {
             throw new SystemErrorException();
         }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $categoryIds
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getProductBrandsByCategories(PDO $conn, array $categoryIds): array
+    {
+        $brandIds = [];
+
+        $result = [];
+
+        foreach ($categoryIds as $categoryId) {
+            try {
+                $sql = "select p.brand_id, b.title, p.image, c.parent_id 
+                        from product p
+                        join brand b on b.id = p.brand_id
+                        join category c on c.id = p.category_id
+                        where p.category_id = :categoryId 
+                        and p.brand_id is not null
+                        and p.image is not null
+                        and not FIND_IN_SET(p.brand_id, :brandIds) limit 0, 1
+                        ";
+
+                // limit 0, 1 - limits the result to 1 element starting from index 0
+                // fetch automatically does the same (returns one element) (?)
+                // the 'limit' clause left here for additional safety
+
+                $statement = $conn->prepare($sql);
+
+                $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+                $statement->bindValue(':brandIds', implode(',', $brandIds), PDO::PARAM_STR);
+
+                $statement->execute();
+
+                $fetchedResult = $statement->fetch(PDO::FETCH_ASSOC);
+
+                if (!$fetchedResult) {
+                    $result[] = ['brand_id' => ''];
+
+                } else {
+                    $result[] = $fetchedResult;
+                }
+
+                foreach ($result as $item) {
+                    $brandIds[] = $item['brand_id'];
+                }
+
+            } catch (Throwable $e) {
+                throw new SystemErrorException();
+            }
+        }
+
+        return $result;
     }
 
 

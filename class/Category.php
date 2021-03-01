@@ -133,8 +133,6 @@ class Category
         } catch (Throwable $e) {
             throw new SystemErrorException();
         }
-
-
     }
 
     /**
