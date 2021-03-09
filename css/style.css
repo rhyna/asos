@@ -7,7 +7,7 @@
   border-collapse: collapse;
 }
 body {
-  font-family: "Futura PT", sans-serif;
+  font-family: futura-pt, sans-serif;
   font-size: 14px;
   color: #2d2d2d;
 }
@@ -58,7 +58,7 @@ ul {
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
 }
 .topbar-nav-item--active {
   background-color: #525050;
@@ -102,7 +102,6 @@ ul {
 .subbar .subbar-button {
   color: #fff;
   letter-spacing: 0.8px;
-  font-weight: lighter;
   font-size: 14px;
   background-color: transparent;
 }
@@ -126,7 +125,6 @@ ul {
   height: 500px;
   display: flex;
   color: #666;
-  font-weight: lighter;
   letter-spacing: 0.5px;
   font-size: 14px;
 }
@@ -195,10 +193,9 @@ ul {
   margin-bottom: 30px;
   text-align: center;
   font-size: 15px;
-  font-family: futura-pt, sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 700;
   color: #2d2d2d;
   z-index: 10;
   max-width: 150px;
@@ -216,7 +213,6 @@ ul {
   display: block;
   color: #666;
   margin-bottom: 10px;
-  font-weight: lighter;
   letter-spacing: 0.5px;
   font-size: 14px;
   margin-right: 10px;
@@ -230,7 +226,7 @@ ul {
 }
 .subbar .subbar-dropdown-title {
   letter-spacing: 2px;
-  font-weight: 900;
+  font-weight: 700;
   color: #2d2d2d;
   margin-bottom: 15px;
   text-transform: uppercase;
@@ -271,7 +267,6 @@ ul {
   padding-right: 45px;
   color: #2d2d2d;
   font-size: 16px;
-  font-weight: 300;
   letter-spacing: 0.4px;
 }
 .search input:focus {
@@ -302,7 +297,7 @@ ul {
 .banner-fullwidth-title {
   background: #fff;
   font-size: 40px;
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
   display: inline;
   padding-top: 1px;
@@ -317,7 +312,6 @@ ul {
 .banner-fullwidth-description {
   font-size: 12px;
   color: #fff;
-  font-weight: 100;
 }
 .banner-bigtop {
   max-width: 1200px;
@@ -360,10 +354,10 @@ ul {
   font-size: 18px;
   letter-spacing: 0.8px;
   text-align: center;
+  font-weight: 700;
 }
 .banner-hotcategorysmall-description {
   font-size: 18px;
-  font-weight: 100;
   letter-spacing: 0.5px;
   text-align: center;
 }
@@ -391,6 +385,7 @@ ul {
   font-size: 28px;
   letter-spacing: 1.2px;
   text-align: center;
+  font-weight: 700;
 }
 .banner-hotcategorybig-description {
   font-size: 18px;
@@ -515,7 +510,6 @@ footer .footer-bar {
   background-color: #ddd;
   padding-top: 20px;
   padding-bottom: 20px;
-  font-weight: 200;
   font-size: 13px;
 }
 footer .footer-bar__content {
@@ -548,5 +542,55 @@ footer .footer-nav-item:last-child {
 }
 footer .footer-nav-item a:hover {
   color: #0770cf;
+}
+main.main-content-catalog {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 15px 0 15px;
+  margin: 20px auto 0 auto;
+}
+main .category-info {
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+main .category-info-title {
+  font-size: 24px;
+  letter-spacing: 1.7px;
+  line-height: 30px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+main .category-info-description {
+  font-size: 16px;
+  line-height: 1.38em;
+  letter-spacing: 0.4px;
+}
+main .catalog {
+  margin-top: 20px;
+}
+main .catalog .catalog-item {
+  margin-bottom: 30px;
+}
+main .catalog .catalog-item-image {
+  width: 100%;
+  height: 350px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-bottom: 10px;
+}
+main .catalog .catalog-item-title {
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+main .catalog .catalog-item-price {
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  line-height: 20px;
+  font-weight: 700;
 }
 /*# sourceMappingURL=style.css.map */

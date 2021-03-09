@@ -688,4 +688,30 @@ class Product
         return $result;
     }
 
+    /**
+     * @param PDO $conn
+     * @param int $categoryId
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getProductsByCategory(PDO $conn, int $categoryId): array
+    {
+        try {
+            $sql = "select id, title, price, image
+                    from product
+                    where category_id = :categoryId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
 }

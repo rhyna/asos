@@ -130,7 +130,6 @@ label {
   transition: background-color 0.1s linear;
   background-color: #17a2b8;
   color: #fff;
-  font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
 .admin-button:hover {
@@ -158,7 +157,6 @@ label {
   transition: background-color 0.1s linear;
   background-color: #17a2b8;
   color: #fff;
-  font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
 .add-entity:hover {
@@ -175,7 +173,6 @@ label {
   transition: background-color 0.1s linear;
   background-color: #17a2b8;
   color: #fff;
-  font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
 }
 .entity-form-submit:hover {
@@ -248,7 +245,6 @@ label {
   transition: background-color 0.1s linear;
   background-color: #17a2b8;
   color: #fff;
-  font-family: "Futura PT", sans-serif;
   letter-spacing: 0.5px;
   background-color: #b8174bb8;
   margin: 15px 0;

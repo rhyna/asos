@@ -8,7 +8,7 @@
 }
 
 body {
-  font-family: "Futura PT", sans-serif;
+  font-family: futura-pt, sans-serif;
   font-size: 14px;
   color: #2d2d2d;
 }
@@ -70,7 +70,7 @@ ul {
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
 
   &--active {
     background-color: #525050
@@ -129,7 +129,6 @@ ul {
   .subbar-button {
     color: #fff;
     letter-spacing: 0.8px;
-    font-weight: lighter;
     font-size: 14px;
     background-color: transparent;
 
@@ -156,7 +155,6 @@ ul {
     height: 500px;
     display: flex;
     color: #666;
-    font-weight: lighter;
     letter-spacing: 0.5px;
     font-size: 14px;
   }
@@ -235,10 +233,9 @@ ul {
         margin-bottom: 30px;
         text-align: center;
         font-size: 15px;
-        font-family: futura-pt, sans-serif;
         letter-spacing: 2px;
         text-transform: uppercase;
-        font-weight: bold;
+        font-weight: 700;
         color: #2d2d2d;
         z-index: 10;
         max-width: 150px;
@@ -261,7 +258,6 @@ ul {
     display: block;
     color: #666;
     margin-bottom: 10px;
-    font-weight: lighter;
     letter-spacing: 0.5px;
     font-size: 14px;
     margin-right: 10px;
@@ -278,7 +274,7 @@ ul {
 
   .subbar-dropdown-title {
     letter-spacing: 2px;
-    font-weight: 900;
+    font-weight: 700;
     color: #2d2d2d;
     margin-bottom: 15px;
     text-transform: uppercase;
@@ -327,7 +323,6 @@ ul {
     padding-right: 45px;
     color: #2d2d2d;
     font-size: 16px;
-    font-weight: 300;
     letter-spacing: 0.4px;
 
     &:focus {
@@ -363,7 +358,7 @@ ul {
   &-title {
     background: #fff;
     font-size: 40px;
-    font-weight: bold;
+    font-weight: 700;
     font-style: italic;
     display: inline;
     padding-top: 1px;
@@ -380,7 +375,6 @@ ul {
   &-description {
     font-size: 12px;
     color: #fff;
-    font-weight: 100;
   }
 }
 
@@ -432,11 +426,11 @@ ul {
     font-size: 18px;
     letter-spacing: 0.8px;
     text-align: center;
+    font-weight: 700;
   }
 
   &-description {
     font-size: 18px;
-    font-weight: 100;
     letter-spacing: 0.5px;
     text-align: center;
   }
@@ -470,6 +464,7 @@ ul {
     font-size: 28px;
     letter-spacing: 1.2px;
     text-align: center;
+    font-weight: 700;
   }
 
   &-description {
@@ -613,7 +608,6 @@ footer {
     background-color: #ddd;
     padding-top: 20px;
     padding-bottom: 20px;
-    font-weight: 200;
     font-size: 13px;
 
     &__content {
@@ -653,6 +647,69 @@ footer {
         color: #0770cf;
       }
     }
+  }
+}
+
+main {
+  &.main-content-catalog {
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 15px 0 15px;
+    margin: 20px auto 0 auto;
+  }
+
+  .category-info {
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+
+    &-title {
+      font-size: 24px;
+      letter-spacing: 1.7px;
+      line-height: 30px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    &-description {
+      font-size: 16px;
+      line-height: 1.38em;
+      letter-spacing: 0.4px;
+    }
+  }
+
+  .catalog {
+    margin-top: 20px;
+
+    .catalog-item {
+      margin-bottom: 30px;
+
+      &-image {
+        width: 100%;
+        height: 350px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin-bottom: 10px;
+      }
+
+      &-title {
+        font-size: 14px;
+        letter-spacing: .5px;
+        line-height: 20px;
+        margin-bottom: 10px;
+      }
+
+      &-price {
+        font-size: 14px;
+        letter-spacing: .5px;
+        line-height: 20px;
+        font-weight: 700;
+      }
+    }
+
+
   }
 }
 

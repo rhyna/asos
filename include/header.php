@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/init.php';
 
-$conn = require_once __DIR__ . '/db.php';
+$conn = require __DIR__ . '/db.php';
 
 $womenRootCategoryId = Category::getRootWomenCategoryId($conn);
 
@@ -23,26 +23,6 @@ $config = [
         'categories' => $menSubCategories]
 ];
 
-$categoriesForAllBrandsMenuWomen = [];
-
-foreach ($womenSubCategories as $womenSubCategory) {
-    for ($i = 0; $i <= 2; $i++) {
-        if (isset($womenSubCategory[$i])) {
-            $categoriesForAllBrandsMenuWomen[] = $womenSubCategory[$i];
-        }
-    }
-}
-
-$categoriesForAllBrandsMenuMen = [];
-
-foreach ($menSubCategories as $menSubCategory) {
-    for ($i = 0; $i <= 2; $i++) {
-        if (isset($menSubCategory[$i])) {
-            $categoriesForAllBrandsMenuMen[] = $menSubCategory[$i];
-        }
-    }
-}
-
 ?>
 
 <!doctype html>
@@ -57,7 +37,7 @@ foreach ($menSubCategories as $menSubCategory) {
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/vendor/font/FuturaPT/stylesheet.css">
+    <link rel="stylesheet" href="/vendor/font/Futura-PT/stylesheet.css">
     <link rel="stylesheet" href="/vendor/fontawesome-free-5.13.1-web/css/all.css">
 </head>
 <body>
@@ -75,7 +55,10 @@ foreach ($menSubCategories as $menSubCategory) {
             <ul class="topbar-nav">
                 <?php foreach ($config as $configItem): ?>
                     <li class="topbar-nav-item
-                        <?= (strpos($_SERVER['REQUEST_URI'], '/' . $configItem['flag'])) !== false ? ' topbar-nav-item--active' : '' ?>">
+                        <?php if (strpos($_SERVER['REQUEST_URI'], '/' . $configItem['flag']) !== false
+                            || isset($rootCategoryFlag) && $rootCategoryFlag === $configItem['flag']): ?>
+                            topbar-nav-item--active
+                        <?php endif; ?>">
                         <a href="/<?= $configItem['flag'] ?>.php"><?= $configItem['flag'] ?></a>
                     </li>
                 <?php endforeach; ?>
@@ -89,7 +72,8 @@ foreach ($menSubCategories as $menSubCategory) {
     <div class="subbar__wrapper">
         <ul class="subbar">
             <?php foreach ($config as $configItem): ?>
-                <?php if (strpos($_SERVER['REQUEST_URI'], '/' . $configItem['flag']) !== false): ?>
+                <?php if (strpos($_SERVER['REQUEST_URI'], '/' . $configItem['flag']) !== false
+                    || isset($rootCategoryFlag) && $rootCategoryFlag === $configItem['flag']): ?>
                     <?php foreach ($configItem['categories'] as $name => $category): ?>
                         <li class="subbar-item">
                             <button type="button" class="subbar-button"><?= $name ?></button>
@@ -102,7 +86,7 @@ foreach ($menSubCategories as $menSubCategory) {
                                         <div class="subbar-dropdown-menu__content">
                                             <?php foreach ($category as $item): ?>
                                                 <a class="subbar-dropdown-item"
-                                                   href="/<?= $configItem['flag'] ?>.php?category=<?= $item['id'] ?>">
+                                                   href="/category.php?id=<?= $item['id'] ?>">
                                                     <?= $item['title'] ?>
                                                 </a>
                                             <?php endforeach; ?>
@@ -147,7 +131,7 @@ foreach ($menSubCategories as $menSubCategory) {
                                             ?>
                                             <?php foreach ($previewSubCategories as $subCategory): ?>
                                                 <div class="subbar-dropdown-menu-preview-image__wrapper">
-                                                    <a href="/<?= $configItem['flag'] ?>.php?category=<?= $subCategory['id'] ?>">
+                                                    <a href="/category.php?id=<?= $subCategory['id'] ?>">
                                                         <div class="subbar-dropdown-menu-preview-image"
                                                              style='background-image: url("<?= $subCategory['image'] ?>")'>
                                                             <span><?= $subCategory['title'] ?></span>
@@ -194,7 +178,7 @@ foreach ($menSubCategories as $menSubCategory) {
                                     <div class="subbar-dropdown-menu-preview__inner">
                                         <div class="row subbar-dropdown-menu-preview__inner-row">
                                             <?php
-                                                $allBrands = array_splice($allBrands, 0, 4);
+                                            $allBrands = array_splice($allBrands, 0, 4);
                                             ?>
                                             <?php foreach ($allBrands as $brand): ?>
                                                 <div class="col-6 subbar-dropdown-menu-preview__inner-col">
