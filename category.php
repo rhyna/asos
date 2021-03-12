@@ -4,11 +4,25 @@ require_once __DIR__ . '/include/init.php';
 
 $conn = require_once __DIR__ . '/include/db.php';
 
+if (!isset($_GET['page'])) {
+    Url::redirect($_SERVER['REQUEST_URI'] . '&page=1');
+
+    // redirect also when there are all other bad cases (page = 0/string/invalid int)
+}
+
 $error = '';
 
 $currentCategory = null;
 
 $productsByCategory = [];
+
+if (!isset($_GET['page']) || (string)(int)$_GET['page'] !== $_GET['page']) {
+    $_GET['page'] = 1;
+}
+
+$page = (int)$_GET['page'];
+
+$token = '&';
 
 try {
     $categoryId = $_GET['id'] ?? null;
@@ -41,7 +55,11 @@ try {
         $rootCategoryFlag = 'men';
     }
 
-    $productsByCategory = Product::getProductsByCategory($conn, $categoryId);
+    $totalProductsInCategory = Product::countProductsByCategory($conn, $categoryId);
+
+    $paginator = new Paginator($page, 10, $totalProductsInCategory);
+
+    $productsByCategory = Product::getPageOfProductsByCategory($conn, $categoryId, $paginator->limit, $paginator->offset);
 
 } catch (Throwable $e) {
     $error = $e->getMessage();
@@ -50,8 +68,10 @@ try {
 require_once __DIR__ . '/include/header.php';
 
 ?>
-
 <main class="main-content-catalog">
+    <?php if ($error): ?>
+        <p><?= $error ?></p>
+    <?php else: ?>
     <div class="category-info">
         <h1 class="category-info-title">
             <?= $currentCategory->title ?>
@@ -65,24 +85,30 @@ require_once __DIR__ . '/include/header.php';
             <?php foreach ($productsByCategory as $product): ?>
                 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                     <div class="catalog-item">
-                        <div class="catalog-item-image"
-                             style="background-image: url('<?= $product->image ?>')">
-                        </div>
-                        <div class="catalog-item-title">
-                            <?= $product->title ?>
-                        </div>
-                        <div class="catalog-item-price">
-                            <span>€</span>
-                            <?= $product->price ?>
-                        </div>
+                        <a href="/product.php?id=<?= $product->id ?>">
+                            <div class="catalog-item-image"
+                                 style="background-image: url('<?= $product->image ?>')">
+                            </div>
+                            <div class="catalog-item-title">
+                                <?= $product->title ?>
+                            </div>
+                            <div class="catalog-item-price">
+                                <span>€</span>
+                                <?= $product->price ?>
+                            </div>
+                        </a>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
+    <?php
+    if ($productsByCategory) {
+        require_once __DIR__ . '/include/pagination.php';
+    }
+    ?>
 </main>
-
-<p><?= $error ?></p>
+<?php endif; ?>
 
 <?php require_once __DIR__ . '/include/footer.php'; ?>
 

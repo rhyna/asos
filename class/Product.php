@@ -714,4 +714,65 @@ class Product
         }
     }
 
+    /**
+     * @param PDO $conn
+     * @param int $categoryId
+     * @return int
+     * @throws SystemErrorException
+     */
+    public static function countProductsByCategory(PDO $conn, int $categoryId): int
+    {
+        try {
+            $sql = "select count(*)
+                    from product
+                    where category_id = :categoryId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return (int)$statement->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param int $categoryId
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getPageOfProductsByCategory(PDO $conn, int $categoryId, int $limit, int $offset): array
+    {
+        try {
+            $sql = "select id, title, price, image
+                    from product
+                    where category_id = :categoryId
+                    order by id 
+                    limit :limit 
+                    offset :offset";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+
+            $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
 }
