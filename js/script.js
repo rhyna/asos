@@ -512,4 +512,13 @@ function editSize(form) {
         })
 }
 
+$('.selectpicker').selectpicker();
+
+// $('.select_all').click(function() {
+//     $('.selectpicker option').prop('selected', true);
+// });
+
+$('.btn.dropdown-toggle.bs-placeholder.btn-light').attr('title', '123');
+$('.filter-option-inner-inner').html('123');
+
 

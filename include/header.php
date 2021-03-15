@@ -36,6 +36,7 @@ $config = [
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="/vendor/bootstrap-select/bootstrap-select.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/vendor/font/Futura-PT/stylesheet.css">
     <link rel="stylesheet" href="/vendor/fontawesome-free-5.13.1-web/css/all.css">

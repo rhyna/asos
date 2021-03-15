@@ -11,6 +11,7 @@ body {
   font-family: futura-pt, sans-serif;
   font-size: 14px;
   color: #2d2d2d;
+
 }
 
 a {
@@ -651,18 +652,17 @@ footer {
 }
 
 main {
-  &.main-content-catalog {
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 15px 0 15px;
-    margin: 20px auto 0 auto;
-  }
-
   .category-info {
     text-align: center;
     max-width: 800px;
     width: 100%;
-    margin: 0 auto;
+    margin: 20px auto;
+
+    &__wrapper {
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      background-color: #f8f8f8;
+    }
 
     &-title {
       font-size: 24px;
@@ -680,7 +680,10 @@ main {
   }
 
   .catalog {
-    margin-top: 20px;
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 15px 0 15px;
+    margin: 20px auto 0 auto;
 
     .catalog-item {
       margin-bottom: 30px;
@@ -707,6 +710,156 @@ main {
         line-height: 20px;
         font-weight: 700;
       }
+    }
+  }
+
+  .catalog-filters {
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 15px 0 15px;
+    margin: 0 auto;
+    letter-spacing: 0.5px;
+
+    &__wrapper {
+      background-color: #eee;
+      padding: 20px 0;
+    }
+
+    .btn.dropdown-toggle.bs-placeholder.btn-light {
+      color: #2d2d2d;
+      background-color: transparent;
+      border-color: #ddd;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .btn-light:not(:disabled):not(.disabled):active:focus {
+      box-shadow: none;
+    }
+
+    .btn-light:focus {
+      box-shadow: none;
+    }
+
+    .btn-light {
+      color: #2d2d2d;
+      background-color: transparent;
+      border-color: #ddd;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .bootstrap-select .dropdown-toggle:focus {
+      outline: none !important;
+    }
+
+    .dropdown-menu.show {
+      -webkit-box-shadow: 0 5px 13px -2px rgb(0 0 0 / 80%);
+      box-shadow: 0 5px 13px -2px rgba(0, 0, 0, .8);
+      background-color: #eee;
+      border: none;
+      border-radius: 0;
+      color: #2d2d2d;
+      padding-bottom: 0;
+      margin-top: 0;
+    }
+
+    .bootstrap-select .dropdown-menu.inner {
+      float: left;
+      padding: 0 10px 10px 10px;
+    }
+
+    .dropdown-menu.inner.show {
+      box-shadow: none;
+    }
+
+    .dropdown-menu.inner.show li {
+      background-color: #fff;
+      border-radius: 0;
+      font-size: 14px;
+      color: #2d2d2d;
+      padding-bottom: 0;
+      margin-bottom: 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      height: 45px;
+      width: 100%;
+      max-width: 300px;
+      cursor: pointer;
+
+      &.no-results {
+        padding: 15px;
+        margin: 0;
+        border-radius: 0;
+        line-height: normal
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    .form-control {
+      border-radius: 0;
+      border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .bs-searchbox {
+      margin-bottom: 10px;
+    }
+
+    .dropdown-item {
+      background-color: transparent;
+      color: #2d2d2d;
+      line-height: normal;
+      outline: 0;
+      padding: 15px;
+
+      span.text {
+        max-width: 250px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+
+    .bootstrap-select.show-tick .dropdown-menu .selected span.check-mark {
+      top: 15px;
+      right: 15px;
+      color: #3333339e;
+    }
+
+    .btn-light:not(:disabled):not(.disabled).active, .btn-light:not(:disabled):not(.disabled):active, .show > .btn-light.dropdown-toggle {
+      color: #2d2d2d;
+      background-color: transparent;
+      border-color: #ddd;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }
