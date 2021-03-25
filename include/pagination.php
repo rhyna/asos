@@ -1,7 +1,17 @@
 <?php
-$currentURL = $_SERVER['REQUEST_URI'];
+$data = parse_url($_SERVER['REQUEST_URI']);
 
-$baseUrl = strtok($currentURL, $token);
+$path = $data['path'];
+
+$query = $data['query'];
+
+parse_str($query, $queryArray);
+
+unset($queryArray['page']);
+
+$newQuery = http_build_query($queryArray);
+
+$baseUrl = $path . '?' . $newQuery;
 ?>
 
 <nav class="pagination-container">

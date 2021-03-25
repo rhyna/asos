@@ -690,50 +690,41 @@ class Product
 
     /**
      * @param PDO $conn
-     * @param int $categoryId
-     * @return array
-     * @throws SystemErrorException
-     */
-    public static function getProductsByCategory(PDO $conn, int $categoryId): array
-    {
-        try {
-            $sql = "select id, title, price, image
-                    from product
-                    where category_id = :categoryId";
-
-            $statement = $conn->prepare($sql);
-
-            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
-
-            $statement->execute();
-
-            return $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
-
-        } catch (Throwable $e) {
-            throw new SystemErrorException();
-        }
-    }
-
-    /**
-     * @param PDO $conn
-     * @param int $categoryId
+     * @param array $parameters
+     * @param string $where
      * @return int
      * @throws SystemErrorException
      */
-    public static function countProductsByCategory(PDO $conn, int $categoryId): int
+    public static function countProductsFiltered(PDO $conn, array $parameters, string $where): int
     {
         try {
-            $sql = "select count(*)
-                    from product
-                    where category_id = :categoryId";
+            $sql = "select count(distinct p.id)
+                    from product p
+                    join product_size ps
+                    on p.id = ps.product_id
+                    where %s";
 
-            $statement = $conn->prepare($sql);
+            $newSQL = sprintf($sql, $where);
 
-            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+            $statement = $conn->prepare($newSQL);
+
+            foreach ($parameters as $key => $value) {
+                if ($key === 'categoryId') {
+                    $statement->bindValue(':categoryId', $value, PDO::PARAM_INT);
+                }
+
+                if ($key === 'brandIds') {
+                    $statement->bindValue(':brandIds', implode(',', $value), PDO::PARAM_STR);
+                }
+
+                if ($key === 'sizeIds') {
+                    $statement->bindValue(':sizeIds', implode(',', $value), PDO::PARAM_STR);
+                }
+            }
 
             $statement->execute();
 
-            return (int)$statement->fetchColumn();
+            return $statement->fetchColumn();
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
@@ -742,25 +733,44 @@ class Product
 
     /**
      * @param PDO $conn
-     * @param int $categoryId
+     * @param array $parameters
+     * @param string $where
+     * @param string $order
      * @param int $limit
      * @param int $offset
      * @return array
      * @throws SystemErrorException
      */
-    public static function getPageOfProductsByCategory(PDO $conn, int $categoryId, int $limit, int $offset): array
+    public static function getPageOfProductsFiltered(PDO $conn, array $parameters, string $where, string $order, int $limit, int $offset): array
     {
         try {
-            $sql = "select id, title, price, image
-                    from product
-                    where category_id = :categoryId
-                    order by id 
+            $sql = "select p.id, p.title, p.price, p.image
+                    from product p
+                    join product_size ps
+                    on p.id = ps.product_id
+                    where %s 
+                    group by p.id 
+                    %s 
                     limit :limit 
                     offset :offset";
 
-            $statement = $conn->prepare($sql);
+            $newSQL = sprintf($sql, $where, $order);
 
-            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+            $statement = $conn->prepare($newSQL);
+
+            foreach ($parameters as $key => $value) {
+                if ($key === 'categoryId') {
+                    $statement->bindValue(':categoryId', $value, PDO::PARAM_INT);
+                }
+
+                if ($key === 'brandIds') {
+                    $statement->bindValue(':brandIds', implode(',', $value), PDO::PARAM_STR);
+                }
+
+                if ($key === 'sizeIds') {
+                    $statement->bindValue(':sizeIds', implode(',', $value), PDO::PARAM_STR);
+                }
+            }
 
             $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
 
@@ -775,4 +785,31 @@ class Product
         }
     }
 
+    /**
+     * @param PDO $conn
+     * @param int $categoryId
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getBrandsByCategory(PDO $conn, int $categoryId): array
+    {
+        try {
+            $sql = "select b.id, 
+                    b.title
+                    from product p
+                    join brand b on b.id = p.brand_id
+                    where p.category_id = :categoryId";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
 }
