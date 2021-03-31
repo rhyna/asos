@@ -794,8 +794,8 @@ class Product
     public static function getBrandsByCategory(PDO $conn, int $categoryId): array
     {
         try {
-            $sql = "select b.id, 
-                    b.title
+            $sql = "select b.id as brandId, 
+                    b.title as brandTitle
                     from product p
                     join brand b on b.id = p.brand_id
                     where p.category_id = :categoryId";
@@ -803,6 +803,44 @@ class Product
             $statement = $conn->prepare($sql);
 
             $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $categories
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getAllBrandsByGender(PDO $conn, array $categories): array
+    {
+        $categoryIds = [];
+
+        foreach ($categories as $categoryData) {
+            $categoryIds[] = $categoryData['id'];
+        }
+
+        try {
+            $sql = "select b.id as id,
+                    b.title as title,
+                    c.id as categoryId,
+                    c.parent_id as parentCategoryId
+                    from product p
+                    join brand b on b.id = p.brand_id
+                    join category c on p.category_id = c.id
+                    where FIND_IN_SET(c.id, :categoryIds)
+                    group by b.id";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':categoryIds', implode(',', $categoryIds), PDO::PARAM_STR);
 
             $statement->execute();
 

@@ -4,24 +4,7 @@ require_once __DIR__ . '/init.php';
 
 $conn = require __DIR__ . '/db.php';
 
-$womenRootCategoryId = Category::getRootWomenCategoryId($conn);
-
-$menRootCategoryId = Category::getRootMenCategoryId($conn);
-
-$womenCategories = Category::getCategories($conn, $womenRootCategoryId);
-
-$menCategories = Category::getCategories($conn, $menRootCategoryId);
-
-$womenSubCategories = Category::getSubCategories($conn, $womenCategories);
-
-$menSubCategories = Category::getSubCategories($conn, $menCategories);
-
-$config = [
-    ['flag' => 'women',
-        'categories' => $womenSubCategories],
-    ['flag' => 'men',
-        'categories' => $menSubCategories]
-];
+$config = require __DIR__ . "/categories-config.php";
 
 ?>
 
@@ -173,6 +156,7 @@ $config = [
                                                    class="subbar-dropdown-item"><?= $brand['title'] ?></a>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
+                                        <a href="/brands.php?gender=<?= $configItem['flag'] ?>" class="subbar-dropdown-item subbar-dropdown-item--allbrands">All brands</a>
                                     </div>
                                 </div>
                                 <div class="subbar-dropdown-menu subbar-dropdown-menu--preview">

@@ -4,6 +4,8 @@ require_once __DIR__ . '/include/init.php';
 
 $conn = require_once __DIR__ . '/include/db.php';
 
+require_once __DIR__ . '/include/filter-select.php';
+
 $error = '';
 
 $currentCategory = null;
@@ -27,17 +29,6 @@ if (!isset($_GET['page']) || (string)(int)$_GET['page'] !== $_GET['page']) {
 $page = (int)$_GET['page'];
 
 $token = '&';
-
-$sort = [
-    [
-        'value' => 'price-asc',
-        'text' => 'Price low to high'
-    ],
-    [
-        'value' => 'price-desc',
-        'text' => 'Price high to low'
-    ],
-];
 
 try {
     $categoryId = $_GET['id'] ?? null;
@@ -126,11 +117,33 @@ try {
     $error = $e->getMessage();
 }
 
+$brandsData = [];
+
+foreach ($brandsByCategory as $item) {
+    $data = [];
+
+    $data['data']['id'] = $item->brandId;
+    $data['data']['title'] = $item->brandTitle;
+
+    $brandsData[] = $data;
+}
+
+$sizesData = [];
+
+foreach ($sizesByCategory as $item) {
+    $data = [];
+
+    $data['data']['id'] = $item->id;
+    $data['data']['title'] = $item->title;
+
+    $sizesData[] = $data;
+}
+
 require_once __DIR__ . '/include/header.php';
 
 ?>
 <?php if ($error): ?>
-    <p><?= $error ?></p>
+    <p class="error-message"><?= $error ?></p>
 <?php else: ?>
     <main class="main-content">
         <div class="category-info__wrapper">
@@ -147,69 +160,13 @@ require_once __DIR__ . '/include/header.php';
             <div class="catalog-filters">
                 <form>
                     <input type="hidden" name="id" value="<?= $categoryId ?>">
-                    <div class="form-group">
-                        <label for="sort">
-                            Sort
-                        </label>
-                        <select class="selectpicker show-tick"
-                                name="sort"
-                                id="sort"
-                                title='Nothing selected'>
-                            <?php foreach ($sort as $item): ?>
-                                <option value="<?= $item['value'] ?>"
-                                    <?php if (isset($_GET['sort']) && $_GET['sort'] === $item['value']): ?>
-                                        selected
-                                    <?php endif; ?>
-                                ><?= $item['text'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="brands">
-                            Brand
-                        </label>
-                        <select class="selectpicker"
-                                multiple
-                                data-live-search="true"
-                                data-actions-box="true"
-                                name="brands[]"
-                                id="brands">
-                            <?php foreach ($brandsByCategory as $brand): ?>
-                                <option value="<?= $brand['id'] ?>"
-                                    <?php if (isset($_GET['brands'])): ?>
-                                        <?php foreach ($_GET['brands'] as $item): ?>
-                                            <?php if ($item === $brand['id']): ?>
-                                                selected
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                ><?= $brand['title'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="sizes">
-                            Size
-                        </label>
-                        <select class="selectpicker"
-                                multiple
-                                data-live-search="true"
-                                data-actions-box="true"
-                                name="sizes[]"
-                                id="sizes">
-                            <?php foreach ($sizesByCategory as $size): ?>
-                                <option value="<?= $size->id ?>"
-                                    <?php if (isset($_GET['sizes'])): ?>
-                                        <?php foreach ($_GET['sizes'] as $item): ?>
-                                            <?php if ($item === $size->id): ?>
-                                                selected
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                ><?= $size->title ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+                    <?php
+                    renderSortSelectPicker();
+
+                    renderSelectPicker($brandsData, 'brands', 'Brand');
+
+                    renderSelectPicker($sizesData, 'sizes', 'Size');
+                    ?>
                     <button type="submit" class="catalog-filters-submit">Filter</button>
                 </form>
             </div>
