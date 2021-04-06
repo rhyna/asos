@@ -691,20 +691,20 @@ class Product
     /**
      * @param PDO $conn
      * @param array $parameters
+     * @param string $join
      * @param string $where
      * @return int
      * @throws SystemErrorException
      */
-    public static function countProductsFiltered(PDO $conn, array $parameters, string $where): int
+    public static function countProductsFiltered(PDO $conn, array $parameters, string $join, string $where): int
     {
         try {
             $sql = "select count(distinct p.id)
                     from product p
-                    join product_size ps
-                    on p.id = ps.product_id
+                    %s
                     where %s";
 
-            $newSQL = sprintf($sql, $where);
+            $newSQL = sprintf($sql, $join, $where);
 
             $statement = $conn->prepare($newSQL);
 
@@ -720,6 +720,19 @@ class Product
                 if ($key === 'sizeIds') {
                     $statement->bindValue(':sizeIds', implode(',', $value), PDO::PARAM_STR);
                 }
+
+                if ($key === 'brandId') {
+                    $statement->bindValue(':brandId', $value, PDO::PARAM_INT);
+                }
+
+                if ($key === 'categoryIdsByGender') {
+                    $statement->bindValue(':categoryIdsByGender', implode(',', $value), PDO::PARAM_STR);
+                }
+
+                if ($key === 'categoryIds') {
+                    $statement->bindValue(':categoryIds', implode(',', $value), PDO::PARAM_STR);
+                }
+
             }
 
             $statement->execute();
@@ -734,6 +747,7 @@ class Product
     /**
      * @param PDO $conn
      * @param array $parameters
+     * @param string $join
      * @param string $where
      * @param string $order
      * @param int $limit
@@ -741,20 +755,19 @@ class Product
      * @return array
      * @throws SystemErrorException
      */
-    public static function getPageOfProductsFiltered(PDO $conn, array $parameters, string $where, string $order, int $limit, int $offset): array
+    public static function getPageOfProductsFiltered(PDO $conn, array $parameters, string $join, string $where, string $order, int $limit, int $offset): array
     {
         try {
             $sql = "select p.id, p.title, p.price, p.image
                     from product p
-                    join product_size ps
-                    on p.id = ps.product_id
+                    %s
                     where %s 
                     group by p.id 
                     %s 
                     limit :limit 
                     offset :offset";
 
-            $newSQL = sprintf($sql, $where, $order);
+            $newSQL = sprintf($sql, $join, $where, $order);
 
             $statement = $conn->prepare($newSQL);
 
@@ -769,6 +782,18 @@ class Product
 
                 if ($key === 'sizeIds') {
                     $statement->bindValue(':sizeIds', implode(',', $value), PDO::PARAM_STR);
+                }
+
+                if ($key === 'brandId') {
+                    $statement->bindValue(':brandId', $value, PDO::PARAM_INT);
+                }
+
+                if ($key === 'categoryIdsByGender') {
+                    $statement->bindValue(':categoryIdsByGender', implode(',', $value), PDO::PARAM_STR);
+                }
+
+                if ($key === 'categoryIds') {
+                    $statement->bindValue(':categoryIds', implode(',', $value), PDO::PARAM_STR);
                 }
             }
 
@@ -798,7 +823,8 @@ class Product
                     b.title as brandTitle
                     from product p
                     join brand b on b.id = p.brand_id
-                    where p.category_id = :categoryId";
+                    where p.category_id = :categoryId
+                    order by b.title asc";
 
             $statement = $conn->prepare($sql);
 
@@ -828,7 +854,8 @@ class Product
         }
 
         try {
-            $sql = "select b.id as id,
+            $sql = " select * from
+                    (select b.id as id,
                     b.title as title,
                     c.id as categoryId,
                     c.parent_id as parentCategoryId
@@ -836,7 +863,9 @@ class Product
                     join brand b on b.id = p.brand_id
                     join category c on p.category_id = c.id
                     where FIND_IN_SET(c.id, :categoryIds)
-                    group by b.id";
+                    group by b.id)
+                    t order by t.title
+                    ";
 
             $statement = $conn->prepare($sql);
 
@@ -850,4 +879,40 @@ class Product
             throw new SystemErrorException();
         }
     }
+
+    /**
+     * @param PDO $conn
+     * @param int $brandId
+     * @param array $categoryIdsByGender
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getCategoriesByBrandAndGender(PDO $conn, int $brandId, array $categoryIdsByGender): array
+    {
+        try {
+            $sql = "select c.id, 
+                    c.title, c1.title as parentCategoryTitle
+                    from product p
+                    join category c on p.category_id = c.id
+                    join category c1 on c1.id = c.parent_id
+                    where p.brand_id = :brandId
+                    and FIND_IN_SET(p.category_id, :categoryIdsByGender)
+                    order by title asc";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':brandId', $brandId, PDO::PARAM_INT);
+
+            $statement->bindValue(':categoryIdsByGender', implode(',', $categoryIdsByGender), PDO::PARAM_STR);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+
 }

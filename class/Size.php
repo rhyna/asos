@@ -14,7 +14,7 @@ class Size
      * @return array
      * @throws SystemErrorException
      */
-    public static function  getSizesByCategory(PDO $conn, int $categoryId): array
+    public static function getSizesByCategory(PDO $conn, int $categoryId): array
     {
         try {
             $sql = "select s.id, s.title, s.sort_order as sortOrder, cs.id 
@@ -36,7 +36,36 @@ class Size
         } catch (Throwable $e) {
             throw new SystemErrorException();
         }
+    }
 
+    /**
+     * @param PDO $conn
+     * @param array $categoryIds
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getSizesByCategoryArray(PDO $conn, array $categoryIds): array
+    {
+        try {
+            $sql = "select s.id, s.title
+                    from size s
+                    join category_size cs
+                    on s.id = cs.size_id
+                    where FIND_IN_SET(cs.category_id, :categoryIds)
+                    group by s.id
+                    order by min(sort_order) asc";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':categoryIds', implode(',', $categoryIds), PDO::PARAM_STR);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
     }
 
     /**
@@ -80,15 +109,15 @@ class Size
     public function addSizeToCategory(PDO $conn, int $categoryId): void
     {
         try {
-                $sql = "insert into category_size (category_id, size_id) values (:categoryId, :sizeId)";
+            $sql = "insert into category_size (category_id, size_id) values (:categoryId, :sizeId)";
 
-                $statement = $conn->prepare($sql);
+            $statement = $conn->prepare($sql);
 
-                $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+            $statement->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
 
-                $statement->bindValue(':sizeId', $this->id, PDO::PARAM_INT);
+            $statement->bindValue(':sizeId', $this->id, PDO::PARAM_INT);
 
-                $statement->execute();
+            $statement->execute();
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
@@ -283,7 +312,7 @@ class Size
 
             $statement->execute();
 
-            return (int) $statement->fetchColumn();
+            return (int)$statement->fetchColumn();
 
         } catch (Throwable $e) {
             throw new SystemErrorException();

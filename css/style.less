@@ -37,6 +37,14 @@ ul {
   letter-spacing: 0.2px;
 }
 
+.page-title {
+  font-size: 24px;
+  letter-spacing: 1.7px;
+  line-height: 30px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
 .topbar {
   background: #2d2d2d;
   display: flex;
@@ -664,7 +672,7 @@ footer {
 }
 
 main {
-  .category-info {
+  .catalog-info {
     text-align: center;
     max-width: 800px;
     width: 100%;
@@ -677,11 +685,8 @@ main {
     }
 
     &-title {
-      font-size: 24px;
-      letter-spacing: 1.7px;
-      line-height: 30px;
-      margin-bottom: 10px;
-      font-weight: 700;
+      .page-title();
+      text-transform: capitalize;
     }
 
     &-description {
@@ -833,6 +838,10 @@ main {
       padding: 0 10px 10px 10px;
     }
 
+    .bootstrap-select .dropdown-menu li a.opt {
+      padding-left: 15px;
+    }
+
     .dropdown-menu.inner.show {
       box-shadow: none;
     }
@@ -877,6 +886,24 @@ main {
         span.text {
           margin-right: 0;
         }
+      }
+
+      &.dropdown-header {
+        background-color: transparent;
+        cursor: default;
+        height: auto;
+        padding: 0;
+        color: #6c757dc2;
+        font-style: italic;
+        font-size: 13px;
+
+        &:not(&:first-child) {
+          margin-top: 15px;
+        }
+      }
+
+      &.dropdown-divider {
+        display: none;
       }
     }
 
@@ -945,8 +972,32 @@ main {
     max-width: 1200px;
     width: 100%;
     padding: 0 15px 0 15px;
-    margin: 0 auto;
+    margin: 20px auto 0 auto;
     letter-spacing: 0.5px;
+
+    &-title {
+      .page-title();
+      text-transform: capitalize;
+      text-align: center;
+    }
+
+    &-item {
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+        border-bottom: none;
+
+      }
+
+      a {
+        display: block;
+        padding: 20px 15px;
+      }
+
+      &:hover {
+        background-color: #f8f8f8;
+      }
+    }
   }
 }
 

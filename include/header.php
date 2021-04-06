@@ -152,7 +152,7 @@ $config = require __DIR__ . "/categories-config.php";
                                         ?>
                                         <?php foreach ($allBrands as $brand): ?>
                                             <?php if ($brand['brand_id']): ?>
-                                                <a href="/<?= $configItem['flag'] ?>.php?brand=<?= $brand['brand_id'] ?>"
+                                                <a href="/brand-catalog.php?gender=<?= $configItem['flag'] ?>&id=<?= $brand['brand_id'] ?>"
                                                    class="subbar-dropdown-item"><?= $brand['title'] ?></a>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
@@ -168,7 +168,7 @@ $config = require __DIR__ . "/categories-config.php";
                                             <?php foreach ($allBrands as $brand): ?>
                                                 <div class="col-6 subbar-dropdown-menu-preview__inner-col">
                                                     <div class="subbar-dropdown-menu-preview-image__wrapper">
-                                                        <a href="/<?= $configItem['flag'] ?>.php?brand=<?= $brand['brand_id'] ?>">
+                                                        <a href="/brand-catalog.php?gender=<?= $configItem['flag'] ?>&id=<?= $brand['brand_id'] ?>">
                                                             <div class="subbar-dropdown-menu-preview-image"
                                                                  style='background-image:
                                                                          url("<?= $brand['image'] ?>")'

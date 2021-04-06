@@ -1,6 +1,25 @@
 <?php
 
-function renderSelectPicker($data, $type, $label)
+function renderOption($array, $type)
+{
+    foreach ($array as $item) {
+        echo "<option value='" . $item['id'] . "'";
+
+        if (isset($_GET[$type])) {
+            foreach ($_GET[$type] as $param) {
+                if ($param === $item['id']) {
+                    echo 'selected';
+                }
+            }
+        }
+
+        echo ">";
+
+        echo $item['title'] . "</option>";
+    }
+}
+
+function renderSelectPicker($data, $type, $label, $settings)
 {
     echo "
             <div class='form-group'>
@@ -13,20 +32,30 @@ function renderSelectPicker($data, $type, $label)
                     id='" . $type . "'>
          ";
 
-    foreach ($data as $item) {
-        echo "<option value='" . $item['data']['id'] . "'";
+    if (isset($settings['optGroups'])) {
 
-        if (isset($_GET[$type])) {
-            foreach ($_GET[$type] as $param) {
-                if ($param === $item['data']['id']) {
-                    echo 'selected';
-                }
-            }
+        $optGroups = [];
+
+        foreach ($settings['optGroups'] as $optGroup) {
+            $optGroups[$optGroup['parentCategoryTitle']] = [];
         }
 
-        echo ">";
+        foreach ($settings['optGroups'] as $optGroup) {
+            $optGroups[$optGroup['parentCategoryTitle']][] = [
+                'id' => $optGroup['id'],
+                'title' => $optGroup['title']
+            ];
+        }
 
-        echo $item['data']['title'] . "</option>";
+        foreach ($optGroups as $key => $optGroup) {
+            echo "<optgroup label='" . $key . "'>";
+
+            renderOption($optGroup, $type);
+
+            echo "</optgroup>";
+        }
+    } else {
+        renderOption($data, $type);
     }
 
     echo "</select></div>";
@@ -67,23 +96,3 @@ function renderSortSelectPicker()
 
     echo "</select></div>";
 }
-
-?>
-
-<!--<div class="form-group">-->
-<!--    <label for="sort">-->
-<!--        Sort-->
-<!--    </label>-->
-<!--    <select class="selectpicker show-tick"-->
-<!--            name="sort"-->
-<!--            id="sort"-->
-<!--            title='Nothing selected'>-->
-<!--        --><?php //foreach ($sort as $item): ?>
-<!--            <option value="--><?//= $item['value'] ?><!--"-->
-<!--                --><?php //if (isset($_GET['sort']) && $_GET['sort'] === $item['value']): ?>
-<!--                    selected-->
-<!--                --><?php //endif; ?>
-<!--            >--><?//= $item['text'] ?><!--</option>-->
-<!--        --><?php //endforeach; ?>
-<!--    </select>-->
-<!--</div>-->

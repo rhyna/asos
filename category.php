@@ -4,11 +4,11 @@ require_once __DIR__ . '/include/init.php';
 
 $conn = require_once __DIR__ . '/include/db.php';
 
-require_once __DIR__ . '/include/filter-select.php';
+require_once __DIR__ . '/include/selectpicker.php';
 
 $error = '';
 
-$currentCategory = null;
+$currentCategory = new Category();
 
 $productsByCategory = [];
 
@@ -29,6 +29,8 @@ if (!isset($_GET['page']) || (string)(int)$_GET['page'] !== $_GET['page']) {
 $page = (int)$_GET['page'];
 
 $token = '&';
+
+$rootCategoryFlag = '';
 
 try {
     $categoryId = $_GET['id'] ?? null;
@@ -51,8 +53,6 @@ try {
 
     $rootCategory = Category::getCategory($conn, $rootCategoryId);
 
-    $rootCategoryFlag = '';
-
     if ((int)$rootCategory->rootWomenCategory === 1) {
         $rootCategoryFlag = 'women';
     }
@@ -68,6 +68,8 @@ try {
     $productQueryParameters = [];
 
     $whereClauses = [];
+
+    $joinClauses = [];
 
     $order = '';
 
@@ -93,6 +95,8 @@ try {
         $productQueryParameters['sizeIds'] = $sizeIds;
 
         $whereClauses[] = 'FIND_IN_SET(ps.size_id, :sizeIds)';
+
+        $joinClauses[] = 'join product_size ps on p.id = ps.product_id';
     }
 
     if (isset($_GET['sort'])) {
@@ -107,11 +111,13 @@ try {
 
     $where = implode(' and ', $whereClauses);
 
-    $totalProductsInCategory = Product::countProductsFiltered($conn, $productQueryParameters, $where);
+    $join = implode(' join ', $joinClauses);
+
+    $totalProductsInCategory = Product::countProductsFiltered($conn, $productQueryParameters, $join, $where);
 
     $paginator = new Paginator($page, 2, $totalProductsInCategory);
 
-    $productsByCategory = Product::getPageOfProductsFiltered($conn, $productQueryParameters, $where, $order, $paginator->limit, $paginator->offset);
+    $productsByCategory = Product::getPageOfProductsFiltered($conn, $productQueryParameters, $join, $where, $order, $paginator->limit, $paginator->offset);
 
 } catch (Throwable $e) {
     $error = $e->getMessage();
@@ -122,8 +128,8 @@ $brandsData = [];
 foreach ($brandsByCategory as $item) {
     $data = [];
 
-    $data['data']['id'] = $item->brandId;
-    $data['data']['title'] = $item->brandTitle;
+    $data['id'] = $item->brandId;
+    $data['title'] = $item->brandTitle;
 
     $brandsData[] = $data;
 }
@@ -133,8 +139,8 @@ $sizesData = [];
 foreach ($sizesByCategory as $item) {
     $data = [];
 
-    $data['data']['id'] = $item->id;
-    $data['data']['title'] = $item->title;
+    $data['id'] = $item->id;
+    $data['title'] = $item->title;
 
     $sizesData[] = $data;
 }
@@ -146,12 +152,13 @@ require_once __DIR__ . '/include/header.php';
     <p class="error-message"><?= $error ?></p>
 <?php else: ?>
     <main class="main-content">
-        <div class="category-info__wrapper">
-            <div class="category-info">
-                <h1 class="category-info-title">
+        <div class="catalog-info__wrapper">
+            <div class="catalog-info">
+                <h1 class="catalog-info-title">
+                    <?= $rootCategoryFlag ?>
                     <?= $currentCategory->title ?>
                 </h1>
-                <div class="category-info-description">
+                <div class="catalog-info-description">
                     <?= $currentCategory->description ?>
                 </div>
             </div>
@@ -163,9 +170,9 @@ require_once __DIR__ . '/include/header.php';
                     <?php
                     renderSortSelectPicker();
 
-                    renderSelectPicker($brandsData, 'brands', 'Brand');
+                    renderSelectPicker($brandsData, 'brands', 'Brand', []);
 
-                    renderSelectPicker($sizesData, 'sizes', 'Size');
+                    renderSelectPicker($sizesData, 'sizes', 'Size', []);
                     ?>
                     <button type="submit" class="catalog-filters-submit">Filter</button>
                 </form>
@@ -207,7 +214,6 @@ if ($productsByCategory) {
     require_once __DIR__ . '/include/pagination.php';
 }
 ?>
-
 
 <?php require_once __DIR__ . '/include/footer.php'; ?>
 

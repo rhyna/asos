@@ -29,6 +29,13 @@ ul {
   margin: 30px auto;
   letter-spacing: 0.2px;
 }
+.page-title {
+  font-size: 24px;
+  letter-spacing: 1.7px;
+  line-height: 30px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
 .topbar {
   background: #2d2d2d;
   display: flex;
@@ -553,25 +560,26 @@ footer .footer-nav-item:last-child {
 footer .footer-nav-item a:hover {
   color: #0770cf;
 }
-main .category-info {
+main .catalog-info {
   text-align: center;
   max-width: 800px;
   width: 100%;
   margin: 20px auto;
 }
-main .category-info__wrapper {
+main .catalog-info__wrapper {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   background-color: #f8f8f8;
 }
-main .category-info-title {
+main .catalog-info-title {
   font-size: 24px;
   letter-spacing: 1.7px;
   line-height: 30px;
   margin-bottom: 10px;
   font-weight: 700;
+  text-transform: capitalize;
 }
-main .category-info-description {
+main .catalog-info-description {
   font-size: 16px;
   line-height: 1.38em;
   letter-spacing: 0.4px;
@@ -696,6 +704,9 @@ main .catalog-filters .bootstrap-select .dropdown-menu.inner {
   float: left;
   padding: 0 10px 10px 10px;
 }
+main .catalog-filters .bootstrap-select .dropdown-menu li a.opt {
+  padding-left: 15px;
+}
 main .catalog-filters .dropdown-menu.inner.show {
   box-shadow: none;
 }
@@ -734,6 +745,21 @@ main .catalog-filters .dropdown-menu.inner.show li.disabled a {
 }
 main .catalog-filters .dropdown-menu.inner.show li.disabled span.text {
   margin-right: 0;
+}
+main .catalog-filters .dropdown-menu.inner.show li.dropdown-header {
+  background-color: transparent;
+  cursor: default;
+  height: auto;
+  padding: 0;
+  color: #6c757dc2;
+  font-style: italic;
+  font-size: 13px;
+}
+main .catalog-filters .dropdown-menu.inner.show li.dropdown-header:not(main .catalog-filters .dropdown-menu.inner.show li.dropdown-header:first-child) {
+  margin-top: 15px;
+}
+main .catalog-filters .dropdown-menu.inner.show li.dropdown-divider {
+  display: none;
 }
 main .catalog-filters .form-control {
   border-radius: 0;
@@ -793,8 +819,30 @@ main .brands-catalog {
   max-width: 1200px;
   width: 100%;
   padding: 0 15px 0 15px;
-  margin: 0 auto;
+  margin: 20px auto 0 auto;
   letter-spacing: 0.5px;
+}
+main .brands-catalog-title {
+  font-size: 24px;
+  letter-spacing: 1.7px;
+  line-height: 30px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  text-transform: capitalize;
+  text-align: center;
+}
+main .brands-catalog-item {
+  border-bottom: 1px solid #eee;
+}
+main .brands-catalog-item:last-child {
+  border-bottom: none;
+}
+main .brands-catalog-item a {
+  display: block;
+  padding: 20px 15px;
+}
+main .brands-catalog-item:hover {
+  background-color: #f8f8f8;
 }
 .pagination-container {
   display: flex;
