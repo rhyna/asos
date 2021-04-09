@@ -87,6 +87,12 @@ $config = require __DIR__ . "/categories-config.php";
                                         $idsSliced = array_slice($ids, 0, 5);
 
                                         $brandsInfo = Product::getProductBrandsByCategories($conn, $idsSliced);
+
+                                        $categoryGETParams = '';
+
+                                        foreach ($ids as $id) {
+                                            $categoryGETParams .= "&categories[]=$id";
+                                        }
                                         ?>
                                         <div class="subbar-dropdown-title">
                                             <span>Shop by brand</span>
@@ -96,7 +102,7 @@ $config = require __DIR__ . "/categories-config.php";
                                                 <?php foreach ($brandsInfo as $item): ?>
                                                     <?php if ($item['brand_id']): ?>
                                                         <li class="subbar-dropdown-item--brand">
-                                                            <a href="/<?= $configItem['flag'] ?>.php?parent_category=<?= $item['parent_id'] ?>&brand=<?= $item['brand_id'] ?>">
+                                                            <a href="/brand.php?gender=<?= $configItem['flag'] ?>&id=<?= $item['brand_id'] ?><?= $categoryGETParams ?>">
                                                                 <div class="subbar-dropdown-item--brand-image"
                                                                      style="background-image: url('<?= $item['image'] ?>')">
                                                                 </div>
@@ -152,7 +158,7 @@ $config = require __DIR__ . "/categories-config.php";
                                         ?>
                                         <?php foreach ($allBrands as $brand): ?>
                                             <?php if ($brand['brand_id']): ?>
-                                                <a href="/brand-catalog.php?gender=<?= $configItem['flag'] ?>&id=<?= $brand['brand_id'] ?>"
+                                                <a href="/brand.php?gender=<?= $configItem['flag'] ?>&id=<?= $brand['brand_id'] ?>"
                                                    class="subbar-dropdown-item"><?= $brand['title'] ?></a>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
@@ -168,7 +174,7 @@ $config = require __DIR__ . "/categories-config.php";
                                             <?php foreach ($allBrands as $brand): ?>
                                                 <div class="col-6 subbar-dropdown-menu-preview__inner-col">
                                                     <div class="subbar-dropdown-menu-preview-image__wrapper">
-                                                        <a href="/brand-catalog.php?gender=<?= $configItem['flag'] ?>&id=<?= $brand['brand_id'] ?>">
+                                                        <a href="/brand.php?gender=<?= $configItem['flag'] ?>&id=<?= $brand['brand_id'] ?>">
                                                             <div class="subbar-dropdown-menu-preview-image"
                                                                  style='background-image:
                                                                          url("<?= $brand['image'] ?>")'

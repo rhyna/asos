@@ -10,8 +10,27 @@ class Banner
     public $description;
     public $buttonLabel;
     public $alias;
+    public $gender;
     public $validationError;
     public $imageValidationErrors = [];
+
+    private static function baseSQL()
+    {
+        return $sql = 'select 
+                    banner.id, 
+                    banner.banner_place_id as bannerPlaceId,
+                    banner.image,
+                    banner.link,
+                    banner.title,
+                    banner.description,
+                    banner.button_label as buttonLabel,
+                    bp.alias,
+                    bp.title as aliasTitle,
+                    bp.gender as gender
+                from banner 
+                left join banner_place bp 
+                on bp.id = banner.banner_place_id';
+    }
 
     /**
      * @param PDO $conn
@@ -21,23 +40,35 @@ class Banner
     public static function getAllBanners(PDO $conn): array
     {
         try {
-            $sql = 'select 
-                    banner.id, 
-                    banner.banner_place_id as bannerPlaceId,
-                    banner.image,
-                    banner.link,
-                    banner.title,
-                    banner.description,
-                    banner.button_label as buttonLabel,
-                    bp.alias,
-                    bp.title as aliasTitle 
-                from banner 
-                left join banner_place bp 
-                on bp.id = banner.banner_place_id';
+            $sql = self::baseSQL();
 
             $result = $conn->query($sql);
 
             return $result->fetchAll(PDO::FETCH_CLASS, Banner::class);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param string $gender
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getAllBannersByGender(PDO $conn, string $gender): array
+    {
+        try {
+            $sql = self::baseSQL() . ' where bp.gender = :gender';
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':gender', $gender, PDO::PARAM_STR);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_CLASS, Banner::class);
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
@@ -58,8 +89,27 @@ class Banner
         foreach ($banners as $banner) {
             $formattedBanners[$banner->alias] = $banner;
         }
+
         return $formattedBanners;
 
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $bannersByGender
+     * @return array
+     */
+    public static function getFormattedBannersByGender(PDO $conn, array $bannersByGender): array
+    {
+        //$banners = self::getAllBannersByGender($conn, $gender);
+
+        $formattedBanners = [];
+
+        foreach ($bannersByGender as $banner) {
+            $formattedBanners[$banner->alias] = $banner;
+        }
+
+        return $formattedBanners;
     }
 
     /**
@@ -74,6 +124,28 @@ class Banner
         $hotCategorySmallBanners = [];
 
         foreach ($banners as $key => $banner) {
+            $isHotCategorySmall = strpos($key, 'hot_category_small');
+
+            if ($isHotCategorySmall !== false) {
+                $hotCategorySmallBanners[$banner->alias] = $banner;
+            };
+        }
+
+        return $hotCategorySmallBanners;
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $bannersByGender
+     * @return array
+     */
+    public static function getHotCategorySmallBannersByGender(PDO $conn, array $bannersByGender): array
+    {
+        //$banners = self::getFormattedBannersByGender($conn, $gender);
+
+        $hotCategorySmallBanners = [];
+
+        foreach ($bannersByGender as $key => $banner) {
             $isHotCategorySmall = strpos($key, 'hot_category_small');
 
             if ($isHotCategorySmall !== false) {
@@ -108,6 +180,28 @@ class Banner
 
     /**
      * @param PDO $conn
+     * @param array $bannersByGender
+     * @return array
+     */
+     public static function getHotCategoryBigBannersByGender(PDO $conn, array $bannersByGender): array
+    {
+        //$banners = self::getFormattedBannersByGender($conn, $gender);
+
+        $hotCategoryBigBanners = [];
+
+        foreach ($bannersByGender as $key => $banner) {
+            $isHotCategoryBig = strpos($key, 'hot_category_big');
+
+            if ($isHotCategoryBig !== false) {
+                $hotCategoryBigBanners[$banner->alias] = $banner;
+            };
+        }
+
+        return $hotCategoryBigBanners;
+    }
+
+    /**
+     * @param PDO $conn
      * @return array
      * @throws Exception
      */
@@ -118,6 +212,28 @@ class Banner
         $trendingBrands = [];
 
         foreach ($banners as $key => $banner) {
+            $isTrendingBrand = strpos($key, 'trending_brand');
+
+            if ($isTrendingBrand !== false) {
+                $trendingBrands[$banner->alias] = $banner;
+            };
+        }
+
+        return $trendingBrands;
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $bannersByGender
+     * @return array
+     */
+    public static function getTrendingBrandsByGender(PDO $conn, array $bannersByGender): array
+    {
+        //$banners = self::getFormattedBannersByGender($conn, $gender);
+
+        $trendingBrands = [];
+
+        foreach ($bannersByGender as $key => $banner) {
             $isTrendingBrand = strpos($key, 'trending_brand');
 
             if ($isTrendingBrand !== false) {

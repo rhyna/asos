@@ -71,7 +71,7 @@ try {
             <ul>
                 <?php foreach ($brandsByGender as $brand): ?>
                     <li class="brands-catalog-item">
-                        <a href="/brand-catalog.php?gender=<?= $rootCategoryFlag ?>&id=<?= $brand['id'] ?>">
+                        <a href="/brand.php?gender=<?= $rootCategoryFlag ?>&id=<?= $brand['id'] ?>">
                             <?= $brand['title'] ?>
                         </a>
                     </li>
