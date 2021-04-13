@@ -22,11 +22,16 @@ ul {
   list-style: none;
   margin-bottom: 0;
 }
+.container1200px {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 15px;
+}
 .error-message {
   max-width: 1200px;
   width: 100%;
-  padding: 0 15px 0 15px;
-  margin: 30px auto;
+  padding: 0 15px;
+  margin: 20px auto;
   letter-spacing: 0.2px;
 }
 .page-title {
@@ -53,7 +58,7 @@ ul {
 .topbar__content {
   max-width: 1200px;
   width: 100%;
-  padding: 0 15px 0 15px;
+  padding: 0 15px;
   display: flex;
   align-items: center;
 }
@@ -140,9 +145,7 @@ ul {
   color: #666;
   letter-spacing: 0.5px;
   font-size: 14px;
-  box-shadow: 7px 7px 7px 0px rgba(108, 117, 125, 0.5);
-  -webkit-box-shadow: 7px 7px 7px 0px rgba(108, 117, 125, 0.5);
-  -moz-box-shadow: 7px 7px 7px 0px rgba(108, 117, 125, 0.5);
+  padding: 0 15px;
 }
 .subbar .subbar-dropdown-menu__inner {
   background-color: #eee;
@@ -335,9 +338,9 @@ ul {
 }
 .banner-bigtop {
   max-width: 1200px;
-  margin: 0 auto 50px auto;
+  width: 100%;
   padding: 0 15px;
-  margin-top: 30px;
+  margin: 30px auto 50px auto;
 }
 .banner-bigtop img {
   width: 100%;
@@ -413,8 +416,9 @@ ul {
 }
 .banner-hotcategorysmall__wrapper {
   max-width: 1200px;
-  margin: 0 auto 30px auto;
+  width: 100%;
   padding: 0 15px;
+  margin: 0 auto 30px auto;
 }
 .banner-hotcategorysmall-title {
   font-size: 18px;
@@ -484,6 +488,7 @@ ul {
 .trending-brands {
   margin: 0 auto 50px auto;
   max-width: 1200px;
+  width: 100%;
   padding: 0 15px;
 }
 .trending-brands-title {
@@ -509,6 +514,7 @@ footer {
 footer .icons-bar {
   margin: 0 auto 50px auto;
   max-width: 1200px;
+  width: 100%;
   padding: 0 15px;
   display: flex;
   justify-content: center;
@@ -585,6 +591,7 @@ footer .footer-bar__content {
   display: flex;
   margin: 0 auto;
   max-width: 1200px;
+  width: 100%;
   padding: 0 15px;
 }
 footer .copyright {
@@ -639,7 +646,7 @@ main .catalog-info-description {
 main .catalog {
   max-width: 1200px;
   width: 100%;
-  padding: 0 15px 0 15px;
+  padding: 0 15px;
   margin: 20px auto 0 auto;
 }
 main .catalog .catalog-item {
@@ -672,7 +679,7 @@ main .catalog-no-products {
 main .catalog-filters {
   max-width: 1200px;
   width: 100%;
-  padding: 0 15px 0 15px;
+  padding: 0 15px;
   margin: 0 auto;
   letter-spacing: 0.5px;
 }
@@ -870,7 +877,7 @@ main .bs-searchbox + .bs-actionsbox {
 main .brands-catalog {
   max-width: 1200px;
   width: 100%;
-  padding: 0 15px 0 15px;
+  padding: 0 15px;
   margin: 20px auto 0 auto;
   letter-spacing: 0.5px;
 }
@@ -926,5 +933,18 @@ main .brands-catalog-item:hover {
 .pagination .pagination-item:last-child .pagination-link {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+}
+.breadcrumbs {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 15px;
+  margin: 20px auto;
+  display: flex;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  color: #6c757d;
+}
+.breadcrumbs-arrow {
+  margin: 0 7px;
 }
 /*# sourceMappingURL=style.css.map */

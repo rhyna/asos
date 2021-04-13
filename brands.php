@@ -8,6 +8,8 @@ $error = '';
 
 $brandsByGender = [];
 
+$breadCrumbsData = [];
+
 $rootCategoryFlag = require_once __DIR__ . '/include/root-category-flag.php';
 
 require_once __DIR__ . '/include/header.php';
@@ -53,6 +55,20 @@ try {
 
     $brandsByGender = Product::getAllBrandsByGender($conn, $categoriesByGender);
 
+    $breadCrumbsData = [
+        [
+            'title' => $rootCategoryFlag,
+            'url' => "/$rootCategoryFlag.php",
+
+        ],
+        [
+            'title' => "All $rootCategoryFlag Brands",
+            'url' => "",
+        ],
+    ];
+
+    include_once __DIR__ . '/include/breadcrumbs.php';
+
 
 } catch (Throwable $e) {
     $error = $e->getMessage();
@@ -64,6 +80,7 @@ try {
     <p class="error-message"><?= $error ?></p>
 <?php else: ?>
     <main class="main-content">
+        <?php renderBreadcrumbs($breadCrumbsData); ?>
         <div class="brands-catalog">
             <h1 class="brands-catalog-title">
                 A-Z <?= $rootCategoryFlag ?> Brands

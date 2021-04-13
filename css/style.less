@@ -29,11 +29,15 @@ ul {
   margin-bottom: 0;
 }
 
-.error-message {
+.container1200px {
   max-width: 1200px;
   width: 100%;
-  padding: 0 15px 0 15px;
-  margin: 30px auto;
+  padding: 0 15px;
+}
+
+.error-message {
+  .container1200px();
+  margin: 20px auto;
   letter-spacing: 0.2px;
 }
 
@@ -63,9 +67,7 @@ ul {
 }
 
 .topbar__content {
-  max-width: 1200px;
-  width: 100%;
-  padding: 0 15px 0 15px;
+  .container1200px;
   display: flex;
   align-items: center;
 }
@@ -95,9 +97,7 @@ ul {
 }
 
 .subbar {
-  max-width: 1200px;
-  width: 100%;
-  padding: 0 15px;
+  .container1200px;
   list-style: none;
   margin-bottom: 0;
   font-size: 0;
@@ -173,9 +173,7 @@ ul {
     color: #666;
     letter-spacing: 0.5px;
     font-size: 14px;
-    box-shadow: 7px 7px 7px 0px rgba(108, 117, 125, 0.5);
-    -webkit-box-shadow: 7px 7px 7px 0px rgba(108, 117, 125, 0.5);
-    -moz-box-shadow: 7px 7px 7px 0px rgba(108, 117, 125, 0.5);
+    padding: 0 15px;
   }
 
   .subbar-dropdown-menu__inner {
@@ -403,10 +401,8 @@ ul {
 }
 
 .banner-bigtop {
-  max-width: 1200px;
-  margin: 0 auto 50px auto;
-  padding: 0 15px;
-  margin-top: 30px;
+  .container1200px();
+  margin: 30px auto 50px auto;
 
   img {
     width: 100%;
@@ -486,9 +482,8 @@ ul {
   }
 
   &__wrapper {
-    max-width: 1200px;
+    .container1200px();
     margin: 0 auto 30px auto;
-    padding: 0 15px;
   }
 
   &-title {
@@ -571,8 +566,7 @@ ul {
 
 .trending-brands {
   margin: 0 auto 50px auto;
-  max-width: 1200px;
-  padding: 0 15px;
+  .container1200px();
 
   &-title {
     text-align: center;
@@ -602,8 +596,7 @@ footer {
 
   .icons-bar {
     margin: 0 auto 50px auto;
-    max-width: 1200px;
-    padding: 0 15px;
+    .container1200px();
     display: flex;
     justify-content: center;
     align-items: center;
@@ -685,8 +678,7 @@ footer {
     &__content {
       display: flex;
       margin: 0 auto;
-      max-width: 1200px;
-      padding: 0 15px;
+      .container1200px();
     }
   }
 
@@ -748,9 +740,7 @@ main {
   }
 
   .catalog {
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 15px 0 15px;
+    .container1200px();
     margin: 20px auto 0 auto;
 
     .catalog-item {
@@ -787,9 +777,7 @@ main {
   }
 
   .catalog-filters {
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 15px 0 15px;
+    .container1200px();
     margin: 0 auto;
     letter-spacing: 0.5px;
 
@@ -1020,9 +1008,7 @@ main {
   }
 
   .brands-catalog {
-    max-width: 1200px;
-    width: 100%;
-    padding: 0 15px 0 15px;
+    .container1200px();
     margin: 20px auto 0 auto;
     letter-spacing: 0.5px;
 
@@ -1091,6 +1077,21 @@ main {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
+
+}
+
+.breadcrumbs {
+  .container1200px();
+  margin: 20px auto;
+  display: flex;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  color: #6c757d;
+
+  &-arrow {
+    margin: 0 7px;
+  }
+
 
 }
 

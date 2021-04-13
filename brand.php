@@ -24,6 +24,8 @@ $categoriesByBrandAndGender = [];
 
 $sizesByCategoryIds = [];
 
+$breadCrumbsData = [];
+
 $rootCategoryFlag = require_once __DIR__ . '/include/root-category-flag.php';
 
 require_once __DIR__ . '/include/header.php';
@@ -154,6 +156,24 @@ try {
 
     $productsByBrand = Product::getPageOfProductsFiltered($conn, $productQueryParameters, $join, $where, $order, $paginator->limit, $paginator->offset);
 
+    $breadCrumbsData = [
+        [
+            'title' => $rootCategoryFlag,
+            'url' => "/$rootCategoryFlag.php",
+
+        ],
+        [
+            'title' => "All $rootCategoryFlag Brands",
+            'url' => "/brands.php?gender=$rootCategoryFlag",
+        ],
+        [
+            'title' => $brand->title,
+            'url' => "/brand.php?gender=$rootCategoryFlag&id=$brandId",
+        ],
+    ];
+
+    include_once __DIR__ . '/include/breadcrumbs.php';
+
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
@@ -164,6 +184,7 @@ try {
     <p class="error-message"><?= $error ?></p>
 <?php else: ?>
     <main class="main-content">
+        <?php renderBreadcrumbs($breadCrumbsData); ?>
         <div class="catalog-info__wrapper">
             <div class="catalog-info">
                 <h1 class="catalog-info-title">

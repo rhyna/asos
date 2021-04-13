@@ -16,6 +16,8 @@ $brandsByCategory = [];
 
 $sizesByCategory = [];
 
+$breadCrumbsData = [];
+
 //if (!isset($_GET['page'])) {
 //    Url::redirect($_SERVER['REQUEST_URI'] . '&page=1');
 //
@@ -47,19 +49,7 @@ try {
         throw new Exception('Such a category does not exist');
     }
 
-    $parentCategoryId = Category::getParentCategory($conn, $categoryId);
-
-    $rootCategoryId = Category::getParentCategory($conn, $parentCategoryId);
-
-    $rootCategory = Category::getCategory($conn, $rootCategoryId);
-
-    if ((int)$rootCategory->rootWomenCategory === 1) {
-        $rootCategoryFlag = 'women';
-    }
-
-    if ((int)$rootCategory->rootMenCategory === 1) {
-        $rootCategoryFlag = 'men';
-    }
+    $rootCategoryFlag = require_once __DIR__ . '/include/root-category-flag.php';
 
     $brandsByCategory = Product::getBrandsByCategory($conn, $categoryId);
 
@@ -119,6 +109,20 @@ try {
 
     $productsByCategory = Product::getPageOfProductsFiltered($conn, $productQueryParameters, $join, $where, $order, $paginator->limit, $paginator->offset);
 
+    $breadCrumbsData = [
+        [
+            'title' => $rootCategoryFlag,
+            'url' => "/$rootCategoryFlag.php",
+
+        ],
+        [
+            'title' => $currentCategory->title,
+            'url' => "/category.php/?id=$categoryId",
+        ],
+    ];
+
+    include_once __DIR__ . '/include/breadcrumbs.php';
+
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
@@ -152,6 +156,7 @@ require_once __DIR__ . '/include/header.php';
     <p class="error-message"><?= $error ?></p>
 <?php else: ?>
     <main class="main-content">
+        <?php renderBreadcrumbs($breadCrumbsData); ?>
         <div class="catalog-info__wrapper">
             <div class="catalog-info">
                 <h1 class="catalog-info-title">

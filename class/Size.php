@@ -18,12 +18,12 @@ class Size
     {
         try {
             $sql = "select s.id, s.title, s.sort_order as sortOrder, cs.id 
-                as categorySizeId, cs.category_id as categoryId
-                from size s 
-                join category_size cs 
-                on s.id = cs.size_id 
-                where category_id = :category_id
-                order by sort_order asc";
+                    as categorySizeId, cs.category_id as categoryId
+                    from size s 
+                    join category_size cs 
+                    on s.id = cs.size_id 
+                    where category_id = :category_id
+                    order by sort_order asc";
 
             $statement = $conn->prepare($sql);
 

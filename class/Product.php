@@ -381,7 +381,7 @@ class Product
      * @return Product|null
      * @throws SystemErrorException
      */
-    static public function getProduct(PDO $conn, int $id): ?Product
+    public static function getProduct(PDO $conn, int $id): ?Product
     {
         try {
             $sql = "select p.id, 
@@ -559,7 +559,10 @@ class Product
     public function getProductSizes(PDO $conn): array
     {
         try {
-            $sql = "select size_id from product_size where product_id = :productId";
+            $sql = "select ps.size_id, s.title as size_title
+                    from product_size ps
+                    join size s on ps.size_id = s.id
+                    where ps.product_id = :productId";
 
             $statement = $conn->prepare($sql);
 
@@ -906,32 +909,51 @@ class Product
      * @return Product|null
      * @throws SystemErrorException
      */
-    public function getProductPage(PDO $conn, int $id): ?Product
-    {
-        try {
-            $sql = "select p.*, 
-                    ps.size_id as sizeId, 
-                    s.title as sizeTitle, 
-                    b.title as brandTitle 
-                    from product p
-                    join product_size ps on p.id = ps.product_id
-                    join brand b on p.brand_id = b.id
-                    join size s on ps.size_id = s.id
-                    where p.id = :id
-                    order by s.sort_order";
-
-            $statement = $conn->prepare($sql);
-
-            $statement->bindValue(':id', $id, PDO::PARAM_INT);
-
-            $statement->execute();
-
-            return $statement->fetchObject(Product::class) ?: null;
-
-        } catch (Throwable $e) {
-            throw new SystemErrorException();
-        }
-    }
-
+//    public static function getProductData(PDO $conn, int $id): ?Product
+//    {
+//        try {
+//            $sql = "select p.*,
+//                    b.title as brandTitle
+//                    from product p
+//                    join brand b on p.brand_id = b.id
+//                    where p.id = :id";
+//
+//            $statement = $conn->prepare($sql);
+//
+//            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+//
+//            $statement->execute();
+//
+//            return $result = $statement->fetchObject(Product::class) ?: null;
+//
+//
+////            $result = [];
+////
+////            $productSizes = [];
+////
+////            foreach ($productArrayBySizes as $product) {
+////                $sizes = [];
+////
+////                $sizes['id'] = $product->sizeId;
+////
+////                $sizes['title'] = $product->sizeTitle;
+////
+////                $productSizes[] = $sizes;
+////
+////                $result[$product->id] = $product;
+////
+////                $result[$product->id]->sizes = $productSizes;
+////
+////                unset($result[$product->id]->sizeId);
+////
+////                unset($result[$product->id]->sizeTitle);
+////            }
+////
+////            return $statement->fetchObject(Product::class) ?: null;
+//
+//        } catch (Throwable $e) {
+//            throw new SystemErrorException();
+//        }
+//    }
 
 }
