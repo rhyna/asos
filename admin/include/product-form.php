@@ -40,7 +40,7 @@ $images = $product->getImagesArray();
     <div class="form-group">
         <label for="price">Price, €</label>
         <input class="form-control" type="number" step='any' min='0.01' name="price" id="price"
-               value="<?= htmlspecialchars($product->price) ?>">
+               value="<?= htmlspecialchars(number_format($product->price, 2, '.', ' ')) ?>">
     </div>
     <div class="form-group">
         <label for="productDetails">Details</label>

@@ -512,7 +512,64 @@ function editSize(form) {
         })
 }
 
-$('.selectpicker').selectpicker();
+if ($('.selectpicker').length) {
+    $('.selectpicker').selectpicker();
+}
+
+$(document).ready(function () {
+    $('.product-gallery span').on('click', function () {
+        let largeImage = $(this).attr('data-full');
+
+        $('.product-gallery span.selected').removeClass('selected');
+
+        $(this).addClass('selected');
+
+        let fullImage = $('.product-gallery .full img');
+
+        fullImage.hide();
+
+        fullImage.attr('src', largeImage);
+
+        fullImage.fadeIn();
+    });
+
+    $('.product-gallery .full img').on('click', function () {
+        let modalImage = $(this).attr('src');
+
+        $.fancybox.open(modalImage);
+    });
+})
+
+if (ClassicEditor) {
+    ClassicEditor.create( document.querySelector( '#productDetails' ) )
+		.then( editor => {
+			window.productDetails = editor;
+		} )
+		.catch( err => {
+			console.error( err.stack );
+		} );
+
+	ClassicEditor.create( document.querySelector( '#lookAfterMe' ) )
+		.then( editor => {
+			window.lookAfterMe = editor;
+		} )
+		.catch( err => {
+			console.error( err.stack );
+		} );
+
+	ClassicEditor.create( document.querySelector( '#aboutMe' ) )
+		.then( editor => {
+			window.aboutMe = editor;
+		} )
+		.catch( err => {
+			console.error( err.stack );
+		} );
+}
+
+
+
+
+
 
 
 

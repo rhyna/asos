@@ -20,9 +20,11 @@ $config = require __DIR__ . "/categories-config.php";
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
     <link rel="stylesheet" href="/vendor/bootstrap-select/bootstrap-select.css">
-    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/vendor/font/Futura-PT/stylesheet.css">
     <link rel="stylesheet" href="/vendor/fontawesome-free-5.13.1-web/css/all.css">
+    <link rel="stylesheet" href="/vendor/product-gallery/stylesheet.css">
+    <link rel="stylesheet" href="/vendor/product-gallery/fancybox/jquery.fancybox.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <header>
@@ -40,7 +42,7 @@ $config = require __DIR__ . "/categories-config.php";
                 <?php foreach ($config as $configItem): ?>
                     <li class="topbar-nav-item
                         <?php if (strpos($_SERVER['REQUEST_URI'], '/' . $configItem['flag']) !== false
-                            || isset($rootCategoryFlag) && $rootCategoryFlag === $configItem['flag']): ?>
+                        || isset($rootCategoryFlag) && $rootCategoryFlag === $configItem['flag']): ?>
                             topbar-nav-item--active
                         <?php endif; ?>">
                         <a href="/<?= $configItem['flag'] ?>.php"><?= $configItem['flag'] ?></a>
@@ -162,7 +164,8 @@ $config = require __DIR__ . "/categories-config.php";
                                                    class="subbar-dropdown-item"><?= $brand['title'] ?></a>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
-                                        <a href="/brands.php?gender=<?= $configItem['flag'] ?>" class="subbar-dropdown-item subbar-dropdown-item--allbrands">All brands</a>
+                                        <a href="/brands.php?gender=<?= $configItem['flag'] ?>"
+                                           class="subbar-dropdown-item subbar-dropdown-item--allbrands">All brands</a>
                                     </div>
                                 </div>
                                 <div class="subbar-dropdown-menu subbar-dropdown-menu--preview">

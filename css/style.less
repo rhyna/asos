@@ -1091,7 +1091,88 @@ main {
   &-arrow {
     margin: 0 7px;
   }
-
-
 }
+
+.pswp__ui {
+  position: static;
+}
+
+.product {
+  max-width: 960px;
+  width: 100%;
+  padding: 0 15px;
+  margin: 20px auto;
+
+  &-top {
+    display: flex;
+  }
+
+  &-top-info {
+    margin-left: 25px;
+  }
+
+  &-title {
+    font-size: 20px;
+    letter-spacing: 1.3px;
+    margin-bottom: 15px;
+  }
+
+  &-price {
+    font-size: 20px;
+    letter-spacing: 2.8px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: #555;
+  }
+
+  &-sizes {
+    label {
+      font-size: 12px;
+      line-height: 1.7;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    select {
+      border-radius: 0;
+      border: 1px solid #ccc;
+
+      &:focus {
+        box-shadow: none;
+        border: 1px solid #ccc;
+      }
+    }
+  }
+
+  &-bottom {
+    margin-top: 30px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+
+    ul {
+      list-style: disc;
+      margin-left: 30px;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+
+    &-title {
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-size: 14px;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    &-col-info {
+      margin-bottom: 30px;
+    }
+  }
+}
+
+
 

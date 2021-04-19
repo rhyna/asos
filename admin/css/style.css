@@ -413,4 +413,12 @@ label {
 .entity-list-item .size-item__inner {
   cursor: pointer;
 }
+.ck-editor ul {
+  list-style: disc;
+  margin-left: 30px;
+}
+.ck-editor ol {
+  list-style: decimal;
+  margin-left: 30px;
+}
 /*# sourceMappingURL=style.css.map */

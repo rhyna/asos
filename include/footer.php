@@ -69,6 +69,7 @@
         crossorigin="anonymous">
 </script>
 <script src="/vendor/bootstrap-select/bootstrap-select.min.js"></script>
+<script src="/vendor/product-gallery/fancybox/jquery.fancybox.js"></script>
 <script src="/js/script.js"></script>
 </body>
 </html>

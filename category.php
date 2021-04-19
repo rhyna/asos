@@ -198,7 +198,7 @@ require_once __DIR__ . '/include/header.php';
                                     </div>
                                     <div class="catalog-item-price">
                                         <span>€</span>
-                                        <?= $product->price ?>
+                                        <?= number_format($product->price, 2, '.', ' ') ?>
                                     </div>
                                 </a>
                             </div>

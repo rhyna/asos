@@ -56,7 +56,7 @@ try {
                                         </a>
                                     </div>
                                     <div class="col"><?= $product->product_code ?></div>
-                                    <div class="col"><?= $product->price ?></div>
+                                    <div class="col"><?= number_format($product->price, 2, '.', ' ') ?></div>
                                     <div class="col"><?= $product->brand_title ?></div>
                                     <div class="col"><?= $product->category_title ?></div>
                                     <div class="col-1 entity-list-item-icons">
