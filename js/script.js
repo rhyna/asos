@@ -540,33 +540,59 @@ $(document).ready(function () {
     });
 })
 
-if (ClassicEditor) {
-    ClassicEditor.create( document.querySelector( '#productDetails' ) )
-		.then( editor => {
-			window.productDetails = editor;
-		} )
-		.catch( err => {
-			console.error( err.stack );
-		} );
+if (typeof ClassicEditor !== 'undefined') {
+    ClassicEditor.create(document.querySelector('#productDetails'))
+        .then(editor => {
+            window.productDetails = editor;
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
 
-	ClassicEditor.create( document.querySelector( '#lookAfterMe' ) )
-		.then( editor => {
-			window.lookAfterMe = editor;
-		} )
-		.catch( err => {
-			console.error( err.stack );
-		} );
+    ClassicEditor.create(document.querySelector('#lookAfterMe'))
+        .then(editor => {
+            window.lookAfterMe = editor;
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
 
-	ClassicEditor.create( document.querySelector( '#aboutMe' ) )
-		.then( editor => {
-			window.aboutMe = editor;
-		} )
-		.catch( err => {
-			console.error( err.stack );
-		} );
+    ClassicEditor.create(document.querySelector('#aboutMe'))
+        .then(editor => {
+            window.aboutMe = editor;
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
 }
 
+if ($('.text-collapsible--product').length) {
+    if ($('.text-collapsible--product').height() < 400) {
+        $('.text-collapsible-toggle').css('display', 'none');
 
+        $('.text-collapsible').addClass('text-collapsible--no-collapse');
+    }
+}
+
+if ($('.text-collapsible--catalog').length) {
+    if ($('.text-collapsible--catalog').height() < 70) {
+        $('.text-collapsible-toggle').css('display', 'none');
+
+        $('.text-collapsible').addClass('text-collapsible--no-collapse');
+    }
+}
+
+if ($('.text-collapsible-toggle').length) {
+    $('.text-collapsible-toggle').on('click', function () {
+        $('.text-collapsible').toggleClass('text-collapsible--expanded');
+
+        if ($('.text-collapsible').hasClass('text-collapsible--expanded')) {
+            $('.text-collapsible-toggle').html('View less');
+        } else {
+            $('.text-collapsible-toggle').html('View more');
+        }
+    });
+}
 
 
 

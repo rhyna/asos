@@ -16,6 +16,8 @@ $productImages = [];
 
 $sizesData = [];
 
+$brandDescription = '';
+
 try {
     $id = $_GET['id'] ?? null;
 
@@ -80,15 +82,19 @@ try {
 
     include_once __DIR__ . '/include/breadcrumbs.php';
 
+    $brand = Brand::getBrand($conn, $product->brand_id);
+
+    if ($rootCategoryFlag === 'men') {
+        $brandDescription = $brand->descriptionMen;
+    } elseif ($rootCategoryFlag === 'women') {
+        $brandDescription = $brand->descriptionWomen;
+    }
+
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
 
 require_once __DIR__ . '/include/header.php';
-
-//echo '<pre>';
-//var_dump($product);
-//exit;
 
 ?>
 
@@ -144,7 +150,7 @@ require_once __DIR__ . '/include/header.php';
                     </div>
                 </div>
             </div>
-            <div class="product-bottom">
+            <div class="product-bottom text-collapsible text-collapsible--product">
                 <div class="row">
                     <div class="product-bottom-col col">
                         <div class="product-bottom-col-info">
@@ -156,6 +162,10 @@ require_once __DIR__ . '/include/header.php';
                         <div class="product-bottom-col-info">
                             <h2 class="product-bottom-title">Product code</h2>
                             <?= html_entity_decode($product->product_code) ?>
+                        </div>
+                        <div class="product-bottom-col-info">
+                            <h2 class="product-bottom-title">Brand</h2>
+                            <?= html_entity_decode($brandDescription) ?>
                         </div>
                     </div>
                     <div class="product-bottom-col col">
@@ -170,6 +180,9 @@ require_once __DIR__ . '/include/header.php';
                     </div>
                 </div>
 
+            </div>
+            <div class="text-collapsible-toggle__wrapper">
+                <button class="text-collapsible-toggle text-collapsible-toggle--product">View more</button>
             </div>
         </div>
     </main>

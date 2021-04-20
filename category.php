@@ -163,9 +163,12 @@ require_once __DIR__ . '/include/header.php';
                     <?= $rootCategoryFlag ?>
                     <?= $currentCategory->title ?>
                 </h1>
-                <div class="catalog-info-description">
+                <div class="catalog-info-description text-collapsible text-collapsible--catalog">
                     <?= $currentCategory->description ?>
                 </div>
+                <?php if ($currentCategory->description): ?>
+                    <button class="text-collapsible-toggle">View more</button>
+                <?php endif; ?>
             </div>
         </div>
         <div class="catalog-filters__wrapper">

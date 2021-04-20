@@ -191,7 +191,7 @@ try {
                     <?= $rootCategoryFlag ?>
                     <?= $brand->title ?>
                 </h1>
-                <div class="catalog-info-description">
+                <div class="catalog-info-description text-collapsible text-collapsible--catalog">
                     <?php
                     if ($rootCategoryFlag === 'women') {
                         echo $brand->descriptionWomen;
@@ -200,6 +200,9 @@ try {
                     }
                     ?>
                 </div>
+                 <?php if ($brand->descriptionWomen || $brand->descriptionMen): ?>
+                    <button class="text-collapsible-toggle">View more</button>
+                <?php endif; ?>
             </div>
         </div>
         <div class="catalog-filters__wrapper">

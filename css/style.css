@@ -1012,4 +1012,50 @@ main .brands-catalog-item:hover {
 .product-bottom-col-info {
   margin-bottom: 30px;
 }
+.text-collapsible {
+  max-height: 70px;
+  overflow: hidden;
+  transition: max-height 1s ease-out;
+}
+.text-collapsible--product {
+  max-height: 400px;
+}
+.text-collapsible--expanded {
+  max-height: 100vh;
+}
+.text-collapsible:not(.text-collapsible--expanded)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0), #f8f8f8);
+}
+.text-collapsible--product:not(.text-collapsible--expanded)::after {
+  top: 70%;
+  background: linear-gradient(rgba(255, 255, 255, 0), #fff);
+}
+.text-collapsible--no-collapse:not(.text-collapsible--expanded)::after {
+  content: none;
+}
+.text-collapsible-toggle {
+  font-size: 16px;
+  background: transparent;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #2d2d2d;
+  margin-top: 10px;
+}
+.text-collapsible-toggle__wrapper {
+  text-align: center;
+}
+.text-collapsible-toggle--product {
+  padding: 5px 15px;
+  border: 2px solid #ccc;
+  margin: 15px 0;
+}
+.text-collapsible-toggle:focus {
+  outline: none;
+}
 /*# sourceMappingURL=style.css.map */
