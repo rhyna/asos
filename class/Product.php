@@ -744,7 +744,7 @@ class Product
             $sql = "select count(distinct p.id)
                     from product p
                     %s
-                    where %s";
+                    %s";
 
             $newSQL = sprintf($sql, $join, $where);
 
@@ -761,6 +761,7 @@ class Product
 
     /**
      * @param PDO $conn
+     * @param string $select
      * @param array $parameters
      * @param string $join
      * @param string $where
@@ -770,19 +771,19 @@ class Product
      * @return array
      * @throws SystemErrorException
      */
-    public static function getPageOfProductsFiltered(PDO $conn, array $parameters, string $join, string $where, string $order, int $limit, int $offset): array
+    public static function getPageOfProductsFiltered(PDO $conn, string $select, array $parameters, string $join, string $where, string $order, int $limit, int $offset): array
     {
         try {
-            $sql = "select p.id, p.title, p.price, p.image
+            $sql = "select %s
                     from product p
                     %s
-                    where %s 
+                    %s 
                     group by p.id 
                     %s 
                     limit :limit 
                     offset :offset";
 
-            $newSQL = sprintf($sql, $join, $where, $order);
+            $newSQL = sprintf($sql, $select, $join, $where, $order);
 
             $statement = self::prepareFilterStatement($conn, $parameters, $newSQL);
 

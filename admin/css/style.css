@@ -421,4 +421,38 @@ label {
   list-style: decimal;
   margin-left: 30px;
 }
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.pagination-link {
+  color: #2d2d2d;
+}
+.pagination-link:hover {
+  color: #2d2d2d;
+  background-color: #ddd;
+  border-color: #ddd;
+}
+.pagination-link:focus {
+  box-shadow: none;
+}
+.pagination-link.active {
+  color: #007bff;
+}
+.pagination .pagination-item {
+  letter-spacing: 0.5px;
+}
+.pagination .pagination-item:first-child .pagination-link {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.pagination .pagination-item:last-child .pagination-link {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.catalog-filters {
+  margin: 40px 0;
+}
 /*# sourceMappingURL=style.css.map */

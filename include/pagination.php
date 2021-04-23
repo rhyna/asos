@@ -1,17 +1,34 @@
 <?php
+$token = '&';
+
 $data = parse_url($_SERVER['REQUEST_URI']);
 
 $path = $data['path'];
 
-$query = $data['query'];
+$query = '';
+
+if (isset($data['query'])) {
+    $query = $data['query'];
+}
 
 parse_str($query, $queryArray);
+
+$onlyPageQuery = count($queryArray) === 1 && array_key_exists('page', $queryArray);
+
+if (!$query || $onlyPageQuery) {
+    $token = '?';
+}
 
 unset($queryArray['page']);
 
 $newQuery = http_build_query($queryArray);
 
-$baseUrl = $path . '?' . $newQuery;
+$baseUrl = $path;
+
+if ($newQuery) {
+    $baseUrl = $path . '?' . $newQuery;
+}
+
 ?>
 
 <nav class="pagination-container">

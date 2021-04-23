@@ -30,9 +30,9 @@ if (!isset($_GET['page']) || (string)(int)$_GET['page'] !== $_GET['page']) {
 
 $page = (int)$_GET['page'];
 
-$token = '&';
-
 $rootCategoryFlag = '';
+
+$parentCategoryId = 0;
 
 try {
     $categoryId = $_GET['id'] ?? null;
@@ -99,7 +99,9 @@ try {
         }
     }
 
-    $where = implode(' and ', $whereClauses);
+    $select = 'p.*';
+
+    $where = 'where ' . implode(' and ', $whereClauses);
 
     $join = implode(' join ', $joinClauses);
 
@@ -107,7 +109,7 @@ try {
 
     $paginator = new Paginator($page, 2, $totalProductsInCategory);
 
-    $productsByCategory = Product::getPageOfProductsFiltered($conn, $productQueryParameters, $join, $where, $order, $paginator->limit, $paginator->offset);
+    $productsByCategory = Product::getPageOfProductsFiltered($conn, $select, $productQueryParameters, $join, $where, $order, $paginator->limit, $paginator->offset);
 
     $breadCrumbsData = [
         [
@@ -127,7 +129,17 @@ try {
     $error = $e->getMessage();
 }
 
+$catalogEntityType = 'category';
+
+$entityId = $categoryId;
+
+$catalogEntity = $currentCategory;
+
+$productsByEntity = $productsByCategory;
+
 $brandsData = [];
+
+$sizesData = [];
 
 foreach ($brandsByCategory as $item) {
     $data = [];
@@ -137,8 +149,6 @@ foreach ($brandsByCategory as $item) {
 
     $brandsData[] = $data;
 }
-
-$sizesData = [];
 
 foreach ($sizesByCategory as $item) {
     $data = [];
@@ -151,79 +161,9 @@ foreach ($sizesByCategory as $item) {
 
 require_once __DIR__ . '/include/header.php';
 
-?>
-<?php if ($error): ?>
-    <p class="error-message"><?= $error ?></p>
-<?php else: ?>
-    <main class="main-content">
-        <?php renderBreadcrumbs($breadCrumbsData); ?>
-        <div class="catalog-info__wrapper">
-            <div class="catalog-info">
-                <h1 class="catalog-info-title">
-                    <?= $rootCategoryFlag ?>
-                    <?= $currentCategory->title ?>
-                </h1>
-                <div class="catalog-info-description text-collapsible text-collapsible--catalog">
-                    <?= $currentCategory->description ?>
-                </div>
-                <?php if ($currentCategory->description): ?>
-                    <button class="text-collapsible-toggle">View more</button>
-                <?php endif; ?>
-            </div>
-        </div>
-        <div class="catalog-filters__wrapper">
-            <div class="catalog-filters">
-                <form>
-                    <input type="hidden" name="id" value="<?= $categoryId ?>">
-                    <?php
-                    renderSortSelectPicker();
+require_once  __DIR__ . '/include/catalog.php';
 
-                    renderSelectPicker($brandsData, 'brands', 'Brand', []);
-
-                    renderSelectPicker($sizesData, 'sizes', 'Size', []);
-                    ?>
-                    <button type="submit" class="catalog-filters-submit">Filter</button>
-                </form>
-            </div>
-        </div>
-        <div class="catalog">
-            <div class="row">
-                <?php if ($productsByCategory): ?>
-                    <?php foreach ($productsByCategory as $product): ?>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <div class="catalog-item">
-                                <a href="/product.php?id=<?= $product->id ?>">
-                                    <div class="catalog-item-image"
-                                         style="background-image: url('<?= $product->image ?>')">
-                                    </div>
-                                    <div class="catalog-item-title">
-                                        <?= $product->title ?>
-                                    </div>
-                                    <div class="catalog-item-price">
-                                        <span>€</span>
-                                        <?= number_format($product->price, 2, '.', ' ') ?>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="col">
-                        <p class="catalog-no-products">No products matching the selected criteria</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </main>
-<?php endif; ?>
-
-<?php
-if ($productsByCategory) {
-    require_once __DIR__ . '/include/pagination.php';
-}
-?>
-
-<?php require_once __DIR__ . '/include/footer.php'; ?>
+require_once __DIR__ . '/include/footer.php';
 
 
 

@@ -487,3 +487,50 @@ label {
     margin-left: 30px;
   }
 }
+
+.pagination {
+  &-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  &-link {
+    color: #2d2d2d;
+
+    &:hover {
+      color: #2d2d2d;
+      background-color: #ddd;
+      border-color: #ddd;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+
+    &.active {
+      color: #007bff;
+    }
+  }
+
+  .pagination-item {
+    letter-spacing: 0.5px;
+  }
+
+  .pagination-item:first-child .pagination-link {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .pagination-item:last-child .pagination-link {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+}
+
+.catalog-filters {
+   margin: 40px 0;
+}
+

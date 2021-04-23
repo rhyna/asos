@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var PDO $conn ;
+ */
+
 $rootCategoryFlag = '';
 
 if (isset($_GET['gender']) && $_GET['gender'] === 'men') {

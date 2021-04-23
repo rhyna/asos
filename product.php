@@ -4,8 +4,6 @@ require_once __DIR__ . '/include/init.php';
 
 $conn = require_once __DIR__ . '/include/db.php';
 
-require_once __DIR__ . '/include/selectpicker.php';
-
 $error = '';
 
 $breadCrumbsData = [];
