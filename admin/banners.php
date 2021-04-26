@@ -3,14 +3,24 @@ require_once __DIR__ . '/include/header.php';
 
 $error = null;
 
-$banners = [];
+$pageOfBanners = [];
+
+if (!isset($_GET['page']) || (string)(int)$_GET['page'] !== $_GET['page']) {
+    $_GET['page'] = 1;
+}
+
+$page = (int)$_GET['page'];
 
 try {
     Auth::ifNotLoggedIn();
 
-    $banners = Banner::getAllBanners($conn);
-
     $entityType = 'banner';
+
+    $totalBanners = Banner::countBanners($conn);
+
+    $paginator = new Paginator($page, 10, $totalBanners);
+
+    $pageOfBanners = Banner::getBannerPage($conn, $paginator->limit, $paginator->offset);
 
 } catch (Throwable $e) {
     $error = $e->getMessage();
@@ -35,46 +45,51 @@ try {
                     </div>
                 </div>
                 <div class="entity-list-content">
-                    <?php foreach ($banners as $banner) : ?>
-                    <div class="entity-list-item__wrapper">
-                        <div class="entity-list-item">
-                            <div class="row entity-list-item__row">
-                                <div class="col-3">
-                                    <div class="entity-list-item-image"
-                                         style="background-image: url('<?= $banner->image ?>')">
-                                        <a href="/admin/edit-banner.php?id=<?= $banner->id ?>"></a>
+                    <?php foreach ($pageOfBanners as $banner) : ?>
+                        <div class="entity-list-item__wrapper">
+                            <div class="entity-list-item">
+                                <div class="row entity-list-item__row">
+                                    <div class="col-3">
+                                        <div class="entity-list-item-image"
+                                             style="background-image: url('<?= $banner->image ?>')">
+                                            <a href="/admin/edit-banner.php?id=<?= $banner->id ?>"></a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <a href="/admin/edit-banner.php?id=<?= $banner->id ?>">
-                                        <?= $banner->aliasTitle ?: 'NO PLACE (Banner not posted yet)' ?>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <?= $banner->title ?>
-                                </div>
-                                <div class="col">
-                                    <?= $banner->link ?>
-                                </div>
-                                <div class="col-1 entity-list-item-icons">
-                                    <div class="entity-list-item-icons__inner">
+                                    <div class="col">
                                         <a href="/admin/edit-banner.php?id=<?= $banner->id ?>">
-                                            <i class="far fa-edit"></i>
+                                            <?= $banner->aliasTitle ?: 'NO PLACE (Banner not posted yet)' ?>
                                         </a>
-                                        <button type="button" data-toggle="modal"
-                                                data-target="#deleteEntity"
-                                                onclick="passEntityId(<?= $banner->id ?>)">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
+                                    </div>
+                                    <div class="col">
+                                        <?= $banner->title ?>
+                                    </div>
+                                    <div class="col">
+                                        <?= $banner->link ?>
+                                    </div>
+                                    <div class="col-1 entity-list-item-icons">
+                                        <div class="entity-list-item-icons__inner">
+                                            <a href="/admin/edit-banner.php?id=<?= $banner->id ?>">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                            <button type="button" data-toggle="modal"
+                                                    data-target="#deleteEntity"
+                                                    onclick="passEntityId(<?= $banner->id ?>)">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <?php endforeach; ?>
                 </div>
             </div>
         <?php endif; ?>
+        <?php
+        if ($pageOfBanners) {
+            require_once __DIR__ . '/../include/pagination.php';
+        }
+        ?>
     </div>
 </main>
 

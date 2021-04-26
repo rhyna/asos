@@ -183,7 +183,7 @@ class Banner
      * @param array $bannersByGender
      * @return array
      */
-     public static function getHotCategoryBigBannersByGender(PDO $conn, array $bannersByGender): array
+    public static function getHotCategoryBigBannersByGender(PDO $conn, array $bannersByGender): array
     {
         //$banners = self::getFormattedBannersByGender($conn, $gender);
 
@@ -599,6 +599,52 @@ class Banner
             $statement->bindValue(':id', $id, PDO::PARAM_STR);
 
             $statement->execute();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @return int
+     * @throws SystemErrorException
+     */
+    public static function countBanners(PDO $conn): int
+    {
+        try {
+            $sql = "select count(*) from banner";
+
+            $result = $conn->query($sql);
+
+            return (int)$result->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getBannerPage(PDO $conn, int $limit, int $offset): array
+    {
+        try {
+            $sql = self::baseSQL() . " limit :limit offset :offset";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+
+            $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_CLASS, Banner::class);
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
