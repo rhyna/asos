@@ -1,3 +1,11 @@
+<?php
+/**
+ * @var Product $product
+ * @var string $mode
+ */
+
+?>
+
 <div class="modal fade add-brand-modal" id="addBrand" tabindex="-1" role="dialog"
      aria-labelledby="addBrandLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -37,7 +45,7 @@
                     <?php endif; ?>
                     <button
                             type="submit"
-                            class="btn btn-primary primary-button add-brand-modal-submit">
+                            class="btn btn-primary primary-button entity-modal-submit">
                         Submit
                     </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

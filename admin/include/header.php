@@ -5,7 +5,6 @@ require_once __DIR__ . "/../../include/init.php";
 $conn = require_once __DIR__ . "/../../include/db.php";
 
 $headerNav = [
-    'Home' => '/admin/',
     'Banners' => '/admin/banners.php',
     'Brands' => '/admin/brands.php',
     'Categories' => '/admin/categories.php',

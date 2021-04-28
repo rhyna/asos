@@ -1,3 +1,11 @@
+<?php
+
+/**
+ * @var string $entityType
+ */
+
+?>
+
 <div class="modal fade delete-entity-modal" id="deleteEntity" tabindex="-1" role="dialog"
      aria-labelledby="deleteEntityLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

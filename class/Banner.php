@@ -14,7 +14,10 @@ class Banner
     public $validationError;
     public $imageValidationErrors = [];
 
-    private static function baseSQL()
+    /**
+     * @return string
+     */
+    private static function baseSQL(): string
     {
         return $sql = 'select 
                     banner.id, 
@@ -101,8 +104,6 @@ class Banner
      */
     public static function getFormattedBannersByGender(PDO $conn, array $bannersByGender): array
     {
-        //$banners = self::getAllBannersByGender($conn, $gender);
-
         $formattedBanners = [];
 
         foreach ($bannersByGender as $banner) {
@@ -114,35 +115,11 @@ class Banner
 
     /**
      * @param PDO $conn
-     * @return array
-     * @throws Exception
-     */
-    public static function getHotCategorySmallBanners(PDO $conn): array
-    {
-        $banners = self::getFormattedBanners($conn);
-
-        $hotCategorySmallBanners = [];
-
-        foreach ($banners as $key => $banner) {
-            $isHotCategorySmall = strpos($key, 'hot_category_small');
-
-            if ($isHotCategorySmall !== false) {
-                $hotCategorySmallBanners[$banner->alias] = $banner;
-            };
-        }
-
-        return $hotCategorySmallBanners;
-    }
-
-    /**
-     * @param PDO $conn
      * @param array $bannersByGender
      * @return array
      */
     public static function getHotCategorySmallBannersByGender(PDO $conn, array $bannersByGender): array
     {
-        //$banners = self::getFormattedBannersByGender($conn, $gender);
-
         $hotCategorySmallBanners = [];
 
         foreach ($bannersByGender as $key => $banner) {
@@ -154,28 +131,6 @@ class Banner
         }
 
         return $hotCategorySmallBanners;
-    }
-
-    /**
-     * @param PDO $conn
-     * @return array
-     * @throws Exception
-     */
-    public static function getHotCategoryBigBanners(PDO $conn): array
-    {
-        $banners = self::getFormattedBanners($conn);
-
-        $hotCategoryBigBanners = [];
-
-        foreach ($banners as $key => $banner) {
-            $isHotCategoryBig = strpos($key, 'hot_category_big');
-
-            if ($isHotCategoryBig !== false) {
-                $hotCategoryBigBanners[$banner->alias] = $banner;
-            };
-        }
-
-        return $hotCategoryBigBanners;
     }
 
     /**
@@ -185,8 +140,6 @@ class Banner
      */
     public static function getHotCategoryBigBannersByGender(PDO $conn, array $bannersByGender): array
     {
-        //$banners = self::getFormattedBannersByGender($conn, $gender);
-
         $hotCategoryBigBanners = [];
 
         foreach ($bannersByGender as $key => $banner) {
@@ -202,35 +155,11 @@ class Banner
 
     /**
      * @param PDO $conn
-     * @return array
-     * @throws Exception
-     */
-    public static function getTrendingBrands(PDO $conn): array
-    {
-        $banners = self::getFormattedBanners($conn);
-
-        $trendingBrands = [];
-
-        foreach ($banners as $key => $banner) {
-            $isTrendingBrand = strpos($key, 'trending_brand');
-
-            if ($isTrendingBrand !== false) {
-                $trendingBrands[$banner->alias] = $banner;
-            };
-        }
-
-        return $trendingBrands;
-    }
-
-    /**
-     * @param PDO $conn
      * @param array $bannersByGender
      * @return array
      */
     public static function getTrendingBrandsByGender(PDO $conn, array $bannersByGender): array
     {
-        //$banners = self::getFormattedBannersByGender($conn, $gender);
-
         $trendingBrands = [];
 
         foreach ($bannersByGender as $key => $banner) {

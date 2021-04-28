@@ -504,4 +504,99 @@ class Category
         }
     }
 
+    /**
+     * @param PDO $conn
+     * @param array $parameters
+     * @param string $where
+     * @return int
+     * @throws SystemErrorException
+     */
+    public static function countCategoriesFiltered(PDO $conn, array $parameters, string $where): int
+    {
+        try {
+            $sql = "select count(distinct c.id)
+                    from category c
+                    where c.root_men_category = 0 
+                    and c.root_women_category = 0 
+                    %s";
+
+            $newSQL = sprintf($sql, $where);
+
+            $statement = self::prepareFilterStatement($conn, $parameters, $newSQL);
+
+            $statement->execute();
+
+            return $statement->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $parameters
+     * @param string $newSQL
+     * @return PDOStatement
+     */
+    private static function prepareFilterStatement(PDO $conn, array $parameters, string $newSQL): PDOStatement
+    {
+        $statement = $conn->prepare($newSQL);
+
+        foreach ($parameters as $key => $value) {
+            if ($key === 'ids') {
+                $statement->bindValue(':ids', implode(',', $value), PDO::PARAM_STR);
+            }
+        }
+
+        return $statement;
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $parameters
+     * @param string $where
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getPageOfCategoriesFiltered(PDO $conn, array $parameters, string $where, int $limit, int $offset): array
+    {
+        try {
+            $sql = "select distinct c.id, 
+                    c.title, 
+                    c.parent_id as parentId, 
+                    pc.title as parentTitle,
+                    pc1.title as rootCategory 
+                    from category c 
+                    left join category pc 
+                    on pc.id = c.parent_id 
+                    left join category pc1 
+                    on pc1.id = pc.parent_id
+                    where c.root_men_category = 0 
+                    and c.root_women_category = 0 
+                    %s
+                    order by c.parent_id asc, 
+                    c.id asc
+                    limit :limit 
+                    offset :offset";
+
+            $newSQL = sprintf($sql, $where);
+
+            $statement = self::prepareFilterStatement($conn, $parameters, $newSQL);
+
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+
+            $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_CLASS, Category::class);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
 }

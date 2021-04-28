@@ -3,7 +3,6 @@
 
 class Auth
 {
-
     static public function login(): void
     {
         session_regenerate_id();

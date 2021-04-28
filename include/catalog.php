@@ -86,9 +86,16 @@
                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                             <div class="catalog-item">
                                 <a href="/product.php?id=<?= $product->id ?>">
-                                    <div class="catalog-item-image"
-                                         style="background-image: url('<?= $product->image ?>')">
-                                    </div>
+                                    <?php if ($product->image): ?>
+                                        <div class="catalog-item-image"
+                                             style="background-image: url('<?= $product->image ?>')">
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="catalog-item-image catalog-item-image--noimage">
+                                            No image
+                                        </div>
+                                    <?php endif; ?>
+
                                     <div class="catalog-item-title">
                                         <?= $product->title ?>
                                     </div>

@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @var Paginator $paginator;
+ */
+
 $token = '&';
 
 $data = parse_url($_SERVER['REQUEST_URI']);

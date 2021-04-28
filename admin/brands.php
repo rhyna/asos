@@ -1,17 +1,31 @@
 <?php
 
+/**
+ * @var PDO $conn;
+ */
+
 require_once __DIR__ . '/include/header.php';
 
 $error = null;
 
-$brands = [];
+$pageOfBrands = [];
+
+if (!isset($_GET['page']) || (string)(int)$_GET['page'] !== $_GET['page']) {
+    $_GET['page'] = 1;
+}
+
+$page = (int)$_GET['page'];
 
 try {
     Auth::ifNotLoggedIn();
 
-    $brands = Brand::getAllBrands($conn);
-
     $entityType = 'brand';
+
+    $totalBrands = Brand::countBrands($conn);
+
+    $paginator = new Paginator($page, 10, $totalBrands);
+
+    $pageOfBrands = Brand::getBrandPage($conn, $paginator->limit, $paginator->offset);
 
 } catch (Throwable $e) {
     $error = $e->getMessage();
@@ -34,7 +48,7 @@ try {
                     </div>
                 </div>
                 <div class="entity-list-content">
-                    <?php foreach ($brands as $brand) : ?>
+                    <?php foreach ($pageOfBrands as $brand) : ?>
                     <div class="entity-list-item__wrapper">
                         <div class="entity-list-item">
                             <div class="row entity-list-item__row">
@@ -62,6 +76,11 @@ try {
                 </div>
             </div>
         <?php endif; ?>
+        <?php
+        if ($pageOfBrands) {
+            require_once __DIR__ . '/../include/pagination.php';
+        }
+        ?>
     </div>
 </main>
 

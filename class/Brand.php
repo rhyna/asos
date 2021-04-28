@@ -9,6 +9,18 @@ class Brand
     public $descriptionMen;
 
     /**
+     * @return string
+     */
+    static private function baseSQL(): string
+    {
+        return "select title, 
+                id, 
+                description_women as descriptionWomen, 
+                description_men as descriptionMen
+                from brand";
+    }
+
+    /**
      * @param PDO $conn
      * @return array
      * @throws SystemErrorException
@@ -16,12 +28,7 @@ class Brand
     static public function getAllBrands(PDO $conn): array
     {
         try {
-            $sql = "select title, 
-                    id, 
-                    description_women as descriptionWomen, 
-                    description_men as descriptionMen
-                    from brand 
-                    order by title asc";
+            $sql = self::baseSQL() . " order by title asc";
 
             $result = $conn->query($sql);
 
@@ -34,13 +41,17 @@ class Brand
 
     /**
      * @param PDO $conn
-     * @param int $id
+     * @param int|null $id
      * @return Brand|null
      * @throws SystemErrorException
      */
-    static public function getBrand(PDO $conn, int $id): ?Brand
+    static public function getBrand(PDO $conn, ?int $id): ?Brand
     {
         try {
+            if ($id === null) {
+                return null;
+            }
+
             $sql = "select title, 
                     id, 
                     description_women as descriptionWomen, 
@@ -180,6 +191,52 @@ class Brand
             $statement->execute();
 
             return (int)$statement->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @return int
+     * @throws SystemErrorException
+     */
+    public static function countBrands(PDO $conn): int
+    {
+        try {
+            $sql = "select count(*) from brand";
+
+            $result = $conn->query($sql);
+
+            return (int)$result->fetchColumn();
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getBrandPage(PDO $conn, int $limit, int $offset): array
+    {
+        try {
+            $sql = self::baseSQL() . " order by title asc limit :limit offset :offset";
+
+            $statement = $conn->prepare($sql);
+
+            $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+
+            $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_CLASS, Brand::class);
 
         } catch (Throwable $e) {
             throw new SystemErrorException();

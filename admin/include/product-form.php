@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @var Product $product;
+ * @var string $mode;
+ * @var array $categoryLevels;
+ * @var array $allBrands;
+ */
+
 $images = $product->getImagesArray();
 
 ?>

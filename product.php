@@ -53,12 +53,12 @@ try {
 
     $productTitle = $product->title;
 
-    $productImages = [
+    $productImages = array_filter([
         $product->image,
         $product->image_1,
         $product->image_2,
         $product->image_3
-    ];
+    ]);
 
     $rootCategoryFlag = require_once __DIR__ . '/include/root-category-flag.php';
 
@@ -82,10 +82,15 @@ try {
 
     $brand = Brand::getBrand($conn, $product->brand_id);
 
-    if ($rootCategoryFlag === 'men') {
-        $brandDescription = $brand->descriptionMen;
-    } elseif ($rootCategoryFlag === 'women') {
-        $brandDescription = $brand->descriptionWomen;
+    if (!$brand) {
+        $brandDescription = '';
+    } else {
+        if ($rootCategoryFlag === 'men') {
+            $brandDescription = $brand->descriptionMen;
+
+        } elseif ($rootCategoryFlag === 'women') {
+            $brandDescription = $brand->descriptionWomen;
+        }
     }
 
 } catch (Throwable $e) {

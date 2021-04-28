@@ -393,7 +393,7 @@ label {
 .product-size-item label {
   margin-bottom: 0;
 }
-.add-brand-modal-submit {
+.entity-modal-submit {
   margin-right: 10px;
 }
 .add-size-button {
@@ -454,5 +454,10 @@ label {
 }
 .catalog-filters {
   margin: 40px 0;
+}
+.catalog-no-products {
+  font-style: italic;
+  font-weight: lighter;
+  font-size: 16px;
 }
 /*# sourceMappingURL=style.css.map */

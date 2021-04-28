@@ -660,6 +660,15 @@ main .catalog .catalog-item-image {
   background-size: cover;
   margin-bottom: 10px;
 }
+main .catalog .catalog-item-image--noimage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  color: #ddd;
+  letter-spacing: 0.5px;
+}
 main .catalog .catalog-item-title {
   font-size: 14px;
   letter-spacing: 0.5px;
@@ -774,6 +783,7 @@ main .brands-catalog-item:hover {
 }
 .product-top-info {
   margin-left: 25px;
+  flex-grow: 1;
 }
 .product-title {
   font-size: 20px;

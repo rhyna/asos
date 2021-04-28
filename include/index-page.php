@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @var PDO $conn;
+ * @var string $gender;
+ */
+
 require_once __DIR__ . '/header.php';
 
 $error = '';

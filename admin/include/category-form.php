@@ -1,3 +1,12 @@
+<?php
+
+/**
+ * @var Category $category;
+ * @var array $categories;
+ */
+
+?>
+
 <?php if ($category->validationErrors): ?>
     <ul class="entity-form-errors">
         <?php foreach ($category->validationErrors as $error): ?>

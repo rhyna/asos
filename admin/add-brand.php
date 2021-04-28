@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var PDO $conn;
+ */
+
 require_once __DIR__ . '/include/header.php';
 
 $error = null;

@@ -1,3 +1,12 @@
+<?php
+
+/**
+ * @var Banner $banner;
+ * @var array $bannerPlaces;
+ */
+
+?>
+
 <?php if ($banner->validationError): ?>
     <ul class="entity-form-errors">
         <li><?= $banner->validationError ?></li>

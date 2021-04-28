@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var PDO $conn;
+ */
+
 $womenRootCategoryId = Category::getRootWomenCategoryId($conn);
 
 $menRootCategoryId = Category::getRootMenCategoryId($conn);

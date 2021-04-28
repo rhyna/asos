@@ -1,12 +1,14 @@
 <?php
 
+/**
+ * @var PDO $conn;
+ */
+
 require_once __DIR__ . '/include/header.php';
 
 $error = null;
 
 $data = parse_url($_SERVER['REQUEST_URI']);
-
-$allProducts = [];
 
 $brandsData = [];
 
@@ -51,18 +53,11 @@ try {
         }
     }
 
-    $allProducts = Product::getAllProducts($conn);
-
     $entityType = 'product';
 
     $productQueryParameters = [];
 
     $whereClauses = [];
-
-    $joinClauses = [
-        'brand b on b.id = p.brand_id',
-        'category c on c.id = p.category_id'
-    ];
 
     $order = '';
 
@@ -101,7 +96,7 @@ try {
         $where = '';
     }
 
-    $join = 'join ' . implode(' join ', $joinClauses);
+    $join = 'left join brand b on b.id = p.brand_id join category c on c.id = p.category_id';
 
     $totalProducts = Product::countProductsFiltered($conn, $productQueryParameters, $join, $where);
 
@@ -146,66 +141,70 @@ try {
                             'optGroups' => $category
                         ];
 
-                        renderSelectPicker($category, 'categories', $gender . ' categories' , $settings);
+                        renderSelectPicker($category, 'categories', $gender . ' categories', $settings);
                     }
 
                     ?>
                     <button type="submit" class="catalog-filters-submit">Filter</button>
                 </form>
             </div>
-            <div class="entity-list entity-list--product">
-                <div class="entity-list-header">
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col-3">Title</div>
-                        <div class="col">Product Code</div>
-                        <div class="col">Price</div>
-                        <div class="col">Brand</div>
-                        <div class="col">Category</div>
-                        <div class="col-1"></div>
+            <?php if ($pageOfProducts): ?>
+                <div class="entity-list entity-list--product">
+                    <div class="entity-list-header">
+                        <div class="row">
+                            <div class="col"></div>
+                            <div class="col-3">Title</div>
+                            <div class="col">Product Code</div>
+                            <div class="col">Price</div>
+                            <div class="col">Brand</div>
+                            <div class="col">Category</div>
+                            <div class="col-1"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="entity-list-content">
-                    <?php foreach ($pageOfProducts as $product) : ?>
-                        <div class="entity-list-item__wrapper">
-                            <div class="entity-list-item">
-                                <div class="row entity-list-item__row">
-                                    <div class="col">
-                                        <div class="entity-list-item-image"
-                                             style="background-image: url('<?= $product->image ?>')">
-                                            <a href="/admin/edit-product.php?id=<?= $product->id ?>"></a>
+                    <div class="entity-list-content">
+                        <?php foreach ($pageOfProducts as $product) : ?>
+                            <div class="entity-list-item__wrapper">
+                                <div class="entity-list-item">
+                                    <div class="row entity-list-item__row">
+                                        <div class="col">
+                                            <div class="entity-list-item-image"
+                                                 style="background-image: url('<?= $product->image ?>')">
+                                                <a href="/admin/edit-product.php?id=<?= $product->id ?>"></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <a href="/product.php?id=<?= $product->id ?>">
-                                            <?= $product->title ?>
-                                        </a>
-                                    </div>
-                                    <div class="col"><?= $product->product_code ?></div>
-                                    <div class="col"><?= number_format($product->price, 2, '.', ' ') ?></div>
-                                    <div class="col"><?= $product->brand_title ?></div>
-                                    <div class="col"><?= $product->category_title ?></div>
-                                    <div class="col-1 entity-list-item-icons">
-                                        <div class="entity-list-item-icons__inner">
-                                            <a href="/admin/edit-product.php?id=<?= $product->id ?>">
-                                                <i class="far fa-edit"></i>
+                                        <div class="col-3">
+                                            <a href="/product.php?id=<?= $product->id ?>">
+                                                <?= $product->title ?>
                                             </a>
-                                            <button type="button" data-toggle="modal"
-                                                    data-target="#deleteEntity"
-                                                    onclick="passEntityId(<?= $product->id ?>)">
-                                                <i class="far fa-trash-alt"></i>
-                                            </button>
+                                        </div>
+                                        <div class="col"><?= $product->product_code ?></div>
+                                        <div class="col"><?= number_format($product->price, 2, '.', ' ') ?></div>
+                                        <div class="col"><?= $product->brand_title ?></div>
+                                        <div class="col"><?= $product->category_title ?></div>
+                                        <div class="col-1 entity-list-item-icons">
+                                            <div class="entity-list-item-icons__inner">
+                                                <a href="/admin/edit-product.php?id=<?= $product->id ?>">
+                                                    <i class="far fa-edit"></i>
+                                                </a>
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#deleteEntity"
+                                                        onclick="passEntityId(<?= $product->id ?>)">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
+            <?php else: ?>
+                <p class="catalog-no-products">No products matching the selected criteria</p>
+            <?php endif; ?>
         <?php endif; ?>
         <?php
-        if ($allProducts) {
+        if ($pageOfProducts) {
             require_once __DIR__ . '/../include/pagination.php';
         }
         ?>

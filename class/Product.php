@@ -22,30 +22,6 @@ class Product
 
     /**
      * @param PDO $conn
-     * @return array
-     * @throws SystemErrorException
-     */
-    static public function getAllProducts(PDO $conn): array
-    {
-        try {
-            $sql = "select p.*,
-                    b.title as brand_title,
-                    c.title as category_title
-                    from product p
-                    left join brand b on b.id = p.brand_id
-                    left join category c on c.id = p.category_id";
-
-            $result = $conn->query($sql);
-
-            return $result->fetchAll(PDO::FETCH_CLASS, Product::class);
-
-        } catch (Throwable $e) {
-            throw new SystemErrorException();
-        }
-    }
-
-    /**
-     * @param PDO $conn
      * @return bool
      * @throws SystemErrorException
      */

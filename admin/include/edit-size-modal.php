@@ -27,7 +27,7 @@
                         <input type="number" class="form-control" name="sortOrder--editSize" id="sortOrder--editSize">
                     </div>
                     <button type="submit"
-                            class="btn btn-primary primary-button add-brand-modal-submit">
+                            class="btn btn-primary primary-button entity-modal-submit">
                         Submit
                     </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

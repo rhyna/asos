@@ -3,7 +3,11 @@
 require_once __DIR__ . "/../include/init.php";
 
 if ($_SERVER['REQUEST_URI'] === '/admin/index.php') {
-    Url::redirect('/admin/');
+    Url::redirect('/admin/products.php');
+}
+
+if ($_SERVER['REQUEST_URI'] === '/admin/') {
+    Url::redirect('/admin/products.php');
 }
 
 require_once __DIR__ . '/include/header.php';

@@ -1,17 +1,70 @@
 <?php
 
+/**
+ * @var PDO $conn;
+ */
+
 require_once __DIR__ . '/include/header.php';
 
 $error = null;
 
-$categories = [];
+$pageOfCategories = [];
+
+$categoriesByGender = [];
+
+require_once __DIR__ . '/../include/selectpicker.php';
+
+if (!isset($_GET['page']) || (string)(int)$_GET['page'] !== $_GET['page']) {
+    $_GET['page'] = 1;
+}
+
+$page = (int)$_GET['page'];
 
 try {
     Auth::ifNotLoggedIn();
 
     $categories = Category::getCategoryLevels($conn);
 
+    $categoriesByGender = [];
+
+    foreach ($categories as $gender) {
+        foreach ($gender['child_category1'] as $category) {
+            $data = [];
+
+            $data['id'] = $category['id'];
+
+            $data['title'] = $category['title'];
+
+            $categoriesByGender[$gender['title']][] = $data;
+        }
+    }
+
     $entityType = 'category';
+
+    $productQueryParameters = [];
+
+    $whereClauses = [];
+
+    if (isset($_GET['ids'])) {
+        $ids = $_GET['ids'];
+
+        $productQueryParameters['ids'] = $ids;
+
+        $whereClauses[] = 'FIND_IN_SET(c.parent_id, :ids)';
+
+    }
+
+    $where = 'and ' . implode(' and ', $whereClauses);
+
+    if (!$whereClauses) {
+        $where = '';
+    }
+
+    $totalCategories = Category::countCategoriesFiltered($conn, $productQueryParameters, $where);
+
+    $paginator = new Paginator($page, 10, $totalCategories);
+
+    $pageOfCategories = Category::getPageOfCategoriesFiltered($conn, $productQueryParameters, $where, $paginator->limit, $paginator->offset);
 
 } catch (Throwable $e) {
     $error = $e->getMessage();
@@ -26,34 +79,45 @@ try {
         <?php else: ?>
             <a href="/admin/add-category.php" class="add-entity">Add category</a>
             <h1 class="entity-list-title">Categories</h1>
-            <div class="entity-list entity-list--category">
-                <div class="entity-list-header">
-                    <div class="row">
-                        <div class="col">Title</div>
-                        <div class="col">Parent Category</div>
-                        <div class="col-1"></div>
+            <div class="catalog-filters">
+                <form>
+                    <?php
+                    foreach ($categoriesByGender as $gender => $category) {
+                        renderSelectPicker($category, 'ids', $gender . ' categories', '');
+                    }
+
+                    ?>
+                    <button type="submit" class="catalog-filters-submit">Filter</button>
+                </form>
+            </div>
+            <?php if ($pageOfCategories): ?>
+                <div class="entity-list entity-list--category">
+                    <div class="entity-list-header">
+                        <div class="row">
+                            <div class="col">Title</div>
+                            <div class="col">Parent Category</div>
+                            <div class="col-1"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="entity-list-content">
-                    <?php foreach ($categories as $rootCategory): ?>
-                        <?php foreach ($rootCategory['child_category1'] as $firstLevelCategory): ?>
+                    <div class="entity-list-content">
+                        <?php foreach ($pageOfCategories as $category): ?>
                             <div class="entity-list-item__wrapper">
                                 <div class="entity-list-item">
                                     <div class="row entity-list-item__row">
                                         <div class="col">
-                                            <a href="/admin/edit-category.php?id=<?= $firstLevelCategory['id'] ?>">
-                                                <?= $firstLevelCategory['title'] ?>
+                                            <a href="/admin/edit-category.php?id=<?= $category->id ?>">
+                                                <?= $category->title ?>
                                             </a>
                                         </div>
-                                        <div class="col"><?= $firstLevelCategory['parent_title'] ?></div>
+                                        <div class="col"><?= $category->rootCategory ?> <?= $category->parentTitle ?></div>
                                         <div class="col-1 entity-list-item-icons">
                                             <div class="entity-list-item-icons__inner">
-                                                <a href="/admin/edit-category.php?id=<?= $firstLevelCategory['id'] ?>">
+                                                <a href="/admin/edit-category.php?id=<?= $category->id ?>">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" data-toggle="modal"
                                                         data-target="#deleteEntity"
-                                                        onclick="passEntityId(<?= $firstLevelCategory['id'] ?>)">
+                                                        onclick="passEntityId(<?= $category->id ?>)">
                                                     <i class="far fa-trash-alt"></i>
                                                 </button>
                                             </div>
@@ -61,40 +125,18 @@ try {
                                     </div>
                                 </div>
                             </div>
-
                         <?php endforeach; ?>
-                        <?php foreach ($rootCategory['child_category1'] as $firstLevelCategory): ?>
-                            <?php foreach ($firstLevelCategory['child_category2'] as $secondLevelCategory): ?>
-                                <div class="entity-list-item__wrapper">
-                                    <div class="entity-list-item">
-                                        <div class="row entity-list-item__row">
-                                            <div class="col">
-                                                <a href="/admin/edit-category.php?id=<?= $secondLevelCategory['id'] ?>">
-                                                    <?= $secondLevelCategory['title'] ?>
-                                                </a>
-                                            </div>
-                                            <div class="col"><?= $firstLevelCategory['parent_title'] ?> <?= $secondLevelCategory['parent_title'] ?></div>
-                                            <div class="col-1 entity-list-item-icons">
-                                                <div class="entity-list-item-icons__inner">
-                                                    <a href="/admin/edit-category.php?id=<?= $secondLevelCategory['id'] ?>">
-                                                        <i class="far fa-edit"></i>
-                                                    </a>
-                                                    <button type="button" data-toggle="modal"
-                                                            data-target="#deleteEntity"
-                                                            onclick="passEntityId(<?= $secondLevelCategory['id'] ?>)">
-                                                        <i class="far fa-trash-alt"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endforeach; ?>
-                    <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
+            <?php else: ?>
+                <p class="catalog-no-products">No products matching the selected criteria</p>
+            <?php endif; ?>
         <?php endif; ?>
+        <?php
+        if ($pageOfCategories) {
+            require_once __DIR__ . '/../include/pagination.php';
+        }
+        ?>
     </div>
 </main>
 
