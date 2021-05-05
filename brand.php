@@ -152,7 +152,7 @@ try {
 
     $totalProductsByBrand = Product::countProductsFiltered($conn, $productQueryParameters, $join, $where);
 
-    $paginator = new Paginator($page, 2, $totalProductsByBrand);
+    $paginator = new Paginator($page, 10, $totalProductsByBrand);
 
     $productsByBrand = Product::getPageOfProductsFiltered($conn, $select, $productQueryParameters, $join, $where, $order, $paginator->limit, $paginator->offset);
 
