@@ -6,6 +6,10 @@ require_once __DIR__ . '/class/Database.php';
 
 require_once __DIR__ . '/class/SearchWord.php';
 
+require_once __DIR__ . '/class/ProductSearchWord.php';
+
+require_once __DIR__ . '/class/Product.php';
+
 require_once __DIR__ . '/vendor/markfullmer/porter2/src/Porter2.php';
 
 use markfullmer\porter2\Porter2;
@@ -13,7 +17,7 @@ use markfullmer\porter2\Porter2;
 $conn = require_once __DIR__ . '/include/db.php';
 
 
-function getSearchData($conn)
+function getSearchDataForAllProducts($conn)
 {
     $sql = "select p.id, 
             p.title,
@@ -59,7 +63,7 @@ function normalizeString($string)
 
 }
 
-$raw = getSearchData($conn);
+$raw = getSearchDataForAllProducts($conn);
 
 $processed = [];
 
@@ -109,11 +113,50 @@ foreach ($wordsByProduct as $productId => $item) {
 
         $word->word = $string;
 
-        $word->createSearchWord($conn);
+        //$word->createSearchWord($conn);
 
-        $word->createProductWord($conn, $productId);
+        $productSearchWord = new ProductSearchWord();
+
+        $productSearchWord->productId = $productId;
+
+        $productSearchWord->wordId = $word->id;
+
+        //$productSearchWord->createProductSearchWord($conn);
     }
 }
+
+/***/
+
+$test = "women's face creams";
+
+// удалять дубли? - в итоге будет два раза dress
+
+$test = normalizeString($test);
+
+$array = [];
+
+foreach ($test as $item) {
+    $item = Porter2::stem($item);
+
+    $array[] = $item;
+}
+
+$searchWordsData = SearchWord::getSearchWords($conn, $array);
+
+$wordIds = [];
+
+foreach ($searchWordsData as $searchWord) {
+    $wordIds[] = $searchWord->id;
+}
+
+echo '<pre>';
+var_dump(Product::getProductsBySearchWords($conn, $wordIds));
+exit;
+
+
+
+
+
 
 
 

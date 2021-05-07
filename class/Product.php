@@ -879,4 +879,35 @@ class Product
             throw new SystemErrorException();
         }
     }
+
+    /**
+     * @param PDO $conn
+     * @param array $wordIds
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getProductsBySearchWords(PDO $conn, array $wordIds): array
+    {
+
+        try {
+            $sql = "select p.* from product p";
+
+            foreach ($wordIds as $i => $wordId) {
+                $sql .= " join product_searchwords t$i on t$i.product_id = p.id and t$i.word_id = :wordId$i";
+            }
+
+            $statement = $conn->prepare($sql);
+
+            foreach ($wordIds as $i => $wordId) {
+                $statement->bindValue(":wordId$i", $wordId, PDO::PARAM_INT);
+            }
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
 }

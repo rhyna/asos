@@ -61,58 +61,16 @@ class SearchWord
 
     }
 
-    /**
-     * @param PDO $conn
-     * @param int $productId
-     * @throws SystemErrorException
-     */
-    public function createProductWord(PDO $conn, int $productId): void
+    public static function getSearchWords($conn, $words)
     {
-        try {
-            if (!self::wordInProductExists($conn, $productId)) {
-                $sql = "insert into product_searchwords 
-                (product_id, word_id)
-                values (:productId, :wordId)";
+        $sql = "select id from search_words where FIND_IN_SET(word, :words)";
 
-                $statement = $conn->prepare($sql);
+        $statement = $conn->prepare($sql);
 
-                $statement->bindValue(':productId', $productId, PDO::PARAM_INT);
+        $statement->bindValue(':words', implode(',', $words), PDO::PARAM_STR);
 
-                $statement->bindValue(':wordId', $this->id, PDO::PARAM_INT);
+        $statement->execute();
 
-                $statement->execute();
-            }
-
-        } catch (Throwable $e) {
-            throw new SystemErrorException();
-        }
-    }
-
-    /**
-     * @param PDO $conn
-     * @param int $productId
-     * @return int
-     * @throws SystemErrorException
-     */
-    public function wordInProductExists(PDO $conn, int $productId): int
-    {
-        try {
-            $sql = "select count(*) from product_searchwords 
-                where product_id = :productId
-                and word_id = :wordId";
-
-            $statement = $conn->prepare($sql);
-
-            $statement->bindValue(':productId', $productId, PDO::PARAM_INT);
-
-            $statement->bindValue(':wordId', $this->id, PDO::PARAM_INT);
-
-            $statement->execute();
-
-            return (int)$statement->fetchColumn();
-
-        } catch (Throwable $e) {
-            throw new SystemErrorException();
-        }
+        return $statement->fetchAll(PDO::FETCH_CLASS, SearchWord::class);
     }
 }
