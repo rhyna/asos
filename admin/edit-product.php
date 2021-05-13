@@ -1,10 +1,12 @@
 <?php
 
 /**
- * @var PDO $conn;
+ * @var PDO $conn ;
  */
 
 require_once __DIR__ . '/include/header.php';
+
+require_once __DIR__ . '/search.php';
 
 $mode = 'edit-product';
 
@@ -44,10 +46,16 @@ try {
 
         if ($product->updateProduct($conn, $_FILES)) {
             if ($product->updateProductImage($conn, $_FILES)) {
-                if ($product->updateProductSizes($conn)) {
-                    Url::redirect("/admin/products.php");
-                }
+                $product->updateProductSizes($conn);
             }
+
+            $searchWords = $product->getSearchDataForProduct($conn);
+
+            $wordsByProduct = prepareSearchWordsByProduct($searchWords);
+
+            ProductSearchWord::deleteProductSearchWords($conn, (int)$product->id);
+
+            createSearchWordsForProduct($conn, $wordsByProduct);
         }
     }
 

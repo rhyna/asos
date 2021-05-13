@@ -35,6 +35,7 @@ try {
 
     foreach ($images as $imageArray) {
         foreach ($imageArray as $key => $value) {
+
             if ($product->$key == '') {
                 continue;
             }
@@ -42,7 +43,7 @@ try {
             $imageToDelete = $product->$key;
 
             try {
-                unlink($ROOT . $imageToDelete . 111);
+                unlink($ROOT . $imageToDelete);
 
             } catch (Throwable $e) {
                 throw new SystemErrorException();

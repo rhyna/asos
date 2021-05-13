@@ -1,21 +1,20 @@
 <?php
 
-require_once __DIR__ . "/config.php";
+require_once __DIR__ . "/../config.php";
 
-require_once __DIR__ . '/class/Database.php';
+require_once __DIR__ . '/../class/Database.php';
 
-require_once __DIR__ . '/class/SearchWord.php';
+require_once __DIR__ . '/../class/SearchWord.php';
 
-require_once __DIR__ . '/class/ProductSearchWord.php';
+require_once __DIR__ . '/../class/ProductSearchWord.php';
 
-require_once __DIR__ . '/class/Product.php';
+require_once __DIR__ . '/../class/Product.php';
 
-require_once __DIR__ . '/vendor/markfullmer/porter2/src/Porter2.php';
+require_once __DIR__ . '/../vendor/markfullmer/porter2/src/Porter2.php';
 
 use markfullmer\porter2\Porter2;
 
-$conn = require_once __DIR__ . '/include/db.php';
-
+$conn = require_once __DIR__ . '/../include/db.php';
 
 function getSearchDataForAllProducts($conn)
 {
@@ -127,7 +126,12 @@ foreach ($wordsByProduct as $productId => $item) {
 
 /***/
 
-$test = "women's face creams";
+$test = "women dress";
+//$test = "men dress";
+//$test = "dbbdb dress";
+//$test = "dbbdb";
+//$test = "dress dbbdb women";
+
 
 // удалять дубли? - в итоге будет два раза dress
 
@@ -141,17 +145,31 @@ foreach ($test as $item) {
     $array[] = $item;
 }
 
-$searchWordsData = SearchWord::getSearchWords($conn, $array);
+$wordIds = SearchWord::getSearchWords($conn, $array);
 
-$wordIds = [];
+//$wordIds = [];
+//
+//foreach ($searchWordsData as $searchWord) {
+//    $wordIds[] = $searchWord;
+//}
 
-foreach ($searchWordsData as $searchWord) {
-    $wordIds[] = $searchWord->id;
+$searchResult = Product::getProductsBySearchWords($conn, $wordIds);
+
+if (!$searchResult) {
+    echo 'No products matching the search query have been found';
+} else {
+    echo '<pre>';
+    var_dump($searchResult);
 }
 
-echo '<pre>';
-var_dump(Product::getProductsBySearchWords($conn, $wordIds));
-exit;
+// переделала метод getSearchWords, на каждое слово в цикле - отдельный sql запрос,
+// если id не найден, возвращается 0
+// в прошлом варианте записи метода, если id не найден, он не добавлялся в массив,
+// и поиск шел по остальным найденным словам
+// мб есть варианты лучше
+// нормальная ли логика работы со словами при edit и add
+
+
 
 
 

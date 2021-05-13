@@ -6,6 +6,8 @@
 
 require_once __DIR__ . '/include/header.php';
 
+require_once __DIR__ . '/search.php';
+
 $error = null;
 
 try {
@@ -25,9 +27,15 @@ try {
         if ($product->createProduct($conn, $_FILES)) {
             if ($product->updateProductImage($conn, $_FILES)) {
                 if ($product->updateProductSizes($conn)) {
-                    Url::redirect("/admin/products.php");
+                    //Url::redirect("/admin/products.php");
                 }
-            };
+            }
+
+            $searchWords = $product->getSearchDataForProduct($conn);
+
+            $wordsByProduct = prepareSearchWordsByProduct($searchWords);
+
+            createSearchWordsForProduct($conn, $wordsByProduct);
         }
     }
 

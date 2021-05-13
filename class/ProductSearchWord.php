@@ -62,80 +62,25 @@ class ProductSearchWord
         }
     }
 
-    public static function testF($conn, $wordIds)
+    /**
+     * @param PDO $conn
+     * @param int $productId
+     * @throws SystemErrorException
+     */
+    public static function deleteProductSearchWords(PDO $conn, int $productId)
     {
-        if (!$wordIds) {
-            return null;
-        }
-
-        if (count($wordIds) === 1) {
-            foreach ($wordIds as $wordId) {
-                $sql = "select p.*
-                        from product_searchwords t0
-                        join product p on p.id = t0.product_id
-                        where t0.word_id = :firstWordId";
-
-                $statement = $conn->prepare($sql);
-
-                $statement->bindValue(':firstWordId', $wordId, PDO::PARAM_INT);
-
-                $statement->execute();
-
-                return $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
-            }
-
-        } else {
-            $firstId = 0;
-
-            $join = '';
-
-            $bindData = [];
-
-            foreach ($wordIds as $wordId) {
-                $firstId = $wordId;
-
-                break;
-            }
-
-            foreach ($wordIds as $i => $wordId) {
-                if ($i === 0) {
-                    $join = '';
-
-                } else {
-                    $join .= " join product_searchwords t$i on t0.product_id = t$i.product_id and t$i.word_id = :wordId$i";
-
-                    $data = [];
-
-                    $data['wordId'] = $wordId;
-
-                    $data['index'] = $i;
-
-                    $bindData[] = $data;
-                }
-            }
-
-            $sql = "select p.*
-                    from product_searchwords t0
-                    join product p on p.id = t0.product_id
-                    $join
-                    where t0.word_id = :firstWordId";
+        try {
+            $sql = "delete from product_searchwords 
+                    where product_id = :productId";
 
             $statement = $conn->prepare($sql);
 
-            $statement->bindValue(':firstWordId', $firstId, PDO::PARAM_INT);
-
-            foreach ($bindData as $data) {
-                $index = $data['index'];
-
-                $statement->bindValue(":wordId$index", $data['wordId'], PDO::PARAM_INT);
-            }
+            $statement->bindValue(':productId', $productId, PDO::PARAM_INT);
 
             $statement->execute();
 
-            return $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
         }
     }
-
-
-
 }

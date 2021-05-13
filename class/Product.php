@@ -321,7 +321,7 @@ class Product
                 }
 
                 if ($previousImage) {
-                    unlink($ROOT . $previousImage . 111);
+                    unlink($ROOT . $previousImage);
                 }
             }
 
@@ -888,23 +888,58 @@ class Product
      */
     public static function getProductsBySearchWords(PDO $conn, array $wordIds): array
     {
-
         try {
-            $sql = "select p.* from product p";
+            $result = [];
 
-            foreach ($wordIds as $i => $wordId) {
-                $sql .= " join product_searchwords t$i on t$i.product_id = p.id and t$i.word_id = :wordId$i";
+            if ($wordIds) {
+                $sql = "select p.* from product p";
+
+                foreach ($wordIds as $i => $wordId) {
+                    $sql .= " join product_searchwords t$i on t$i.product_id = p.id and t$i.word_id = :wordId$i";
+                }
+
+                $statement = $conn->prepare($sql);
+
+                foreach ($wordIds as $i => $wordId) {
+                    $statement->bindValue(":wordId$i", $wordId, PDO::PARAM_INT);
+                }
+
+                $statement->execute();
+
+                $result = $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
             }
+
+            return $result;
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    public function getSearchDataForProduct(PDO $conn): array
+    {
+        try {
+            $sql = "select p.id, 
+            p.title,
+            p.product_details as productDetails,
+            c.title as categoryTitle,
+            pc.title as parentTitle,
+            pc1.title as rootTitle,
+            b.title as brandTitle
+            from product p
+            left join brand b on b.id = p.brand_id
+            join category c on c.id = p.category_id
+            join category pc on c.parent_id = pc.id
+            join category pc1 on pc.parent_id = pc1.id
+            where p.id = :id";
 
             $statement = $conn->prepare($sql);
 
-            foreach ($wordIds as $i => $wordId) {
-                $statement->bindValue(":wordId$i", $wordId, PDO::PARAM_INT);
-            }
+            $statement->bindValue(":id", $this->id, PDO::PARAM_INT);
 
             $statement->execute();
 
-            return $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
