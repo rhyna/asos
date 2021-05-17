@@ -70,33 +70,33 @@ class SearchWord
     public static function getSearchWords(PDO $conn, array $words): array
     {
         try {
-            $result = [];
-
-            foreach ($words as $word) {
-                $sql = "select id from search_words where word = :word";
-
-                $statement = $conn->prepare($sql);
-
-                $statement->bindValue(':word', $word, PDO::PARAM_STR);
-
-                $statement->execute();
-
-                $fetchedResult = (int)$statement->fetchColumn();
-
-                $result[] = $fetchedResult;
-            }
-
-//        $sql = "select id from search_words where FIND_IN_SET(word, :words)";
+//            $result = [];
 //
-//        $statement = $conn->prepare($sql);
+//            foreach ($words as $word) {
+//                $sql = "select id from search_words where word = :word";
 //
-//        $statement->bindValue(':words', implode(',', $words), PDO::PARAM_STR);
+//                $statement = $conn->prepare($sql);
 //
-//        $statement->execute();
+//                $statement->bindValue(':word', $word, PDO::PARAM_STR);
 //
-//        return $statement->fetchAll(PDO::FETCH_CLASS, SearchWord::class);
+//                $statement->execute();
+//
+//                $fetchedResult = (int)$statement->fetchColumn();
+//
+//                $result[] = $fetchedResult;
+//            }
 
-            return $result;
+        $sql = "select id from search_words where FIND_IN_SET(word, :words)";
+
+        $statement = $conn->prepare($sql);
+
+        $statement->bindValue(':words', implode(',', $words), PDO::PARAM_STR);
+
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+//            return $result;
 
         } catch (Throwable $e) {
             throw new SystemErrorException();

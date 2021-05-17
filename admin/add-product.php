@@ -1,12 +1,10 @@
 <?php
 
 /**
- * @var PDO $conn;
+ * @var PDO $conn ;
  */
 
 require_once __DIR__ . '/include/header.php';
-
-require_once __DIR__ . '/search.php';
 
 $error = null;
 
@@ -24,18 +22,20 @@ try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $product->fillProductObject($_POST);
 
-        if ($product->createProduct($conn, $_FILES)) {
-            if ($product->updateProductImage($conn, $_FILES)) {
-                if ($product->updateProductSizes($conn)) {
-                    //Url::redirect("/admin/products.php");
-                }
-            }
+        if ($product->validateProductAndImage($conn, $_FILES)) {
+            $product->createProduct($conn);
+
+            $product->updateProductImage($conn, $_FILES);
+
+            $product->updateProductSizes($conn);
 
             $searchWords = $product->getSearchDataForProduct($conn);
 
-            $wordsByProduct = prepareSearchWordsByProduct($searchWords);
+            $wordsByProduct = Search::prepareSearchWordsByProduct($searchWords);
 
-            createSearchWordsForProduct($conn, $wordsByProduct);
+            Search::createSearchWordsForProduct($conn, $wordsByProduct);
+
+            Url::redirect("/admin/edit-product.php?id=$product->id");
         }
     }
 

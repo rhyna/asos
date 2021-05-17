@@ -294,12 +294,14 @@ ul {
 .search input:focus {
   outline: none;
 }
-.search .search-icon {
+.search .search-button {
   position: absolute;
-  font-size: 16px;
   right: 15px;
-  top: 10px;
-  cursor: pointer;
+  top: 8px;
+  background-color: transparent;
+}
+.search .search-button i {
+  font-size: 16px;
 }
 .banner-fullwidth {
   background-repeat: no-repeat;
@@ -880,5 +882,20 @@ main .brands-catalog-item:hover {
 }
 .text-collapsible-toggle:focus {
   outline: none;
+}
+.search-query {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 15px;
+  margin: 20px auto 35px auto;
+  letter-spacing: 0.5px;
+  font-size: 16px;
+  text-align: center;
+}
+.search-query-title {
+  font-style: italic;
+  font-size: 20px;
+  margin-right: 5px;
+  line-height: normal;
 }
 /*# sourceMappingURL=style.css.map */

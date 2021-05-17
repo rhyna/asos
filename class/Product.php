@@ -91,13 +91,31 @@ class Product
      * @return bool
      * @throws SystemErrorException
      */
-    public function createProduct(PDO $conn, array $data): bool
+    public function validateProductAndImage(PDO $conn, array $data): bool
     {
         try {
             $isImageValidated = $this->checkImageValidation($data);
 
             if ($this->validateProduct($conn) && $isImageValidated) {
-                $sql = "insert into product 
+                return true;
+
+            } else {
+                return false;
+            }
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+    }
+
+    /**
+     * @param PDO $conn
+     * @throws SystemErrorException
+     */
+    public function createProduct(PDO $conn): void
+    {
+        try {
+            $sql = "insert into product 
                         (category_id, 
                         brand_id,
                         product_code,
@@ -115,19 +133,13 @@ class Product
                         :lookAfterMe,
                         :aboutMe)";
 
-                $statement = $conn->prepare($sql);
+            $statement = $conn->prepare($sql);
 
-                $this->fillProductStatement($statement);
+            $this->fillProductStatement($statement);
 
-                $statement->execute();
+            $statement->execute();
 
-                $this->id = $conn->lastInsertId();
-
-                return true;
-
-            } else {
-                return false;
-            }
+            $this->id = $conn->lastInsertId();
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
@@ -231,10 +243,9 @@ class Product
      * @param PDO $conn
      * @param string $currentImage
      * @param string $imagePath
-     * @return bool
      * @throws SystemErrorException
      */
-    private function setProductImage(PDO $conn, string $currentImage, string $imagePath): bool
+    private function setProductImage(PDO $conn, string $currentImage, string $imagePath): void
     {
         try {
             $imageColNames = [
@@ -254,11 +265,9 @@ class Product
 
                     $statement->bindValue(':image', $imagePath, $imagePath === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
 
-                    return $statement->execute();
+                    $statement->execute();
                 }
             }
-
-            return false;
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
@@ -268,16 +277,11 @@ class Product
     /**
      * @param PDO $conn
      * @param array $data
-     * @return bool
      * @throws SystemErrorException
      */
-    public function updateProductImage(PDO $conn, array $data): bool
+    public function updateProductImage(PDO $conn, array $data): void
     {
         try {
-            if ($this->imageErrors || $this->productErrors) {
-                return false;
-            }
-
             global $ROOT;
 
             $imagesArray = [
@@ -306,26 +310,18 @@ class Product
                     $imageUploadDestination = '/upload/product/' . $base . '-' . $i . '.' . $pathInfo['extension'];
                 }
 
-                $isFileMoved = move_uploaded_file($image['tmp_name'], $ROOT . $imageUploadDestination);
-
-                if (!$isFileMoved) {
-                    return false;
-                }
+                move_uploaded_file($image['tmp_name'], $ROOT . $imageUploadDestination);
 
                 $previousImage = $this->$imageKey; // $imageKey - variable variable
 
                 $this->$imageKey = $imageUploadDestination;
 
-                if (!$this->setProductImage($conn, $imageKey, $imageUploadDestination)) {
-                    return false;
-                }
+                $this->setProductImage($conn, $imageKey, $imageUploadDestination);
 
                 if ($previousImage) {
                     unlink($ROOT . $previousImage);
                 }
             }
-
-            return true;
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
@@ -395,17 +391,12 @@ class Product
 
     /**
      * @param PDO $conn
-     * @param array $data
-     * @return bool
      * @throws SystemErrorException
      */
-    public function updateProduct(PDO $conn, array $data): bool
+    public function updateProduct(PDO $conn): void
     {
         try {
-            $isImageValidated = $this->checkImageValidation($data);
-
-            if ($this->validateProduct($conn) && $isImageValidated) {
-                $sql = "update product 
+            $sql = "update product 
                         set category_id = :categoryId,
                         brand_id = :brandId,
                         product_code = :productCode,
@@ -416,16 +407,13 @@ class Product
                         about_me = :aboutMe
                         where id = :id";
 
-                $statement = $conn->prepare($sql);
+            $statement = $conn->prepare($sql);
 
-                $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+            $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 
-                $this->fillProductStatement($statement);
+            $this->fillProductStatement($statement);
 
-                return $statement->execute();
-            } else {
-                return false;
-            }
+            $statement->execute();
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
@@ -503,28 +491,30 @@ class Product
 
     /**
      * @param PDO $conn
-     * @return bool
      * @throws SystemErrorException
      */
-    public function updateProductSizes(PDO $conn): bool
+    public function updateProductSizes(PDO $conn): void
     {
-        $this->deleteProductSizes($conn);
+        try {
+            $this->deleteProductSizes($conn);
 
-        foreach ($this->sizes as $sizeId) {
-            $sql = "insert into product_size 
+            foreach ($this->sizes as $sizeId) {
+                $sql = "insert into product_size 
                     (product_id, size_id) 
                     values (:productId, :sizeId)";
 
-            $statement = $conn->prepare($sql);
+                $statement = $conn->prepare($sql);
 
-            $statement->bindValue(':productId', $this->id, PDO::PARAM_INT);
+                $statement->bindValue(':productId', $this->id, PDO::PARAM_INT);
 
-            $statement->bindValue(':sizeId', $sizeId, PDO::PARAM_INT);
+                $statement->bindValue(':sizeId', $sizeId, PDO::PARAM_INT);
 
-            $statement->execute();
+                $statement->execute();
+            }
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
         }
-
-        return true;
     }
 
     /**
@@ -700,6 +690,10 @@ class Product
 
             if ($key === 'categoryIds') {
                 $statement->bindValue(':categoryIds', implode(',', $value), PDO::PARAM_STR);
+            }
+
+            if ($key === 'productIds') {
+                $statement->bindValue(':productIds', implode(',', $value), PDO::PARAM_STR);
             }
         }
 
@@ -892,17 +886,9 @@ class Product
             $result = [];
 
             if ($wordIds) {
-                $sql = "select p.* from product p";
+                $sql = self::prepareProductsBySearchWordsSql($wordIds);
 
-                foreach ($wordIds as $i => $wordId) {
-                    $sql .= " join product_searchwords t$i on t$i.product_id = p.id and t$i.word_id = :wordId$i";
-                }
-
-                $statement = $conn->prepare($sql);
-
-                foreach ($wordIds as $i => $wordId) {
-                    $statement->bindValue(":wordId$i", $wordId, PDO::PARAM_INT);
-                }
+                $statement = self::prepareProductsBySearchWordsStatement($conn, $sql, $wordIds);
 
                 $statement->execute();
 
@@ -916,6 +902,78 @@ class Product
         }
     }
 
+    /**
+     * @param array $wordIds
+     * @return string
+     */
+    private static function prepareProductsBySearchWordsSql(array $wordIds): string
+    {
+        $sql = "select p.* from product p";
+
+        foreach ($wordIds as $i => $wordId) {
+            $sql .= " join product_searchwords t$i on t$i.product_id = p.id and t$i.word_id = :wordId$i";
+        }
+
+        return $sql;
+    }
+
+    /**
+     * @param PDO $conn
+     * @param string $sql
+     * @param array $wordIds
+     * @return PDOStatement
+     */
+    private static function prepareProductsBySearchWordsStatement(PDO $conn, string $sql, array $wordIds): PDOStatement
+    {
+        $statement = $conn->prepare($sql);
+
+        foreach ($wordIds as $i => $wordId) {
+            $statement->bindValue(":wordId$i", $wordId, PDO::PARAM_INT);
+        }
+
+        return $statement;
+    }
+
+    /**
+     * @param PDO $conn
+     * @param array $wordIds
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     * @throws SystemErrorException
+     */
+    public static function getPageOfProductsBySearchWords(PDO $conn, array $wordIds, int $limit, int $offset): array
+    {
+        try {
+            $result = [];
+
+            if ($wordIds) {
+                $sql = self::prepareProductsBySearchWordsSql($wordIds) . " limit :limit offset :offset";
+
+                $statement = self::prepareProductsBySearchWordsStatement($conn, $sql, $wordIds);
+
+                $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+
+                $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+                $statement->execute();
+
+                $result = $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
+            }
+
+            return $result;
+
+        } catch (Throwable $e) {
+            throw new SystemErrorException();
+        }
+
+    }
+
+    /**
+     * @param PDO $conn
+     * @return array
+     * @throws SystemErrorException
+     */
     public function getSearchDataForProduct(PDO $conn): array
     {
         try {

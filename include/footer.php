@@ -68,8 +68,8 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous">
 </script>
-<script src="/vendor/bootstrap-select/bootstrap-select.min.js"></script>
-<script src="/vendor/product-gallery/fancybox/jquery.fancybox.js"></script>
-<script src="/js/script.js"></script>
+<script src="/assets/vendor/bootstrap-select/bootstrap-select.min.js"></script>
+<script src="/assets/vendor/product-gallery/fancybox/jquery.fancybox.js"></script>
+<script src="/assets/js/script.js"></script>
 </body>
 </html>

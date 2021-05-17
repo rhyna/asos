@@ -107,7 +107,7 @@ try {
 
     $totalProductsInCategory = Product::countProductsFiltered($conn, $productQueryParameters, $join, $where);
 
-    $paginator = new Paginator($page, 10, $totalProductsInCategory);
+    $paginator = new Paginator($page, 12, $totalProductsInCategory);
 
     $productsByCategory = Product::getPageOfProductsFiltered($conn, $select, $productQueryParameters, $join, $where, $order, $paginator->limit, $paginator->offset);
 

@@ -13,7 +13,7 @@
         crossorigin="anonymous">
 </script>
 <script src="https://cdn.ckeditor.com/ckeditor5/27.0.0/classic/ckeditor.js"></script>
-<script src="/vendor/bootstrap-select/bootstrap-select.min.js"></script>
-<script src="/js/script.js"></script>
+<script src="/assets/vendor/bootstrap-select/bootstrap-select.min.js"></script>
+<script src="/assets/js/script.js"></script>
 </body>
 </html>

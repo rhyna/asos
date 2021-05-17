@@ -351,12 +351,15 @@ ul {
     }
   }
 
-  .search-icon {
+  .search-button {
     position: absolute;
-    font-size: 16px;
     right: 15px;
-    top: 10px;
-    cursor: pointer;
+    top: 8px;
+    background-color: transparent;
+
+    i {
+      font-size: 16px;
+    }
   }
 }
 
@@ -1019,6 +1022,26 @@ main {
   &:focus {
     outline: none;
   }
+}
+
+.search-query {
+  .container1200px;
+  margin: 20px auto 35px auto;
+  letter-spacing: 0.5px;
+  font-size: 16px;
+  text-align: center;
+
+  &-title {
+    font-style: italic;
+    font-size: 20px;
+    margin-right: 5px;
+    line-height: normal;
+  }
+
+  //&-divider {
+  //  border-bottom: 1px solid #eee;
+  //  padding: 15px 0;
+  //}
 }
 
 
