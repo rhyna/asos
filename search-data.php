@@ -28,7 +28,6 @@ $raw = getSearchDataForAllProducts($conn);
 
 $wordsByProduct = Search::prepareSearchWordsByProduct($raw);
 
-
 foreach ($wordsByProduct as $productId => $item) {
     foreach ($item as $string) {
         $word = new SearchWord();

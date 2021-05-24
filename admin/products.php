@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var PDO $conn;
+ * @var PDO $conn ;
  */
 
 require_once __DIR__ . '/include/header.php';
@@ -29,14 +29,11 @@ try {
 
     $categoriesData = require_once __DIR__ . '/../include/categories-config.php';
 
-    $categories = [];
+    //$categories = [];
 
-    foreach ($categoriesData as $gender) {
-        $flag = [];
-
-        $flag = $gender['flag'];
-
-        $categories[$flag] = [];
+    function getCategoryInfoForSelectPickerByGender($gender, $flag)
+    {
+//        $categories[$flag] = [];
 
         foreach ($gender['categories'] as $key => $level1) {
             foreach ($level1 as $level2) {
@@ -51,6 +48,29 @@ try {
                 $categories[$flag][] = $level2Array;
             }
         }
+    }
+
+    foreach ($categoriesData as $gender) {
+        $flag = $gender['flag'];
+
+        $categories[$flag] = [];
+//
+//        foreach ($gender['categories'] as $key => $level1) {
+//            foreach ($level1 as $level2) {
+//                $level2Array = [];
+//
+//                $level2Array['id'] = $level2['id'];
+//
+//                $level2Array['title'] = $level2['title'];
+//
+//                $level2Array['parentCategoryTitle'] = $key;
+//
+//                $categories[$flag][] = $level2Array;
+//            }
+//        }
+
+        getCategoryInfoForSelectPickerByGender($gender, $flag);
+
     }
 
     $entityType = 'product';

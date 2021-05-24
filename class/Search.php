@@ -74,23 +74,27 @@ class Search
 
             unset($item['id']);
 
-            $data = [];
-
-            foreach ($item as $key => $array) {
-                foreach ($array as $string) {
-                    $data[] = $string;
-                }
-            }
-
-            $wordsByProduct[$id] = $data;
+            $wordsByProduct[$id] = self::getFlatListOfSearchWordsByProduct($item);
         }
 
         return $wordsByProduct;
     }
 
-    private function flatWordFields()
+    /**
+     * @param array $item
+     * @return array
+     */
+    private static function getFlatListOfSearchWordsByProduct(array $item): array
     {
+        $data = [];
 
+        foreach ($item as $array) {
+            foreach ($array as $string) {
+                $data[] = $string;
+            }
+        }
+
+        return $data;
     }
 
     /**
