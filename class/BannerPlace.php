@@ -6,6 +6,7 @@ class BannerPlace
     public $id;
     public $title;
     public $alias;
+    public $gender;
 
     /**
      * @param PDO $conn
