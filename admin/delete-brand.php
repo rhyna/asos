@@ -24,7 +24,7 @@ try {
     $hasProducts = $brand->checkBrandProducts($conn);
 
     if ($hasProducts) {
-        throw new ValidationErrorException("Cannot delete a brand that has products linked to it. <br> Delete products first");
+        throw new ValidationErrorException("Cannot delete a brand that has products linked to it. <br> Delete the products first");
     }
 
     $brand->deleteBrand($conn);
