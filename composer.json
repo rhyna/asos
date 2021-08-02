@@ -1,5 +1,6 @@
 {
     "require": {
-        "markfullmer/porter2": "^1.0"
+        "markfullmer/porter2": "^1.0",
+      "ext-pdo": "*"
     }
 }
