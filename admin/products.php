@@ -29,11 +29,9 @@ try {
 
     $categoriesData = require_once __DIR__ . '/../include/categories-config.php';
 
-    //$categories = [];
-
-    function getCategoryInfoForSelectPickerByGender($gender, $flag)
+    function getCategoryInfoForSelectPickerByGender($gender): array
     {
-//        $categories[$flag] = [];
+        $result = [];
 
         foreach ($gender['categories'] as $key => $level1) {
             foreach ($level1 as $level2) {
@@ -45,32 +43,17 @@ try {
 
                 $level2Array['parentCategoryTitle'] = $key;
 
-                $categories[$flag][] = $level2Array;
+                $result[] = $level2Array;
             }
         }
+
+        return $result;
     }
 
     foreach ($categoriesData as $gender) {
         $flag = $gender['flag'];
 
-        $categories[$flag] = [];
-//
-//        foreach ($gender['categories'] as $key => $level1) {
-//            foreach ($level1 as $level2) {
-//                $level2Array = [];
-//
-//                $level2Array['id'] = $level2['id'];
-//
-//                $level2Array['title'] = $level2['title'];
-//
-//                $level2Array['parentCategoryTitle'] = $key;
-//
-//                $categories[$flag][] = $level2Array;
-//            }
-//        }
-
-        getCategoryInfoForSelectPickerByGender($gender, $flag);
-
+        $categories[$flag] = getCategoryInfoForSelectPickerByGender($gender);
     }
 
     $entityType = 'product';
