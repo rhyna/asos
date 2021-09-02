@@ -32,7 +32,6 @@ $images = $product->getImagesArray();
     </ul>
 <?php endif; ?>
 
-
 <form action="" method="post" enctype="multipart/form-data" id="productForm" class="entity-form product-form">
     <div class="form-group">
         <label for="title">Title</label>
