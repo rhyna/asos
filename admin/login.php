@@ -4,7 +4,10 @@
  * @var PDO $conn;
  */
 
+ob_start(); 
 require_once __DIR__ . '/include/header.php';
+$header = ob_get_contents();
+ob_end_clean();
 
 $error = null;
 
@@ -30,6 +33,7 @@ try {
 
 ?>
 
+<?=$header?>
 <div class="container">
     <?php if ($error): ?>
         <div><?= $error ?></div>
