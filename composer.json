@@ -2,6 +2,7 @@
   "require": {
     "markfullmer/porter2": "^1.0",
     "ext-pdo": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-mbstring": "*"
   }
 }

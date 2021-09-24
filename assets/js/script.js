@@ -157,8 +157,6 @@ function addBrandFromProduct(form) {
         url: url,
         type: 'POST',
         data: {
-            productId: productId,
-            productMode: productMode,
             title: title,
             descriptionWomen: descriptionWomen,
             descriptionMen: descriptionMen,

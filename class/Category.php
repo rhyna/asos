@@ -271,7 +271,7 @@ class Category
             $fetchedResult = $result->fetchAll();
 
             if ($fetchedResult) {
-                $this->validationErrors[] = 'Impossible to delete a category that has products associated with it. Delete the products first';
+                $this->validationErrors[] = 'Cannot delete a category that has products associated with it. Delete the products first';
             }
 
             return $this->validationErrors ? false : true;

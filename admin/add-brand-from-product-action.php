@@ -8,11 +8,6 @@ try {
     Auth::ifNotLoggedIn();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-        $productId = $_POST['productId'];
-
-        $productMode = $_POST['productMode'];
-
         $brand = new Brand();
 
         $brand->fillBrandObject($_POST);
