@@ -4,7 +4,9 @@
  * @var PDO $conn;
  */
 
-require_once __DIR__ . '/include/header.php';
+require_once __DIR__ . "/../include/init.php";
+
+$conn = require_once __DIR__ . "/../include/db.php";
 
 $error = null;
 
@@ -30,6 +32,9 @@ try {
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }
+
+require_once __DIR__ . '/include/header.php';
+
 ?>
 
 <main>

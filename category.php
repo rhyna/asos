@@ -18,12 +18,6 @@ $sizesByCategory = [];
 
 $breadCrumbsData = [];
 
-//if (!isset($_GET['page'])) {
-//    Url::redirect($_SERVER['REQUEST_URI'] . '&page=1');
-//
-//    // redirect also when there are all other bad cases (page = 0/string/invalid int)
-//}
-
 if (!isset($_GET['page']) || (string)(int)$_GET['page'] !== $_GET['page']) {
     $_GET['page'] = 1;
 }

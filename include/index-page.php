@@ -5,6 +5,10 @@
  * @var string $gender;
  */
 
+require_once __DIR__ . "./init.php";
+
+$conn = require_once __DIR__ . './db.php';
+
 require_once __DIR__ . '/header.php';
 
 $error = '';

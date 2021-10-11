@@ -4,10 +4,9 @@
  * @var PDO $conn;
  */
 
-ob_start(); 
-require_once __DIR__ . '/include/header.php';
-$header = ob_get_contents();
-ob_end_clean();
+require_once __DIR__ . "/../include/init.php";
+
+$conn = require_once __DIR__ . "/../include/db.php";
 
 $error = null;
 
@@ -31,9 +30,10 @@ try {
     $error = $e->getMessage();
 }
 
+require_once __DIR__ . '/include/header.php';
+
 ?>
 
-<?=$header?>
 <div class="container">
     <?php if ($error): ?>
         <div><?= $error ?></div>

@@ -69,7 +69,6 @@ try {
 
     include_once __DIR__ . '/include/breadcrumbs.php';
 
-
 } catch (Throwable $e) {
     $error = $e->getMessage();
 }

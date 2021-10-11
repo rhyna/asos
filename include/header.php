@@ -1,9 +1,5 @@
 <?php
 
-require_once __DIR__ . '/init.php';
-
-$conn = require __DIR__ . '/db.php';
-
 $config = require __DIR__ . "/categories-config.php";
 
 ?>

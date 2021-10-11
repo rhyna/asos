@@ -1,9 +1,5 @@
 <?php
 
-require_once __DIR__ . "/../../include/init.php";
-
-$conn = require_once __DIR__ . "/../../include/db.php";
-
 $headerNav = [
     'Banners' => '/admin/banners.php',
     'Brands' => '/admin/brands.php',

@@ -816,9 +816,7 @@ class Product
         try {
             $sql = " select * from
                     (select b.id as id,
-                    b.title as title,
-                    c.id as categoryId,
-                    c.parent_id as parentCategoryId
+                    b.title as title
                     from product p
                     join brand b on b.id = p.brand_id
                     join category c on p.category_id = c.id
