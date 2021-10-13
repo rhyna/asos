@@ -39,8 +39,16 @@ try {
 
     $size = Size::getSizeByNormalizedTitle($conn, $normalizedTitle);
 
-    if (Size::checkIfSortOrderExists($conn, $sortOrder) && (int)$size->sortOrder !== $sortOrder) {
-        $errors['errorMessages'][] = 'Such a sorting number already exists';
+    if ($size) {
+        if (Size::checkIfSortOrderExists($conn, $sortOrder) && (int)$size->sortOrder !== $sortOrder) {
+            $errors['errorMessages'][] = 'Such a sorting number already exists';
+        }
+    }
+
+    if (!$size) {
+        if (Size::checkIfSortOrderExists($conn, $sortOrder)) {
+            $errors['errorMessages'][] = 'Such a sorting number already exists';
+        }
     }
 
     if (!$size) {
