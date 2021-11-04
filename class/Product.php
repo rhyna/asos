@@ -616,7 +616,7 @@ class Product
                         from product p
                         join brand b on b.id = p.brand_id
                         join category c on c.id = p.category_id
-                        where p.category_id = :categoryId 
+                        where p.category_id = :categoryId   
                         and p.brand_id is not null
                         and p.image is not null
                         and not FIND_IN_SET(p.brand_id, :brandIds) limit 0, 1

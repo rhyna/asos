@@ -54,6 +54,7 @@ $config = require __DIR__ . "/categories-config.php";
                     <i class="fas fa-search"></i>
                 </button>
             </form>
+        </div>
     </nav>
     <div class="subbar__wrapper">
         <ul class="subbar">
@@ -149,14 +150,16 @@ $config = require __DIR__ . "/categories-config.php";
                                         <?php
                                         $categoriesForAllBrandsMenu = [];
 
-                                        foreach ($configItem['categories'] as $name => $category) {
+                                        foreach ($configItem['categories'] as $category) {
                                             for ($i = 0; $i <= 3; $i++) {
                                                 if (isset($category[$i])) {
                                                     $categoriesForAllBrandsMenu[] = $category[$i]['id'];
                                                 }
                                             }
                                         }
+
                                         $allBrands = Product::getProductBrandsByCategories($conn, $categoriesForAllBrandsMenu);
+
                                         ?>
                                         <?php foreach ($allBrands as $brand): ?>
                                             <?php if ($brand['brand_id']): ?>
