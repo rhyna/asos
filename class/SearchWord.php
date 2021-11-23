@@ -70,33 +70,15 @@ class SearchWord
     public static function getSearchWords(PDO $conn, array $words): array
     {
         try {
-//            $result = [];
-//
-//            foreach ($words as $word) {
-//                $sql = "select id from search_words where word = :word";
-//
-//                $statement = $conn->prepare($sql);
-//
-//                $statement->bindValue(':word', $word, PDO::PARAM_STR);
-//
-//                $statement->execute();
-//
-//                $fetchedResult = (int)$statement->fetchColumn();
-//
-//                $result[] = $fetchedResult;
-//            }
+            $sql = "select id from search_words where FIND_IN_SET(word, :words)";
 
-        $sql = "select id from search_words where FIND_IN_SET(word, :words)";
+            $statement = $conn->prepare($sql);
 
-        $statement = $conn->prepare($sql);
+            $statement->bindValue(':words', implode(',', $words), PDO::PARAM_STR);
 
-        $statement->bindValue(':words', implode(',', $words), PDO::PARAM_STR);
+            $statement->execute();
 
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-
-//            return $result;
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (Throwable $e) {
             throw new SystemErrorException();
