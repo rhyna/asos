@@ -113,7 +113,7 @@ try {
         ],
         [
             'title' => $currentCategory->title,
-            'url' => "/category.php/?id=$categoryId",
+            'url' => "/category.php?id=$categoryId",
         ],
     ];
 

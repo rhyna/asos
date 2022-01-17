@@ -70,7 +70,7 @@ try {
         ],
         [
             'title' => $categoryTitle,
-            'url' => "/category.php/?id=$categoryId",
+            'url' => "/category.php?id=$categoryId",
         ],
         [
             'title' => $productTitle,
